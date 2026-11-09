@@ -232,6 +232,8 @@ p { margin: 0; line-height: 1.5; }
 .scenpick button[aria-pressed="true"][data-prog]::after { color: #fff; }
 .proglegend { flex-basis: 100%; font-size: .8rem; color: var(--muted); }
 .proglegend[hidden] { display: none; }
+.brstep { display: block; padding-left: .3em; }
+.brnho { padding-left: 0; margin-top: .15em; }
 .proglegend .pa { color: #1f8a4c; } .proglegend .ps { color: #f9a825; }
 .pmark { display: inline-block; margin-right: 4px; font-weight: 800; }
 .pmark.great { color: #1f8a4c; } .pmark.good { color: #2f80ed; } .pmark.ok { color: #8d6e63; }
@@ -1047,7 +1049,7 @@ function TX(s) {
   if (LANG === "vi" || s == null || s === "") return s;
   var t = EN[s]; if (t == null) { MISSING[s] = 1; return s; } return t;
 }
-EN[" vào ô. Kiểm tra lại rồi bấm "] = " into the box. Check it, then press "; EN["Nhập kết quả vào ô trước đã."] = "Type your result in the box first."; EN["8 câu chuyện"] = "8 stories";
+EN[" vào ô. Kiểm tra lại rồi bấm "] = " into the box. Check it, then press "; EN["Đang cộng điểm…"] = "Adding points…"; EN["Nhập kết quả vào ô trước đã."] = "Type your result in the box first."; EN["8 câu chuyện"] = "8 stories";
 function defT(o, k, vi) { Object.defineProperty(o, k, { get: function () { return TX(vi); }, configurable: true, enumerable: true }); }
 function DEC() { return LANG === "en" ? "." : ","; }
 /* static texts written in the HTML: remember the Vietnamese once, re-translate on every switch */
@@ -4977,7 +4979,7 @@ var NT1 = c4Job("nongtrai", {
   lead: ["Đêm nay có <b>sương muối</b>! Luống rau non phải được phủ bạt <b>vừa khít</b>. Em đo luống rau rồi chọn cuộn bạt có diện tích đúng bằng diện tích luống nhé.", "There will be <b>frost</b> tonight! The young vegetable bed needs a cover that fits <b>exactly</b>. Measure the bed and pick the cover whose area equals the bed's area."],
   taskT: function () { return L("<b>Nhiệm vụ:</b> chọn cuộn bạt có diện tích <b>đúng bằng</b> diện tích luống rau hình chữ nhật.<br><b>Dụng cụ:</b> chạm vào cạnh luống rau để đo (m); chạm vào cuộn bạt để chọn.<br><b>Nhớ:</b> 1 m² = 100 dm² = 10 000 cm².", "<b>Task:</b> choose the cover whose area is <b>exactly equal</b> to the area of the rectangular bed.<br><b>Tools:</b> tap a side of the bed to measure (m); tap a cover to choose it.<br><b>Remember:</b> 1 m² = 100 dm² = 10,000 cm²."); },
   make: function () {
-    var a = rnd(2, 6), b; do { b = rnd(1, 4); } while (b === a); var A = a * b;
+    var a, b; do { a = rnd(2, 6); b = rnd(1, 4); } while (b >= a); var A = a * b;
     var good = pickOne([{ v: A * 100, u: "dm²" }, { v: A * 10000, u: "cm²" }]);
     var pool = shuffle([{ v: A * 10, u: "dm²" }, { v: A * 1000, u: "cm²" }, { v: A * 100, u: "cm²" }, { v: A, u: "dm²" }, { v: A * 100000, u: "cm²" }, { v: A * 1000, u: "dm²" }]).filter(function (r) { return m2Of(r) !== A && r.v !== good.v; });
     return { a: a, b: b, A: A, rolls: shuffle([good].concat(pool.slice(0, 3))), sel: null, bottom: 430 };
@@ -5436,36 +5438,62 @@ var V51 = c4Job("vuonhoa", {
     L("Ví dụ: đáy 10 m, chiều cao 6 m: diện tích = 10 × 6 : 2 = 30 m².", "Example: base 10 m, height 6 m: area = 10 × 6 ÷ 2 = 30 m².")]; }
 });
 
-/* V52 · Tấm bạt che nắng: biết diện tích và đáy, tìm chiều cao (bài thay thế, KM-HH-502) */
+/* V52 · Tấm bạt che nắng: biết diện tích và đáy, tìm chiều cao (bài thay thế, KM-HH-502)
+   Bản 3.17: nhìn từ trên xuống. Hai góc A, B buộc vào móc trên tường nhà, góc C buộc vào cột ngoài sân.
+   Câu hỏi có ý nghĩa thực tế: chôn cột cách tường bao xa (chính là chiều cao CH của tam giác). */
 var V52 = c4Job("vuonhoa", {
   name: ["Tấm bạt che nắng", "The sunshade"], sub: ["biết diện tích và đáy tam giác, tìm chiều cao", "from a triangle's area and base, find its height"],
-  endName: ["tấm bạt che nắng", "the sunshade"], what: ["Chiều cao tấm bạt", "Height of the sunshade"], get unit() { return "m"; }, dp: 2,
-  btnText: ["Căng bạt", "Put it up"], H: 430,
-  lead: ["Chú mua một <b>tấm bạt che nắng hình tam giác</b> cho chỗ ngồi nghỉ. Nhãn ghi diện tích nhưng không ghi chiều cao, mà cột chống phải dài đúng bằng chiều cao tấm bạt. Em tính giúp chú nhé!", "I bought a <b>triangular sunshade</b> for the rest area. The label gives its area but not its height, and the pole must be exactly as long as the height. Work it out for me!"],
-  taskT: function () { return L("<b>Nhiệm vụ:</b> tính chiều cao của tấm bạt tam giác (ứng với cạnh đáy đo được) để cắt cột chống vừa khít.<br><b>Dữ kiện:</b> chạm vào nhãn tấm bạt; chạm vào cạnh đáy để đo.", "<b>Task:</b> find the triangle's height (for the base you measure) so the pole fits exactly.<br><b>Data:</b> tap the label; tap the base to measure it."); },
-  make: function () { var b, h; do { b = rnd(4, 14); h = rnd(3, 9); } while ((b * h) % 2); return { b: b, h: h, A: b * h / 2, ans: h, bottom: 430 }; },
-  geo: function (p) { var k = Math.min(22, 260 / p.b, 190 / p.h), x0 = 180 - p.b * k / 2, y0 = 300; return { A: [x0, y0], B: [x0 + p.b * k, y0], C: [x0 + p.b * k * 0.4, y0 - p.h * k] }; },
+  endName: ["tấm bạt che nắng", "the sunshade"], what: ["Khoảng cách từ cột đến tường", "Distance from pole to wall"], get unit() { return "m"; }, dp: 2,
+  btnText: ["Chôn cột", "Set the pole"], H: 430,
+  lead: ["Chú mua một <b>tấm bạt che nắng hình tam giác</b> để che chỗ ngồi nghỉ trước nhà. Hai góc A, B buộc vào <b>hai móc trên tường</b>, góc C buộc vào <b>một cái cột chôn ngoài sân</b>. Chú cần biết phải <b>chôn cột cách tường bao nhiêu mét</b> thì bạt mới căng vừa khít. Em tính giúp chú nhé!", "I bought a <b>triangular sunshade</b> for the seats in front of the house. Corners A and B tie to <b>two hooks on the wall</b>, and corner C ties to <b>a pole in the yard</b>. I need to know <b>how far from the wall to set the pole</b> so the shade is pulled just tight. Work it out for me!"],
+  make: function () { var b, h; do { b = rnd(4, 12); h = rnd(3, 8); } while ((b * h) % 2 || b > 2 * h + 1); return { b: b, h: h, A: b * h / 2, ans: h, bottom: 430 }; },
+  geo: function (p) { var k = Math.min(40, 280 / p.b, 225 / p.h), x0 = 180 - p.b * k / 2, y0 = 96, cx = x0 + p.b * k * 0.38; return { k: k, A: [x0, y0], B: [x0 + p.b * k, y0], C: [cx, y0 + p.h * k], H: [cx, y0] }; },
   base: function (p) {
-    var g = this.geo(p), o = gardenTop("");
-    o += '<polygon points="' + [g.A, g.B, g.C].map(function (q) { return q.join(","); }).join(" ") + '" fill="#ffb74d" stroke="' + INK + '" stroke-width="2.4"/>' + lab(g.A, "A", -14, 16) + lab(g.B, "B", 4, 16) + lab(g.C, "C", -4, -8);
+    var g = this.geo(p), o = '<rect width="360" height="430" fill="#93d47f"/>';
+    /* nhà và tường (nhìn từ trên xuống) */
+    o += '<rect x="0" y="34" width="360" height="56" fill="#c97b5a"/>';
+    for (var i = 0; i < 9; i++) o += '<path d="M' + (i * 40) + ' 34 v56" stroke="#a65f43" stroke-width="2"/>';
+    o += T2(10, 60, L("MÁI NHÀ", "ROOF"), { a: "start", fs: 12, fw: 800, c: "#fff" }) + T2(180, 22, L("Sân trước nhà (nhìn từ trên xuống)", "Front yard (seen from above)"), { a: "middle", fs: 12.5, fw: 800, c: "#1b5e20" });
+    o += '<path d="M0 92 H360" stroke="' + INK + '" stroke-width="4"/>' + T2(352, 86, L("tường nhà", "house wall"), { a: "end", fs: 11, fw: 800, c: "#fff" });
+    /* bàn ghế dưới bạt */
+    var mx = g.A[0] + 0.62 * (g.B[0] - g.A[0]), my = g.A[1] + 0.3 * (g.C[1] - g.A[1]);
+    o += '<circle cx="' + mx + '" cy="' + my + '" r="10" fill="#6d4c41" stroke="' + INK + '" stroke-width="2"/><circle cx="' + (mx - 16) + '" cy="' + my + '" r="5" fill="#5c6bc0" stroke="' + INK + '" stroke-width="1.2"/><circle cx="' + (mx + 16) + '" cy="' + my + '" r="5" fill="#5c6bc0" stroke="' + INK + '" stroke-width="1.2"/>';
+    /* tấm bạt */
+    o += '<polygon points="' + [g.A, g.B, g.C].map(function (q) { return q.join(","); }).join(" ") + '" fill="#ffb74d" fill-opacity=".6" stroke="#e65100" stroke-width="2.4"/>';
+    /* khoảng cách cần tìm: từ cột C vuông góc đến tường */
+    o += '<path d="M' + g.C[0] + " " + g.C[1] + " V" + g.H[1] + '" stroke="#1565c0" stroke-width="2.4" stroke-dasharray="7 5"/>' + '<path d="M' + (g.H[0] + 9) + " " + g.H[1] + " V" + (g.H[1] + 9) + " H" + g.H[0] + '" fill="none" stroke="' + INK + '" stroke-width="1.5"/>';
+    o += tag(g.C[0] + 34, (g.C[1] + g.H[1]) / 2 + 8, "? m", "#1565c0");
+    /* móc A, B và cột C */
+    o += '<circle cx="' + g.A[0] + '" cy="' + g.A[1] + '" r="5" fill="#fff" stroke="' + INK + '" stroke-width="2"/><circle cx="' + g.B[0] + '" cy="' + g.B[1] + '" r="5" fill="#fff" stroke="' + INK + '" stroke-width="2"/>';
+    o += '<circle cx="' + g.C[0] + '" cy="' + g.C[1] + '" r="8" fill="#795548" stroke="' + INK + '" stroke-width="2"/>';
+    o += lab(g.A, "A", -16, 22) + lab(g.B, "B", 6, 22) + lab(g.C, "C", 12, 6) + lab(g.H, "H", 6, 22) + T2(g.C[0], g.C[1] + 26, L("cột", "pole"), { a: "middle", fs: 11.5, fw: 800, c: "#4e342e" });
     o += hitL(g.A[0], g.A[1], g.B[0], g.B[1], "b");
-    o += '<g transform="rotate(-4 290 370)"><rect x="236" y="336" width="112" height="70" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(292, 358, L("NHÃN BẠT", "LABEL"), { a: "middle", fs: 11.5, fw: 800, c: "#c0392b" }) + T2(292, 388, L("Diện tích: " + hv(p, "A", decVi(p.A)) + " m²", "Area: " + hv(p, "A", p.A) + " m²"), { a: "middle", fs: 13, fw: 800 }) + "</g>" + hitR(234, 332, 116, 78, "A");
-    return o + adult(60, 400, "#2e7d32", "#f3dc8a");
+    /* nhãn tấm bạt */
+    o += '<g transform="rotate(-4 290 378)"><rect x="236" y="344" width="112" height="66" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(292, 364, L("NHÃN BẠT", "LABEL"), { a: "middle", fs: 11.5, fw: 800, c: "#c0392b" }) + T2(292, 393, L("Diện tích: " + hv(p, "A", decVi(p.A)) + " m²", "Area: " + hv(p, "A", p.A) + " m²"), { a: "middle", fs: 13, fw: 800 }) + "</g>" + hitR(234, 340, 116, 74, "A");
+    return o + adult(36, 412, "#2e7d32", "#f3dc8a");
   },
-  items: function (p) { var g = this.geo(p); return { b: I5("Đáy AB = " + p.b + " m", "Base AB = " + p.b + " m", p.b, midTag(g.A, g.B, p.b + " m", 0, 22), "tape", "AB"), A: I5("Diện tích tấm bạt " + decVi(p.A) + " m²", "Sunshade area " + p.A + " m²", p.A, null, "pick", "S") }; },
-  extra: function (p) { return p.seen.A ? c4Tick(344, 344) : ""; },
-  special: function (p, v) { if (Math.abs(v - p.A / p.b) < 1e-6) return { ok: false, kind: "short", msg: L("Em quên nhân diện tích với 2 rồi! Chiều cao = diện tích × 2 : đáy.", "You forgot to multiply the area by 2! Height = area × 2 ÷ base.") }; return null; },
-  okMsg: ["Cột chống vừa khít, tấm bạt căng đẹp!", "The pole fits perfectly and the shade is taut!"],
-  shortMsg: ["Cột ngắn quá, bạt bị chùng.", "The pole is too short: the shade sags."],
-  longMsg: ["Cột dài quá, bạt bị rách mất!", "The pole is too long: the shade tears!"],
-  fx: function (p, k) { var g = this.geo(p); return '<path d="M' + g.C[0] + " " + g.C[1] + " V" + g.A[1] + '" stroke="' + (k === "ok" ? "#2fa35a" : "#c0392b") + '" stroke-width="5"/>'; },
+  items: function (p) { var g = this.geo(p); return { b: I5("Hai móc AB = " + p.b + " m", "Hooks AB = " + p.b + " m", p.b, [(g.A[0] + g.B[0]) / 2 + (g.C[0] < (g.A[0] + g.B[0]) / 2 ? 24 : -24), 74, "AB = " + p.b + " m"], "tape", "AB"), A: I5("Diện tích tấm bạt " + decVi(p.A) + " m²", "Sunshade area " + p.A + " m²", p.A, null, "pick", "S") }; },
+  extra: function (p) { return p.seen.A ? c4Tick(350, 342) : ""; },
+  special: function (p, v) {
+    if (Math.abs(v - p.A / p.b) < 1e-6) return { ok: false, kind: "short", msg: L("Em quên nhân diện tích với 2 rồi! Khoảng cách CH = diện tích × 2 : AB.", "You forgot to multiply the area by 2! Distance CH = area × 2 ÷ AB.") };
+    if (Math.abs(v - p.A * p.b * 2) < 1e-6 || Math.abs(v - p.A * p.b) < 1e-6) return { ok: false, kind: "long", msg: L("Phải <b>chia</b> cho độ dài AB chứ không nhân. Khoảng cách CH = diện tích × 2 : AB.", "You must <b>divide</b> by AB, not multiply. Distance CH = area × 2 ÷ AB.") };
+    return null;
+  },
+  okMsg: ["Cột chôn đúng chỗ, tấm bạt căng vừa khít!", "The pole is in the right place and the shade is pulled just tight!"],
+  shortMsg: ["Cột gần tường quá, tấm bạt bị chùng xuống.", "The pole is too close to the wall: the shade sags."],
+  longMsg: ["Cột xa tường quá, kéo không tới góc C, bạt bị căng rách!", "The pole is too far from the wall: corner C won't reach and the shade tears!"],
+  fx: function (p, k, v) {
+    var g = this.geo(p); if (k === "ok") return '<circle cx="' + g.C[0] + '" cy="' + g.C[1] + '" r="11" fill="none" stroke="#2fa35a" stroke-width="4"/>' + tag(g.C[0] + 34, (g.C[1] + g.H[1]) / 2 + 8, p.h + " m", "#2fa35a");
+    var d = isFinite(v) ? Math.max(0.3, Math.min(v, 300 / g.k)) : p.h, y = Math.min(g.H[1] + d * g.k, 330);
+    return '<path d="M' + g.C[0] + " " + g.C[1] + " V" + y + '" stroke="#c0392b" stroke-width="2" stroke-dasharray="3 3"/><circle cx="' + g.C[0] + '" cy="' + y + '" r="8" fill="#c0392b" stroke="' + INK + '" stroke-width="2"/>' + T2(g.C[0] - 14, y + 5, L("cột sai chỗ", "wrong place"), { a: "end", fs: 11.5, fw: 800, c: "#c0392b" });
+  },
   passTitle: ["bạt đã căng!", "the shade is up!"],
-  rows: function (p) { return [[L("Chiều cao", "Height"), fmt(p.A, 1) + " × 2 : " + p.b + " = " + p.h + " m"]]; },
+  rows: function (p) { return [[L("Khoảng cách từ cột đến tường (CH)", "Pole to wall (CH)"), fmt(p.A, 1) + " × 2 : " + p.b + " = " + p.h + " m"]]; },
   formula: function () { return L("Chiều cao tam giác = diện tích × 2 : độ dài đáy", "Triangle height = area × 2 ÷ base"); },
   hints: function () { return [
-    L("Diện tích = đáy × chiều cao : 2, nên <b>đáy × chiều cao = diện tích × 2</b>.", "Area = base × height ÷ 2, so <b>base × height = area × 2</b>."),
-    L("Biết tích (đáy × chiều cao) và biết đáy thì <b>chiều cao = diện tích × 2 : đáy</b>.", "Know the product (base × height) and the base, so <b>height = area × 2 ÷ base</b>."),
-    L("Ví dụ: diện tích 40 m², đáy 10 m: chiều cao = 40 × 2 : 10 = 8 m.", "Example: area 40 m², base 10 m: height = 40 × 2 ÷ 10 = 8 m.")]; }
+    L("Nhìn từ trên xuống, tấm bạt là tam giác ABC có đáy AB nằm sát tường. Khoảng cách từ cột C đến tường chính là <b>chiều cao CH</b> của tam giác.", "Seen from above, the shade is triangle ABC with base AB along the wall. The pole's distance from the wall is the triangle's <b>height CH</b>."),
+    L("Diện tích = đáy × chiều cao : 2, nên <b>chiều cao = diện tích × 2 : đáy</b>.", "Area = base × height ÷ 2, so <b>height = area × 2 ÷ base</b>."),
+    L("Ví dụ: diện tích 20 m², AB = 8 m: CH = 20 × 2 : 8 = 5 m.", "Example: area 20 m², AB = 8 m: CH = 20 × 2 ÷ 8 = 5 m.")]; }
 });
 
 /* V53 · Vườn rau hình thang (KM-HH-503) */
@@ -6124,6 +6152,153 @@ C4_POOL.tiembanh = [[B51, B52], [B53, B54], [B55], [B56]];
   ["KM-DL-511", "B55", "Chia sữa ra bình", "Sharing out the milk", "tiembanh", ["đổi dm³ ra cm³", "phép chia có dư"], ["dm³ to cm³", "division with remainder"], "so_luong", "bình", "đúng tuyệt đối", 3, ["doc_so_lieu"]],
   ["KM-HH-515", "B56", "Chụp kính trưng bày", "The glass cover", "tiembanh", ["diện tích xung quanh", "hình hộp không có đáy"], ["lateral surface area", "box without a bottom"], "dien_tich", "cm²", "đúng tuyệt đối", 3, ["thuoc_ke"]]
 ].forEach(function (r) { C4_CAT.push({ id: r[0], key: r[1], ten: { vi: r[2], en: r[3] }, kb: r[4], cap: [1], lop: [5], chu_de: { vi: r[5], en: r[6] }, yccd: { vi: ["Toán 5 (CT GDPT 2018)"], en: ["Grade 5 maths (2018 curriculum)"] }, do_kho: { cap1: r[10] }, goc_nhin: "chinh_dien", dap_an: { loai: r[7], don_vi: r[8], sai_so: r[9] }, dung_cu_can: r[11], vai_tro: "cap1_" + r[4], trang_thai: "dang_dung" }); });
+/* ===== Đề bài thống nhất cho mọi bài lớp 4, lớp 5 (bản 3.17) =====
+   Cấu trúc cố định: Nhiệm vụ → Dụng cụ → Cách làm ① ② ③ → Nhớ (nếu có). */
+var BR_NUM = ["①", "②", "③", "④", "⑤"];
+function brief(o) {
+  function part(i) {
+    var s = (i ? "<b>Task:</b> " : "<b>Nhiệm vụ:</b> ") + o.nv[i];
+    s += "<br>" + (i ? "<b>Tools:</b> " : "<b>Dụng cụ:</b> ") + o.dc.map(function (x) { return x[i]; }).join(" · ");
+    s += "<br>" + (i ? "<b>Steps:</b>" : "<b>Cách làm:</b>") + o.b.map(function (x, k) { return '<span class="brstep">' + BR_NUM[k] + " " + x[i] + "</span>"; }).join("");
+    if (o.nho) s += '<span class="brstep brnho">' + (i ? "<b>Remember:</b> " : "<b>Nhớ:</b> ") + o.nho[i] + "</span>";
+    return s;
+  }
+  return L(part(0), part(1));
+}
+/* Từ điển dụng cụ dùng chung, để mọi bài gọi tên giống nhau */
+var DC = {
+  tape: function (u) { return ["thước dây (" + u + ")", "tape measure (" + u + ")"]; },
+  ruler: function (u) { return ["thước kẻ (" + u + ")", "ruler (" + u + ")"]; },
+  read: ["chạm để đọc số liệu", "tap to read the figures"],
+  pick: ["chạm để chọn", "tap to choose"],
+  turn: ["nút ⟲ ⟳ để xoay", "⟲ ⟳ buttons to turn"],
+  arrow: ["nút ◀ ▶ để xoay kim", "◀ ▶ buttons to turn the arm"],
+  eke: ["ê-ke", "set square"],
+  weight: ["các quả cân", "the weights"],
+  frac: ["ô nhập phân số (tử/mẫu)", "fraction box (top/bottom)"]
+};
+var ENTER = ["tính rồi nhập kết quả vào ô bên dưới", "work it out and type the answer in the box below"];
+function BRF(job, f) { job.taskT = function (p) { return brief(f(p || {})); }; }
+
+/* ---- Lớp 4 · Bảo tàng ---- */
+BRF(BT1, function () { return { nv: ["xoay kim mỗi ổ khóa để tạo đúng loại góc ghi trên ổ (góc nhọn, tù, vuông hoặc bẹt).", "turn each lock's arm to make the kind of angle written on it (acute, obtuse, right or straight)."],
+  dc: [DC.arrow], b: [["đọc tên góc ghi trên từng ổ", "read the angle written on each lock"], ["bấm ◀ ▶ xoay kim cho tới khi tạo đúng góc", "press ◀ ▶ until the arm makes that angle"], ["làm đủ 3 ổ rồi bấm <b>Mở cửa</b>", "do all 3 locks, then press <b>Open</b>"]],
+  nho: ["chỉ được thử 3 lần, cả 3 ổ phải đúng mới mở được cửa.", "you have 3 tries, and all 3 locks must be right."] }; });
+BRF(BT2, function (p) { return { nv: ["chọn quả cân để cân thăng bằng với tượng nặng <b>" + (p.lab || "") + "</b>.", "choose weights to balance the statue, which weighs <b>" + (p.lab || "") + "</b>."],
+  dc: [DC.weight], b: [["đổi khối lượng tượng ra ki-lô-gam", "change the statue's mass into kilograms"], ["chạm chọn các quả cân có <b>tổng bằng đúng</b> số đó", "tap weights whose <b>total is exactly</b> that"], ["bấm <b>Mở khóa cân</b>", "press <b>Release</b>"]],
+  nho: ["1 yến = 10 kg; 1 tạ = 100 kg; 1 tấn = 1000 kg. Có thể có nhiều cách chọn đúng.", "1 yến = 10 kg; 1 tạ = 100 kg; 1 tấn = 1000 kg. There may be more than one right choice."] }; });
+BRF(BT3, function () { return { nv: ["tìm thế kỷ dựng bia và số năm đã trôi qua đến năm hiện tại.", "find the century the tablet was set up and how many years have passed since."],
+  dc: [DC.read, DC.pick], b: [["chạm vào tấm bia để xem năm dựng bia", "tap the tablet to see the year it was set up"], ["chọn <b>thế kỷ</b> của năm đó (số La Mã)", "choose that year's <b>century</b> (Roman numeral)"], ["nhập <b>số năm</b> từ năm dựng bia đến năm hiện tại (trên tờ lịch) vào ô bên dưới", "type the <b>number of years</b> from then to the current year (on the calendar) below"]],
+  nho: ["thế kỷ I từ năm 1 đến năm 100, thế kỷ II từ năm 101 đến năm 200, …", "century I is years 1–100, century II is years 101–200, …"] }; });
+/* ---- Lớp 4 · Làng chài ---- */
+BRF(LC1, function () { return { nv: ["tính số tiền còn trong quỹ cuối ngày.", "work out the money left in the fund at the end of the day."],
+  dc: [DC.read], b: [["chạm vào từng dòng của sổ quỹ", "tap each line of the cash book"], ["khoản <b>thu</b> thì cộng, khoản <b>chi</b> thì trừ", "<b>add</b> income, <b>subtract</b> spending"], ENTER] }; });
+BRF(LC2, function () { return { nv: ["tính số bao gạo đóng được, mỗi bao nặng bằng bao mẫu.", "work out how many bags you can fill, each as heavy as the sample bag."],
+  dc: [DC.read], b: [["chạm vào cân của kho để đọc tổng số gạo", "tap the store's scale for all the rice"], ["chạm vào cân bao mẫu", "tap the sample bag's scale"], ENTER] }; });
+BRF(LC3, function (p) { var w = p.ask === "boat" ? ["chiếc thuyền", "the boat"] : ["tấm lưới", "the net"]; return { nv: ["nói đúng giá của <b>" + w[0] + "</b>.", "name the exact price of <b>" + w[1] + "</b>."],
+  dc: [DC.read], b: [["chạm vào lời đố của bác chủ xưởng", "tap the owner's riddle"], ["chạm vào tờ ghi chú trên vách", "tap the note on the wall"], ENTER] }; });
+/* ---- Lớp 4 · Trồng rừng ---- */
+BRF(RG1, function (p) { return { nv: ["tính trung bình mỗi ngày đội trồng được bao nhiêu cây trong " + (p.n || "") + " ngày.", "find the average number of trees planted per day over " + (p.n || "") + " days."],
+  dc: [DC.read], b: [["chạm vào từng dòng của nhật ký", "tap each line of the log"], ENTER] }; });
+BRF(RG2, function () { return { nv: ["tính số xe <b>ít nhất</b> cần thuê để ai cũng có chỗ ngồi.", "find the <b>fewest</b> buses so everyone has a seat."],
+  dc: [DC.read], b: [["chạm vào danh sách đăng ký", "tap the sign-up list"], ["chạm vào chiếc xe xem mỗi xe chở tối đa bao nhiêu người", "tap the bus to see how many it carries at most"], ENTER] }; });
+BRF(RG3, function (p) { var h = p.ask === "keo" ? ["đồi Keo", "Acacia Hill"] : ["đồi Thông", "Pine Hill"]; return { nv: ["tính số cây giống phải chở lên <b>" + h[0] + "</b>.", "find how many saplings go to <b>" + h[1] + "</b>."],
+  dc: [DC.read], b: [["chạm vào bảng phân công", "tap the plan board"], ["chạm vào lời dặn của anh Đội trưởng", "tap the leader's message"], ENTER] }; });
+/* ---- Lớp 4 · Xây dựng ---- */
+BRF(XD1, function () { return { nv: ["lắp thanh A <b>song song</b> với mặt cầu và thanh B <b>vuông góc</b> với thanh A.", "fit bar A <b>parallel</b> to the deck and bar B <b>perpendicular</b> to bar A."],
+  dc: [["nút ⟲ ⟳ để xoay (mỗi lần 15°)", "⟲ ⟳ buttons to turn (15° each)"], DC.eke], b: [["xoay thanh <b>A</b> (xanh) cho song song với mặt cầu (nâu)", "turn bar <b>A</b> (blue) parallel to the deck (brown)"], ["xoay thanh <b>B</b> (cam), bấm <b>Êke</b> để kiểm tra góc vuông với thanh A", "turn bar <b>B</b> (orange); press <b>Set square</b> to check the right angle with A"], ["bấm <b>Lắp thanh giằng</b>", "press <b>Fit</b>"]] }; });
+BRF(XD2, function () { return { nv: ["tính chiều dài dây viền đủ để may kín xung quanh lá cờ hình thoi.", "work out the trim needed to go all the way round the rhombus pennant."],
+  dc: [DC.pick, DC.ruler("cm")], b: [["chạm vào <b>giữa</b> mảnh vải có 4 cạnh bằng nhau nhưng không có góc vuông", "tap the <b>middle</b> of the piece with 4 equal sides and no right angles"], ["chạm vào <b>cạnh</b> mảnh vải đó để đo", "tap a <b>side</b> of that piece to measure it"], ENTER] }; });
+BRF(XD3, function () { return { nv: ["tính diện tích phần sảnh được lát (dm²); gạch lát khít, không chồng lên nhau.", "find the area of the tiled hall (dm²); the tiles fit with no gaps or overlaps."],
+  dc: [DC.ruler("cm"), DC.read], b: [["chạm vào các đoạn trên viên gạch để đo (chỉ đo đoạn em cần)", "tap lengths on a tile to measure them (only what you need)"], ["chạm vào phiếu đặt hàng để biết số viên gạch", "tap the order slip for the number of tiles"], ENTER],
+  nho: ["1 dm² = 100 cm².", "1 dm² = 100 cm²."] }; });
+/* ---- Lớp 4 · Nông trại ---- */
+BRF(NT1, function () { return { nv: ["chọn cuộn bạt có diện tích <b>đúng bằng</b> diện tích luống rau.", "choose the cover whose area <b>exactly equals</b> the bed's area."],
+  dc: [DC.tape("m"), DC.pick], b: [["đo hai cạnh luống rau", "measure the two sides of the bed"], ["tính diện tích rồi đổi ra đơn vị ghi trên cuộn bạt", "find the area and change it into the covers' units"], ["chạm chọn cuộn bạt rồi bấm <b>Phủ bạt</b>", "tap a cover, then press <b>Cover</b>"]],
+  nho: ["1 m² = 100 dm² = 10 000 cm².", "1 m² = 100 dm² = 10,000 cm²."] }; });
+BRF(NT2, function () { return { nv: ["tính diện tích mảnh đất hình chữ nhật (m²) để đặt hạt giống.", "find the area of the rectangular plot (m²) to order seeds."],
+  dc: [DC.read], b: [["chạm vào hóa đơn lưới rào (lưới quây vừa kín mảnh đất)", "tap the fencing receipt (the fence goes once round the plot)"], ["chạm vào tờ ghi chú của cô Mai", "tap Ms Mai's note"], ENTER] }; });
+BRF(NT3, function () { return { nv: ["ghép hai tấm rơm thành hình chữ nhật và tính diện tích.", "join two straw panels into a rectangle and find its area."],
+  dc: [DC.turn, DC.ruler("dm")], b: [["bấm ⟳ xoay tấm thứ hai, bấm <b>Ghép vào</b> để thử ghép", "press ⟳ to turn the second panel, then <b>Join</b>"], ["chạm vào hai cạnh góc vuông để đo", "tap the two sides of the right angle to measure"], ENTER] }; });
+/* ---- Lớp 4 · Quầy nước ---- */
+BRF(QN1, function () { return { nv: ["chọn <b>tất cả</b> các chai có lượng sữa <b>bằng</b> lượng ghi trên thẻ công thức.", "choose <b>every</b> bottle whose milk is <b>equal</b> to the recipe card."],
+  dc: [DC.read, DC.pick], b: [["chạm vào thẻ công thức để xem lượng sữa", "tap the recipe card to see the milk needed"], ["chạm chọn các chai có phân số bằng phân số đó (có thể 2 hoặc 3 chai)", "tap the bottles with an equal fraction (there may be 2 or 3)"], ["bấm <b>Đổ vào máy xay</b>", "press <b>Pour</b>"]] }; });
+BRF(QN2, function () { return { nv: ["tính số lít nước ép <b>còn lại</b> trong bình.", "work out how many litres are <b>left</b> in the jug."],
+  dc: [["chạm vào ca để đổ", "tap a jug to pour"], DC.frac], b: [["chạm vào từng ca để đổ hết vào bình", "tap each jug to pour it into the big jug"], ["chạm vào vũng nước trào ra để xem bao nhiêu lít", "tap the spilled puddle to see how much"], ["tính rồi nhập phân số, ví dụ 5/8", "work it out and type a fraction, e.g. 5/8"]] }; });
+BRF(QN3, function (p) { return { nv: ["tính số chai nước phải giao cho <b>lớp " + (p.cls || "4A") + "</b>.", "work out how many bottles go to <b>class " + (p.cls || "4A") + "</b>."],
+  dc: [DC.read], b: [["chạm vào bảng kho và một thùng nước", "tap the store board and a crate"], ["chạm vào phiếu đặt hàng", "tap the order slip"], ENTER] }; });
+
+/* ---- Lớp 5 · Khu vườn ---- */
+BRF(V51, function () { return { nv: ["tính diện tích luống đất hình tam giác ABC (m²).", "find the area of triangle ABC (m²)."],
+  dc: [DC.tape("m")], b: [["chạm vào các đoạn trên hình để đo (chỉ đo đoạn em cần)", "tap lengths in the picture to measure them (only what you need)"], ENTER] }; });
+BRF(V52, function () { return { nv: ["tính khoảng cách từ cột C đến tường nhà (m) để chôn cột.", "find how far the pole C must be from the house wall (m)."],
+  dc: [DC.tape("m"), DC.read], b: [["đo đoạn AB giữa hai móc trên tường", "measure AB between the two wall hooks"], ["chạm vào nhãn tấm bạt để đọc diện tích", "tap the label to read the area"], ENTER] }; });
+BRF(V53, function () { return { nv: ["tính diện tích mảnh vườn hình thang ABCD (m²).", "find the area of trapezoid ABCD (m²)."],
+  dc: [DC.tape("m")], b: [["chạm vào các đoạn trên hình để đo (chỉ đo đoạn em cần)", "tap lengths in the picture to measure them (only what you need)"], ENTER] }; });
+BRF(V54, function () { return { nv: ["tính chiều dài hàng rào chạy sát mép hồ (m), lấy π = 3,14.", "find the length of a fence right round the pond (m), using π = 3.14."],
+  dc: [DC.tape("m")], b: [["chạm vào sợi dây căng qua tâm hồ để đo", "tap the rope across the middle to measure it"], ENTER] }; });
+BRF(V55, function () { return { nv: ["tính chu vi hồ sen (m), lấy π = 3,14.", "find the lotus pond's circumference (m), using π = 3.14."],
+  dc: [DC.tape("m")], b: [["chạm vào cầu gỗ để đo từ tâm O ra mép hồ", "tap the bridge to measure from the centre O to the edge"], ENTER] }; });
+BRF(V56, function () { return { nv: ["tính số viên gạch để lát kín đáy đài phun nước, lấy π = 3,14.", "find how many tiles cover the fountain's bottom, using π = 3.14."],
+  dc: [DC.tape("m"), DC.read], b: [["chạm vào thước đo từ tâm (tượng) ra mép đài", "tap the tape from the centre (statue) to the rim"], ["chạm vào hộp gạch để đọc số viên mỗi m²", "tap the tile box for tiles per m²"], ["tính rồi nhập kết quả; số lẻ thì <b>làm tròn lên</b>", "work it out and type it; if it isn't whole, <b>round up</b>"]] }; });
+/* ---- Lớp 5 · Lễ hội ---- */
+BRF(F51, function (p) { var t = p.t != null ? F51_FR[p.t] : ["", ""]; return { nv: ["viết tỉ số của số lần mũi tên chỉ ô <b>" + t[0] + "</b> và tổng số lần quay.", "write the ratio of landings on <b>" + t[1] + "</b> to the total spins."],
+  dc: [["nút Quay", "Spin buttons"], DC.frac], b: [["quay đủ <b>" + (p.N || "") + " lần</b>", "spin <b>" + (p.N || "") + " times</b>"], ["đếm số lần chỉ vào ô " + t[0], "count the landings on " + t[1]], ["nhập phân số, ví dụ 3/10", "type a fraction, e.g. 3/10"]] }; });
+BRF(F52, function (p) { return { nv: ["viết tỉ số của số lần bốc được <b>hạt hướng dương</b> và tổng số lần bốc.", "write the ratio of <b>sunflower</b> draws to the total."],
+  dc: [["nút Bốc", "Draw buttons"], DC.frac], b: [["bốc đủ <b>" + (p.N || "") + " lần</b> (bốc xong bỏ lại vào túi)", "draw <b>" + (p.N || "") + " times</b> (putting each seed back)"], ["đếm số lần được hạt hướng dương", "count the sunflower draws"], ["nhập phân số <b>tối giản</b>", "type the fraction in <b>simplest form</b>"]] }; });
+BRF(F53, function (p) { return { nv: ["viết tỉ số của số lần mặt <b>sấp</b> và tổng số lần tung.", "write the ratio of <b>tails</b> to the total flips."],
+  dc: [["nút Tung", "Flip buttons"], DC.frac], b: [["tung đủ <b>" + (p.N || "") + " lần</b>", "flip <b>" + (p.N || "") + " times</b>"], ["đếm số lần mặt sấp", "count the tails"], ["nhập phân số <b>tối giản</b>", "type the fraction in <b>simplest form</b>"]] }; });
+BRF(F54, function (p) { return { nv: ["viết tỉ số của số lần ra <b>mặt lẻ</b> và tổng số lần gieo.", "write the ratio of <b>odd</b> rolls to the total."],
+  dc: [["nút Gieo", "Roll buttons"], DC.frac], b: [["gieo đủ <b>" + (p.N || "") + " lần</b>", "roll <b>" + (p.N || "") + " times</b>"], ["bảng chỉ đếm mặt chẵn (2, 4, 6): tự suy ra số lần ra mặt lẻ", "the board only counts even faces (2, 4, 6): work out the odd ones"], ["nhập phân số", "type the fraction"]] }; });
+BRF(F55, function (p) { return { nv: ["viết tỉ số của số lần <b>gắp trúng</b> và tổng số lượt chơi.", "write the ratio of <b>wins</b> to the total turns."],
+  dc: [["nút Gắp", "Play buttons"], DC.frac], b: [["chơi đủ <b>" + (p.N || "") + " lượt</b>", "play <b>" + (p.N || "") + " turns</b>"], ["máy chỉ hiện số lần trượt: tự suy ra số lần trúng", "the machine only shows misses: work out the wins"], ["nhập phân số", "type the fraction"]] }; });
+BRF(F56, function () { return { nv: ["dự đoán số bạn trúng gấu bông chiều nay, coi như tỉ số trúng thưởng giống buổi sáng.", "predict how many children win a teddy this afternoon, with the same win ratio as this morning."],
+  dc: [DC.read], b: [["chạm vào bảng kết quả buổi sáng", "tap the morning results board"], ["chạm vào danh sách đăng ký buổi chiều", "tap the afternoon sign-up list"], ENTER] }; });
+/* ---- Lớp 5 · Trạm cứu hộ ---- */
+BRF(P51, function (p) { var s = p.ask != null ? P51_SP[p.ask] : ["", ""]; return { nv: ["tính số <b>" + s[0].toLowerCase() + "</b> đang ở trạm.", "work out how many <b>" + s[1].toLowerCase() + "</b> are at the shelter."],
+  dc: [DC.read], b: [["đọc phần trăm trên biểu đồ", "read the percentage on the chart"], ["chạm vào sổ tiếp nhận để xem tổng số", "tap the intake book for the total"], ENTER] }; });
+BRF(P52, function () { return { nv: ["tính số ki-lô-gam <b>rau củ</b> cần chuẩn bị mỗi tuần.", "work out how many kilograms of <b>vegetables</b> are needed each week."],
+  dc: [DC.read], b: [["đọc biểu đồ khẩu phần, tìm phần trăm rau củ", "read the food chart to find the vegetables' share"], ["chạm vào sổ kho để xem tổng số thức ăn mỗi tuần", "tap the store book for the total food per week"], ENTER] }; });
+BRF(P53, function () { return { nv: ["tính số nhà sơn màu <b>trắng</b>.", "work out how many houses are <b>white</b>."],
+  dc: [DC.read], b: [["đọc biểu đồ, tìm phần trăm nhà trắng", "read the chart to find the white share"], ["chạm vào bảng kiểm kê để xem tổng số nhà", "tap the stock list for the total"], ENTER] }; });
+BRF(P54, function (p) { var a = p.a != null ? P54_T[p.a] : ["", ""], c = p.b != null ? P54_T[p.b] : ["", ""]; return { nv: ["đội <b>" + a[0] + "</b> nhiều hơn đội <b>" + c[0] + "</b> bao nhiêu người?", "how many more people are in <b>" + a[1] + "</b> than in <b>" + c[1] + "</b>?"],
+  dc: [DC.read], b: [["đọc phần trăm của hai đội trên biểu đồ", "read both teams' percentages on the chart"], ["chạm vào danh sách tình nguyện viên để xem tổng số", "tap the volunteer list for the total"], ENTER] }; });
+BRF(P55, function () { return { nv: ["tính tổng số tiền tiết kiệm của trạm.", "work out the shelter's total savings."],
+  dc: [DC.read], b: [["đọc biểu đồ chi tiêu", "read the spending chart"], ["chạm vào hóa đơn mua bát", "tap the bowls receipt"], ENTER] }; });
+BRF(P56, function (p) { var r = p.req || [0, 0, 0]; return { nv: ["sân đang chia chưa đúng tỉ lệ; điều chỉnh cho đúng thiết kế: <b>Thảm cỏ " + r[0] + "%</b>, <b>Bãi cát " + r[1] + "%</b>, <b>Hồ nước " + r[2] + "%</b>.", "the playground isn't in the right proportions; adjust it to the design: <b>Grass " + r[0] + "%</b>, <b>Sand " + r[1] + "%</b>, <b>Pool " + r[2] + "%</b>."],
+  dc: [["nút ◀ ▶ <b style=\"color:#e53935\">đỏ</b> dời ranh giới 1", "<b style=\"color:#e53935\">red</b> ◀ ▶ buttons move boundary 1"], ["nút ◀ ▶ <b style=\"color:#8e24aa\">tím</b> dời ranh giới 2", "<b style=\"color:#8e24aa\">purple</b> ◀ ▶ buttons move boundary 2"]],
+  b: [["đổi phần trăm ra số vạch (đường tròn có 20 vạch đều nhau)", "change each percentage into ticks (the circle has 20 equal ticks)"], ["dời hai ranh giới, đi theo chiều kim đồng hồ từ đường đen cố định ở trên cùng", "move the two boundaries, clockwise from the fixed black line at the top"], ["bấm <b>Xây sân chơi</b>", "press <b>Build</b>"]] }; });
+/* ---- Lớp 5 · Tiệm bánh ---- */
+BRF(B51, function () { return { nv: ["tính diện tích giấy gói kín toàn bộ mặt ngoài hộp lập phương (cm²).", "find the paper to cover the whole outside of the cube box (cm²)."],
+  dc: [DC.ruler("cm"), ["nút Mở hộp", "Unfold button"]], b: [["chạm vào một cạnh hộp để đo", "tap an edge to measure"], ["bấm <b>Mở hộp</b> xem hình khai triển, đếm số mặt", "press <b>Unfold</b> to see the net and count the faces"], ENTER] }; });
+BRF(B52, function () { return { nv: ["tính diện tích giấy dán <b>một mặt</b> của hộp kẹo.", "find the paper for <b>one face</b> of the sweet box."],
+  dc: [DC.read, ["nút Mở hộp", "Unfold button"]], b: [["chạm vào nhãn hộp", "tap the box label"], ["bấm <b>Mở hộp</b> xem hình khai triển, đếm số mặt", "press <b>Unfold</b> to see the net and count the faces"], ENTER] }; });
+BRF(B53, function () { return { nv: ["tính thể tích bột tối đa khuôn chứa được (cm³), coi như thành khuôn rất mỏng.", "find the most batter the tin can hold (cm³); the sides are very thin."],
+  dc: [DC.ruler("cm")], b: [["chạm vào các cạnh của khuôn để đo", "tap the tin's edges to measure"], ENTER] }; });
+BRF(B54, function () { return { nv: ["tính thể tích kho bột (m³).", "find the flour store's volume (m³)."],
+  dc: [DC.tape("m")], b: [["chạm vào các cạnh của kho để đo", "tap the store's edges to measure"], ENTER] }; });
+BRF(B55, function () { return { nv: ["tính số bình nhỏ rót <b>đầy</b> được từ thùng sữa.", "work out how many small jugs can be filled <b>to the top</b>."],
+  dc: [DC.read], b: [["chạm vào nhãn thùng sữa", "tap the carton label"], ["chạm vào nhãn bình nhỏ, đổi về cùng đơn vị", "tap the jug label and use the same units"], ENTER],
+  nho: ["1 dm³ = 1000 cm³.", "1 dm³ = 1000 cm³."] }; });
+BRF(B56, function () { return { nv: ["tính tổng diện tích kính làm chụp: <b>4 mặt xung quanh và mặt trên</b>, không có mặt đáy (cm²).", "find the glass for the cover: <b>4 sides and the top</b>, no bottom (cm²)."],
+  dc: [DC.ruler("cm")], b: [["chạm vào các cạnh của chụp kính để đo", "tap the cover's edges to measure"], ENTER] }; });
+
+/* Biểu tượng thước nhấp nháy trên mọi đoạn đo được mà em chưa đo (bản 3.17),
+   để em nhìn hình là biết chỗ nào dùng thước. Chạm vào biểu tượng cũng đo được. */
+function tapeBadge(x, y, it) {
+  var t = ""; for (var i = -12; i <= 12; i += 4) t += '<path d="M' + i + ' -9 v' + (i % 8 === 0 ? 8 : 5) + '" stroke="' + INK + '" stroke-width="1.3"/>';
+  return '<g data-it="' + it + '" style="cursor:pointer" transform="translate(' + x + ' ' + y + ')"><g><rect x="-17" y="-10" width="34" height="20" rx="4" fill="#ffd54f" stroke="' + INK + '" stroke-width="1.6"/>' + t +
+    '<animateTransform attributeName="transform" type="scale" values="1;1.15;1" dur="1.4s" repeatCount="indefinite"/></g></g>';
+}
+C4_BASE.layer = function (p) {
+  var o = S9_BASE.layer.call(this, p), its = this.items(p);
+  var at = this.badgeAt ? this.badgeAt(p) : {};
+  Object.keys(its).forEach(function (k) { var it = its[k], q = it.tag || at[k]; if (it.sfx === "tape" && q && !p.seen[k]) o += tapeBadge(q[0], q[1], k); });
+  return o;
+};
+/* hai bài lớp 4 tự vẽ số đo: chỉ chỗ đặt biểu tượng thước */
+XD3.badgeAt = function (p) { var g = this.geo(p); return { a: [(g.A[0] + g.B[0]) / 2, g.A[1] + 26], c: [(g.A[0] + g.D[0]) / 2 - 26, (g.A[1] + g.D[1]) / 2], h: [g.D[0] + 34, (g.D[1] + g.H[1]) / 2] }; };
+NT1.badgeAt = function (p) { var g = this.geo(p); return { a: [180, g.y + g.h + 18], b: [g.x + g.w + 26, g.y + g.h / 2] }; };
 
 /* ---------- problem catalogue: one JSON-like record per problem ----------
    id        : mã bài (KM = Khe Mây, HH = hình học, HS = hàm số)
@@ -9920,7 +10095,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.16";
+var APP_VER = "3.17";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
