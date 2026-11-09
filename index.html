@@ -7932,12 +7932,39 @@ tlmFlush = function () {
   fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(batch) })
     .then(function (r) { return r.json(); })
     .then(function (j) {
+      if (j && !j.ok && j.err === "action") return tlmLegacy(url, batch);
       TLM.busy = false; if (!j || !j.ok) return;
-      var q2 = tlmQ(); tlmSave(q2.slice(batch.length));
-      (j.ket_qua || []).forEach(gotPoints);
-      if (q2.length > batch.length) setTimeout(tlmFlush, 400);
+      tlmDone(batch, j.ket_qua || []);
     }).catch(function () { TLM.busy = false; });
 };
+function tlmDone(batch, res) {
+  TLM.busy = false;
+  var q2 = tlmQ(); tlmSave(q2.slice(batch.length));
+  res.forEach(gotPoints);
+  if (q2.length > batch.length) setTimeout(tlmFlush, 400);
+}
+/* máy chủ bản 1.0.0 chưa nhận luồng sự kiện: gửi lượt chơi và kết quả bằng thao tác batch (có từ 1.0.0) */
+function tlmLegacy(url, batch) {
+  var items = [], map = [];
+  batch.forEach(function (e) {
+    var base = { ma_may: e.ma_may, cap: e.cap, lop: e.lop, kich_ban: e.kich_ban, nen_tang: e.nen_tang, phien_ban: e.phien_ban };
+    if (e.nick && e.token) { base.nick = e.nick; base.token = e.token; }
+    if (e.su_kien === "phien") { base.a = "session"; base.ngon_ngu = e.ngon_ngu; items.push(base); map.push(null); }
+    else if (e.su_kien === "qua" || e.su_kien === "het3") {
+      base.a = "result"; base.ma_bai = e.ma_bai; base.ten_bai = e.ten_bai; base.so_lan_thu = e.lan_lap; base.dat = e.su_kien === "qua"; base.muc = e.ket_qua;
+      base.giay = e.giay; base.so_goi_y = e.goi_y; base.sao = e.su_kien === "qua" ? e.sao_bai : 0; items.push(base); map.push(e);
+    }
+  });
+  if (!items.length) { tlmDone(batch, []); return; }
+  return fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ a: "batch", items: items, ma_may: tlmDev() }) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) { TLM.busy = false; return; }
+      var res = [];
+      (j.results || []).forEach(function (r, i) { var e = map[i]; if (e && r) res.push({ su_kien: e.su_kien, ma_bai: e.ma_bai, diem: r.diem || 0, card: r.card || null }); });
+      tlmDone(batch, res);
+    }).catch(function () { TLM.busy = false; });
+}
 function gotPoints(k) {
   if (k.su_kien !== "qua") return;
   var old = ACC && ACC.card ? ACC.card.rank.ten_vi : null;
