@@ -202,6 +202,41 @@ p { margin: 0; line-height: 1.5; }
 .rpstars { font-size: 1.4rem; font-weight: 800; color: #e09a00; }
 .rpbtns { display: grid; grid-template-columns: 1fr; gap: 8px; }
 .confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+#sEnd { position: relative; }
+.endconf { z-index: 0; }
+.endconf i { animation-iteration-count: 2; }
+.fwcv { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 80; }
+.fwcv[hidden] { display: none; }
+.endmedal { display: flex; justify-content: center; margin: 2px 0 6px; position: relative; z-index: 1; }
+.medalwrap { display: flex; align-items: center; gap: 12px; }
+.endmedal svg { width: 104px; height: 104px; animation: medalPop .9s cubic-bezier(.2,1.6,.4,1) both, medalWig 2.6s ease-in-out 1s infinite; }
+.endmedal .rays { transform-box: fill-box; transform-origin: center; animation: raySpin 9s linear infinite; }
+.medaltxt { display: flex; flex-direction: column; }
+.medaltxt b { font-size: 1.7rem; color: #e65100; line-height: 1.1; }
+.medaltxt span { font-size: .92rem; color: var(--muted); font-weight: 700; }
+.medaltxt .mstars { color: #ffb300; font-size: 1.5rem; letter-spacing: 2px; }
+.medaltxt .twk { color: #ffb300; }
+#endStars small { display: block; font-size: .9rem; font-weight: 700; color: var(--muted); margin-top: 2px; }
+.twk { display: inline-block; animation: twinkle 1.2s ease-in-out infinite; }
+@keyframes medalPop { from { transform: scale(0) rotate(-25deg); } to { transform: scale(1) rotate(0); } }
+@keyframes medalWig { 0%, 100% { transform: rotate(0) scale(1); } 50% { transform: rotate(-6deg) scale(1.06); } }
+@keyframes raySpin { to { transform: rotate(360deg); } }
+@keyframes twinkle { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: .6; } }
+@media (prefers-reduced-motion: reduce) { .endmedal svg, .endmedal .rays, .twk { animation: none; } }
+.scenpick button[data-prog="all"] { border-color: #2fa35a; background: #e8f5e9; }
+.scenpick button[data-prog="some"] { border-color: #f9a825; background: #fff8e1; }
+.scenpick button[data-prog]::after { margin-left: 4px; font-weight: 800; }
+.scenpick button[data-prog="all"]::after { content: "✓"; color: #1f8a4c; }
+.scenpick button[data-prog="some"]::after { content: "◐"; color: #f9a825; }
+.scenpick button[aria-pressed="true"][data-prog] { background: var(--accent); }
+.scenpick button[aria-pressed="true"][data-prog]::after { color: #fff; }
+.proglegend { flex-basis: 100%; font-size: .8rem; color: var(--muted); }
+.proglegend[hidden] { display: none; }
+.proglegend .pa { color: #1f8a4c; } .proglegend .ps { color: #f9a825; }
+.pmark { display: inline-block; margin-right: 4px; font-weight: 800; }
+.pmark.great { color: #1f8a4c; } .pmark.good { color: #2f80ed; } .pmark.ok { color: #8d6e63; }
+.bankpill { margin: 6px auto 0; padding: 6px 12px; border-radius: 999px; background: #fff8e1; border: 2px solid #ffb300; font-weight: 700; font-size: .9rem; text-align: center; width: fit-content; max-width: 100%; }
+.bankpill[hidden] { display: none; }
 .confetti i { position: absolute; top: -14px; width: 9px; height: 14px; border-radius: 2px; animation: conf 1.9s ease-in forwards; }
 @keyframes conf { to { transform: translateY(560px) rotate(540deg); opacity: .2; } }
 @media (prefers-reduced-motion: reduce) { .confetti { display: none; } }
@@ -754,6 +789,7 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
 <section class="screen" id="sStart">
   <div class="langsel" role="group" aria-label="Ngôn ngữ / Language"><button type="button" data-lang="vi" aria-pressed="true">Tiếng Việt</button><button type="button" data-lang="en" aria-pressed="false">English</button></div>
   <div class="accbar" id="accBar"></div>
+  <div class="bankpill" id="bankPill" hidden></div>
   <p class="srvnote" id="srvNote" hidden></p>
   <div class="card hero">
     <svg viewBox="0 0 360 170" role="img" aria-label="Làng quê, khu vườn, cây cầu và dụng cụ đo">
@@ -944,6 +980,7 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
 </div>
 <div class="report accdlg" id="accDlg" hidden role="dialog" aria-modal="true"></div>
 <div class="acctoast" id="accToast" hidden></div>
+<canvas class="fwcv" id="fwCanvas" hidden aria-hidden="true"></canvas>
 <div class="report" id="report" hidden role="dialog" aria-modal="true" aria-labelledby="rpTitle">
   <div class="card rpcard">
     <div class="confetti" id="confetti"></div>
@@ -964,6 +1001,8 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
 
 <!-- END -->
 <section class="screen" id="sEnd" hidden>
+  <div class="confetti endconf" id="endConfetti"></div>
+  <div class="endmedal" id="endMedal"></div>
   <div class="card hero" id="endHero">
     <svg viewBox="0 0 360 150" role="img" aria-label="Xe chở hàng về đến bản">
       <rect width="360" height="150" fill="#bfe8ff"/>
@@ -6285,7 +6324,7 @@ function renderStory() {
   C4_ORDER.concat(C5_ORDER).forEach(function (k) { var b = sp1.querySelector("[data-scen=" + k + "]"); b.textContent = L(C4[k].btn[0], C4[k].btn[1]); b.hidden = C4[k].lop !== S.g; });
   document.querySelectorAll("#scenPick [data-scen]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.scen === (S.scen || "vuon") ? "true" : "false"); });
   $("#storyHero").innerHTML = c.hero(); $("#storyLevel").textContent = c.level; $("#storyTitle").textContent = c.title; $("#storyLead").innerHTML = c.lead;
-  renderRoute();
+  renderRoute(); decoratePickers();
 }
 
 $("#scenPick2").addEventListener("click", function (e) { var b = e.target.closest("[data-scen2]"); if (!b || b.dataset.scen2 === S.scen2) return; S.scen2 = b.dataset.scen2; SFX.click(); pickRoute(); renderStory(); });
@@ -6712,6 +6751,7 @@ function render() {
   $("#inVal").disabled = S.done;
   document.querySelectorAll(".ftools .btn").forEach(function (b) { b.disabled = S.done || !!S.rowing; });
   syncRoomAns();
+  if (inGame) bankSave();
   $("#fnList").innerHTML = noteItems();
   var ft = $("#fnTools"); if (ft) ft.innerHTML = (S.meas.length + S.results.length) ? nbTools(false) : "";
   autosave();
@@ -6980,14 +7020,14 @@ function renderRoute() {
   if (isC4()) {
     $("#routeInfo").className = "card route r1";
     $("#routeInfo").innerHTML = "<p><b>" + TX("Cấp 1 · Lớp ") + S.g + L(":</b> em làm <b>", ":</b> you do <b>") + list.length + L(" việc</b>, từ dễ đến khó.</p><ol>", " tasks</b>, from easy to harder.</p><ol>") +
-      list.map(function (o) { return "<li><b>" + o.name + "</b>: " + o.sub + "</li>"; }).join("") + "</ol>" +
+      list.map(function (o) { return "<li>" + doneMark(o) + "<b>" + o.name + "</b>: " + o.sub + "</li>"; }).join("") + "</ol>" +
       (C4_POOL[S.scen].some(function (s) { return Array.isArray(s) && s.length > 1; }) ? '<button class="linkbtn" type="button" id="bReroll">' + L("Đổi bài khác (ngẫu nhiên)", "Other tasks (random)") + "</button>" : "");
     return;
   }
   if (S.g <= 5) {
     $("#routeInfo").className = "card route r1";
     $("#routeInfo").innerHTML = "<p><b>" + TX("Cấp 1 · Lớp ") + S.g + (S.scen === "cho" ? TX(":</b> Tèo đi qua <b>") + list.length + TX(" quầy hàng</b> để mua đồ cho bữa tiệc.</p><ol>") : TX(":</b> em giúp ông làm <b>") + list.length + TX(" việc</b> để cải tạo khu vườn.</p><ol>")) +
-      list.map(function (o) { return "<li><b>" + o.name + "</b>: " + o.sub + "</li>"; }).join("") + "</ol>" +
+      list.map(function (o) { return "<li>" + doneMark(o) + "<b>" + o.name + "</b>: " + o.sub + "</li>"; }).join("") + "</ol>" +
       TX('<button class="linkbtn" type="button" id="bReroll">Đổi bài khác (ngẫu nhiên)</button>');
     return;
   }
@@ -6996,19 +7036,19 @@ function renderRoute() {
     var fix9 = Array.isArray(S9_POOL[S.scen2]);
     $("#routeInfo").className = "card route r2";
     $("#routeInfo").innerHTML = "<p><b>" + L("Ôn thi vào 10:</b> em cần hoàn thành <b>", "Exam prep:</b> complete <b>") + list.length + L(" thử thách</b>.", " challenges</b>.") + (fix9 ? L(" Bấm ↑ để đổi thứ tự.", " Tap ↑ to change the order.") : "") + "</p>" + '<ol class="corder">' +
-      list.map(function (o, k) { return "<li><span><b>" + o.name + "</b>: " + o.sub + "</span>" + (fix9 && k ? '<button class="upbtn" type="button" data-up="' + k + '" aria-label="' + L("Làm trước", "Do first") + '">↑</button>' : "") + "</li>"; }).join("") + "</ol>" +
+      list.map(function (o, k) { return "<li><span>" + doneMark(o) + "<b>" + o.name + "</b>: " + o.sub + "</span>" + (fix9 && k ? '<button class="upbtn" type="button" data-up="' + k + '" aria-label="' + L("Làm trước", "Do first") + '">↑</button>' : "") + "</li>"; }).join("") + "</ol>" +
       (fix9 ? "" : '<button class="linkbtn" type="button" id="bReroll">' + L("Đổi bài khác (ngẫu nhiên)", "Other challenges (random)") + "</button>");
     return;
   }
   if (isCamp()) {
     $("#routeInfo").className = "card route r2";
     $("#routeInfo").innerHTML = "<p><b>" + TX("Cấp 2:</b> em phụ trách hậu cần ở <b>") + list.length + TX(" khu</b> của trại. Em muốn làm khu nào trước? Bấm ↑ để đổi thứ tự.</p>") + '<ol class="corder">' +
-      list.map(function (o, k) { return "<li><span><b>" + o.name + "</b>: " + o.sub + "</span>" + (k ? '<button class="upbtn" type="button" data-up="' + k + '" aria-label="' + TX("Làm trước") + '">↑</button>' : "") + "</li>"; }).join("") + "</ol>";
+      list.map(function (o, k) { return "<li><span>" + doneMark(o) + "<b>" + o.name + "</b>: " + o.sub + "</span>" + (k ? '<button class="upbtn" type="button" data-up="' + k + '" aria-label="' + TX("Làm trước") + '">↑</button>' : "") + "</li>"; }).join("") + "</ol>";
     return;
   }
   $("#routeInfo").className = "card route " + (lv3 ? "r3" : "r2");
   $("#routeInfo").innerHTML = "<p><b>" + (lv3 ? TX("Cấp 3") : TX("Cấp 2")) + TX(":</b> em phải vượt qua <b>") + list.length + TX(" chướng ngại</b> để đưa hàng cứu trợ về bản.</p><ol>") +
-    list.map(function (o) { return "<li><b>" + o.name + "</b>: " + o.sub + "</li>"; }).join("") + "</ol>" +
+    list.map(function (o) { return "<li>" + doneMark(o) + "<b>" + o.name + "</b>: " + o.sub + "</li>"; }).join("") + "</ol>" +
     TX('<button class="linkbtn" type="button" id="bReroll">Đổi bài khác (ngẫu nhiên)</button>');
 }
 $("#grades").addEventListener("click", function (e) {
@@ -7022,7 +7062,7 @@ $("#grades").addEventListener("click", function (e) {
   renderRoute();
 });
 $("#subG").addEventListener("click", function (e) { var sg = e.target.closest("[data-sg]"); if (!sg) return; S.g = +sg.dataset.sg; pickRoute(); renderRoute(); SFX.click(); });
-$("#bStart").addEventListener("click", function () { tlm("phien", { ghi_chu: (S.route || []).map(function (o) { return o && o.meta ? o.meta.id : ""; }).join(" ") }); S.wallet = S.g <= 5 && S.scen === "cho" ? (S.g === 4 ? 300000 : 500000) : 0; S.hist = []; $("#bHist").hidden = true; inGame = true; armBack(); OBS = routeList(); S.stars = 3; S.i = 0; S.formulas = []; setupKeys(); show("sGame"); loadOb(); });
+$("#bStart").addEventListener("click", function () { tlm("phien", { ghi_chu: (S.route || []).map(function (o) { return o && o.meta ? o.meta.id : ""; }).join(" ") }); S.wallet = S.g <= 5 && S.scen === "cho" ? (S.g === 4 ? 300000 : 500000) : 0; S.hist = []; $("#bHist").hidden = true; inGame = true; armBack(); OBS = routeList(); S.stars = Math.max(3, bankGet()); S.i = 0; S.formulas = []; setupKeys(); show("sGame"); loadOb(); });
 $("#bAgain").addEventListener("click", function () { reroll(); renderResume(); renderStory(); show("sStory"); });
 $("#bToStory").addEventListener("click", function () { SFX.click(); renderStory(); show("sStory"); });
 $("#bStoryBack").addEventListener("click", function () { SFX.click(); renderResume(); show("sStart"); });
@@ -7135,6 +7175,7 @@ function showReport(v) {
   }
   $("#report").hidden = false; zoomCap("");
   SFX[great ? "fanfare" : (R.level === "good" ? "good" : "okay")]();
+  if (S.g <= 5 && R.level !== "ok") { SFX.clap(great ? 1.8 : 1, 24); if (great) setTimeout(function () { fireworks(1600, 2, false); }, 300); }
   render();
   say(great ? TX("Rất chuẩn! Giỏi lắm cháu.") : (ob.doneSay ? ob.doneSay : ob.garden ? TX("Xong việc rồi. Cố lên cháu!") : TX("Xe đã qua. Cố lên cháu!")));
   setMsg((ob.camp || ob.s9job ? TX("Hoàn thành! +") : TX("Lắp đặt xong. +")) + earn + " ★", "ok");
@@ -7154,7 +7195,7 @@ function next() {
     $("#endText").textContent = S.endText();
     $("#endStars").textContent = "★ " + S.stars + TX(" sao");
     inGame = false; clearTimeout(saveT); lsDel(SAVE_KEY); $("#bHistEnd").hidden = !(S.hist && S.hist.length);
-    show("sEnd"); SFX.fanfare();
+    show("sEnd"); celebrateEnd();
   }
 }
 /* ---------- technical room ---------- */
@@ -9879,7 +9920,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.15";
+var APP_VER = "3.16";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
@@ -10280,6 +10321,7 @@ function autosave(now) {
 }
 function readSave() { var t = lsGet(SAVE_KEY); if (!t) return null; try { var d = JSON.parse(t); return d && d.v === 1 && d.p ? d : null; } catch (e) { return null; } }
 function renderResume() {
+  renderBank();
   var d = readSave(), box = $("#resumeBox"); if (!box) return;
   if (!d) { box.hidden = true; return; }
   var obs = d.obs.map(function (k) { return OBK[k]; }), ob = obs[d.i], tm = new Date(d.t);
@@ -10354,7 +10396,7 @@ function recordDone(ob, R, v) {
   S.hist = S.hist || [];
   S.hist.push({ name: ob.name, i: S.i, task: ob.task(S.g), notes: S.meas.map(measNote), res: S.results.map(resNote),
     v: v, att: S.att, level: R.level, rows: R.rows, memo: S.memo, fig: figSnapshot() });
-  S.okDone = true; $("#bHist").hidden = false; autosave(true);
+  S.okDone = true; $("#bHist").hidden = false; progMark(ob.key, R.level); bankSave(); autosave(true);
 }
 function openHist() {
   var H = S.hist || [];
@@ -10423,7 +10465,7 @@ function refreshLang() {
     if (!$("#parSheet").hidden) parRender();
     renderDrawChips();
   }
-  if (!$("#sEnd").hidden && S.endText) { $("#endText").textContent = S.endText(); $("#endStars").textContent = "★ " + S.stars + TX(" sao"); }
+  if (!$("#sEnd").hidden && S.endText) { $("#endText").textContent = S.endText(); $("#endStars").innerHTML = "★ " + S.stars + TX(" sao") + "<small>" + L("Kho sao được giữ cho lần chơi sau", "Your stars are kept for next time") + "</small>"; var em = $("#endMedal"); if (em && em.innerHTML) em.innerHTML = endMedalHTML(); }
   if (!$("#histDlg").hidden) openHist();
   if (!$("#catDlg").hidden) openCat();
   if (!$("#exitDlg").hidden) askQuit();
@@ -10432,6 +10474,73 @@ document.addEventListener("click", function (e) {
   var b = e.target.closest("[data-lang]"); if (b) { SFX.click(); setLang(b.dataset.lang); return; }
   var t = e.target.closest(".langtog"); if (t) { e.preventDefault(); e.stopPropagation(); SFX.click(); setLang(LANG === "vi" ? "en" : "vi"); }
 }, true);
+/* ---------- tiến độ: đánh dấu bài/câu chuyện đã chơi; kho sao giữ cho lần sau; chúc mừng sôi động (bản 3.16) ---------- */
+var PROG_KEY = "tt-tien-do", STAR_KEY = "tt-kho-sao", LV_RANK = { ok: 1, good: 2, great: 3 };
+function progGet() { try { return JSON.parse(lsGet(PROG_KEY) || "{}") || {}; } catch (e) { return {}; } }
+function progMark(key, level) { if (!key) return; var o = progGet(); o.d = o.d || {}; if (!o.d[key] || LV_RANK[level] > LV_RANK[o.d[key]]) o.d[key] = level; lsSet(PROG_KEY, JSON.stringify(o)); }
+function progScenDone(id) { var o = progGet(); o.s = o.s || {}; o.s[id] = (o.s[id] || 0) + 1; lsSet(PROG_KEY, JSON.stringify(o)); }
+function scenId() { return S.g <= 5 ? "c1:" + (S.scen || "vuon") + ":" + S.g : (S.g >= 10 ? "c3:km" : "c2:" + (S.scen2 || "km")); }
+function flat(a) { var o = []; (a || []).forEach(function (x) { o = o.concat(Array.isArray(x) ? x : [x]); }); return o; }
+function scenPoolFor(lv1, id) {
+  if (lv1) { if (C4[id]) return flat(C4_POOL[id]); if (id === "cho") return MPOOL; return GPOOL.filter(function (o) { return o.meta.lop.indexOf(S.g) >= 0; }); }
+  if (S9[id]) { var pl = S9_POOL[id]; return Array.isArray(pl) ? pl : [].concat(pl.ds, pl.hh, pl.tt); }
+  return id === "trai" ? CPOOL : POOL;
+}
+function scenStatus(list) { var d = progGet().d || {}, n = list.filter(function (o) { return d[o.key]; }).length; return !n ? "" : n >= list.length ? "all" : "some"; }
+function doneMark(o) { var lv = (progGet().d || {})[o.key]; return lv ? '<span class="pmark ' + lv + '" title="' + { great: TX("Rất chuẩn"), good: TX("Tốt"), ok: TX("Đạt") }[lv] + '">✓</span>' : ""; }
+function decoratePickers() {
+  var any = false;
+  document.querySelectorAll("#scenPick [data-scen]").forEach(function (b) { var st = scenStatus(scenPoolFor(true, b.dataset.scen)); if (st) any = true; if (st) b.dataset.prog = st; else b.removeAttribute("data-prog"); });
+  document.querySelectorAll("#scenPick2 [data-scen2]").forEach(function (b) { var st = scenStatus(scenPoolFor(false, b.dataset.scen2)); if (st) any = true; if (st) b.dataset.prog = st; else b.removeAttribute("data-prog"); });
+  ["#scenPick", "#scenPick2"].forEach(function (s) { var p = $(s); if (!p) return; var lg = p.querySelector(".proglegend"); if (!lg) { p.insertAdjacentHTML("beforeend", '<span class="proglegend"></span>'); lg = p.querySelector(".proglegend"); } lg.innerHTML = L('<b class="pa">✓</b> đã chơi hết bài · <b class="ps">◐</b> đã chơi một phần', '<b class="pa">✓</b> all tasks played · <b class="ps">◐</b> some played'); lg.hidden = !any; });
+}
+function bankGet() { return Math.max(0, Math.floor(+(lsGet(STAR_KEY) || 0) || 0)); }
+function bankSave() { if (typeof S.stars === "number" && isFinite(S.stars)) lsSet(STAR_KEY, String(S.stars)); }
+function renderBank() { var el = $("#bankPill"); if (!el) return; var n = bankGet(); el.hidden = !n; el.innerHTML = L("★ Kho sao của em: <b>" + n + "</b> sao, dùng tiếp ở lần chơi sau", "★ Your star bank: <b>" + n + "</b> stars, carried to your next game"); }
+
+/* âm thanh chúc mừng: vỗ tay, reo hò, tiếng pháo */
+SFX.clap = function (dur, dens) { dur = dur || 2.4; var n = Math.round(dur * (dens || 26)); for (var i = 0; i < n; i++) { var t = Math.random() * dur, v = (0.08 + Math.random() * 0.12) * (1 - 0.6 * t / dur); noise(t, 0.025 + Math.random() * 0.03, v, "bandpass", 900 + Math.random() * 1900, 0, 0.8); } };
+SFX.yay = function (t0) { t0 = t0 || 0; [[392, 784], [494, 988], [587, 1175]].forEach(function (f, i) { tone("triangle", f[0], f[1], t0 + i * 0.06, 0.5, 0.05); tone("sine", f[0] * 2, f[1] * 2, t0 + i * 0.06, 0.45, 0.025); }); };
+SFX.boom = function (t) { t = t || 0; noise(t, 0.45, 0.22, "lowpass", 900, 140); tone("sine", 95, 42, t, 0.35, 0.18); for (var k = 0; k < 7; k++) noise(t + 0.22 + k * 0.05, 0.035, 0.07, "highpass", 3200 + Math.random() * 2500); };
+SFX.celebrate = function () { SFX.fanfare(); SFX.yay(0.85); SFX.clap(3.4, 30); };
+
+/* pháo hoa trên canvas phủ toàn màn hình */
+var FW = { raf: 0 };
+function fireworks(ms, bursts, sound) {
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var cv = $("#fwCanvas"); if (!cv) return; var ctx = cv.getContext("2d"); if (!ctx) return;
+  cancelAnimationFrame(FW.raf); var W = cv.width = window.innerWidth, H = cv.height = window.innerHeight, ps = [], t0 = performance.now(), cols = ["#ff5252", "#ffd740", "#69f0ae", "#40c4ff", "#e040fb", "#ff9100", "#ffffff"], fired = 0;
+  cv.hidden = false;
+  function burst() { var x = W * (0.15 + Math.random() * 0.7), y = H * (0.12 + Math.random() * 0.38), c = cols[Math.floor(Math.random() * cols.length)], c2 = cols[Math.floor(Math.random() * cols.length)], n = 70 + Math.floor(Math.random() * 40);
+    for (var i = 0; i < n; i++) { var a = Math.PI * 2 * i / n + Math.random() * 0.1, v = 2.2 + Math.random() * 3.2; ps.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, c: i % 3 ? c : c2, r: 1.6 + Math.random() * 1.6 }); }
+    if (sound) SFX.boom(0); }
+  var gap = ms / (bursts + 1);
+  function step(now) {
+    var el = now - t0; while (fired < bursts && el > gap * fired + 150) { burst(); fired++; }
+    ctx.globalCompositeOperation = "destination-out"; ctx.fillStyle = "rgba(0,0,0,0.22)"; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = "lighter";
+    ps = ps.filter(function (p) { p.x += p.vx; p.y += p.vy; p.vy += 0.045; p.vx *= 0.985; p.vy *= 0.985; p.life -= 0.011; if (p.life <= 0) return false; ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill(); return true; });
+    ctx.globalAlpha = 1;
+    if (el < ms || ps.length) FW.raf = requestAnimationFrame(step); else { ctx.clearRect(0, 0, W, H); cv.hidden = true; }
+  }
+  FW.raf = requestAnimationFrame(step);
+}
+function confettiRain(el, n) { var cols = ["#ff7a3d", "#ffcf3f", "#2fa35a", "#2f80ed", "#8e5cf7", "#e53935"], h = ""; for (var k = 0; k < n; k++) h += '<i style="left:' + Math.floor(Math.random() * 100) + "%;background:" + cols[k % 6] + ";animation-delay:" + (Math.random() * 1.2).toFixed(2) + "s;animation-duration:" + (1.6 + Math.random() * 1.4).toFixed(2) + 's"></i>'; el.innerHTML = h; }
+function endMedalHTML() {
+  var H = S.hist || [], n = H.length, g = H.filter(function (h) { return h.level === "great"; }).length;
+  var title = n && g === n ? L("Xuất sắc!", "Outstanding!") : g * 2 >= n ? L("Giỏi lắm!", "Great job!") : L("Hoàn thành!", "Well done!");
+  var rays = ""; for (var i = 0; i < 12; i++) rays += '<path d="M48 48 L' + (48 + 46 * Math.cos(i * 0.5236 - 0.13)) + " " + (48 + 46 * Math.sin(i * 0.5236 - 0.13)) + " L" + (48 + 46 * Math.cos(i * 0.5236 + 0.13)) + " " + (48 + 46 * Math.sin(i * 0.5236 + 0.13)) + ' Z" fill="#fff59d"/>';
+  var svg = '<svg viewBox="0 0 96 96" aria-hidden="true"><g class="rays">' + rays + '</g><g stroke="' + INK + '" stroke-width="2.2" stroke-linejoin="round"><path d="M28 24 h40 v12 q0 22 -20 26 q-20 -4 -20 -26 Z" fill="#ffca28"/><path d="M28 30 q-12 0 -10 10 q2 9 12 9 M68 30 q12 0 10 10 q-2 9 -12 9" fill="none"/><path d="M44 62 h8 v10 h-8 Z" fill="#ffb300"/><rect x="34" y="72" width="28" height="9" rx="2" fill="#8d6e63"/></g><path d="M48 31 l3.2 6.6 7.2 1 -5.2 5 1.3 7.2 -6.5 -3.4 -6.5 3.4 1.3 -7.2 -5.2 -5 7.2 -1 Z" fill="#fff" stroke="#e65100" stroke-width="1.2"/></svg>';
+  var stars = ""; for (var k = 0; k < 3; k++) stars += '<span class="twk" style="animation-delay:' + (k * 0.3) + 's">★</span>';
+  return '<div class="medalwrap">' + svg + '<div class="medaltxt"><b>' + title + '</b><span class="mstars">' + stars + "</span><span>" + L("Em hoàn thành " + n + " việc, " + g + " việc Rất chuẩn", n + " tasks done, " + g + " spot on") + "</span></div></div>";
+}
+function celebrateEnd() {
+  progScenDone(scenId()); bankSave();
+  var m = $("#endMedal"); if (m) m.innerHTML = endMedalHTML();
+  var cf = $("#endConfetti"); if (cf) confettiRain(cf, S.g <= 5 ? 90 : 50);
+  $("#endStars").innerHTML = "★ " + S.stars + TX(" sao") + "<small>" + L("Kho sao được giữ cho lần chơi sau", "Your stars are kept for next time") + "</small>";
+  SFX.celebrate();
+  setTimeout(function () { fireworks(S.g <= 5 ? 5600 : 3800, S.g <= 5 ? 9 : 5, true); }, 350);
+}
 applyStatic(); syncSnd(); renderRoute(); renderResume();
 window.__khemay = { S9OB: S9OB, setLang: setLang, MISSING: MISSING, TX: TX,  readSave: readSave, snapshot: snapshot,  OB4: OB4, OB5: OB5, OB6: OB6, ROW: ROW, setRoute: function (a) { S.route = a.map(function (n) { return OBK[n]; }); renderRoute(); }, view: function () { return VIEW; }, OB3: OB3, getOBS: function () { return OBS; }, loadOb: loadOb, SFX: SFX, SND: SND, showReport: showReport, CAS: CAS, keyPress: keyPress, calcVars: calcVars, calcC: function () { return C; }, outTxt: outTxt, OB1: OB1, OB2: OB2, S: S, findPt: findPt, P: P };
 })();
