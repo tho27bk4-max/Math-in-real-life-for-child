@@ -5294,11 +5294,11 @@ C4.lehoi = {
 C4.thucung = {
   lop: 5, btn: ["Cứu hộ thú cưng", "Pet shelter"],
   title: ["Trạm cứu hộ thú cưng", "The Pet Rescue Shelter"],
-  lead: ["Trạm cứu hộ thú cưng của thị trấn đang rất bận. Cô bác sĩ thú y dùng <b>biểu đồ hình quạt tròn</b> để ghi chép mọi thứ. Em đọc biểu đồ, tính <b>tỉ số phần trăm</b> và cuối cùng tự tay chia mặt bằng sân chơi mới nhé!", "The town's pet rescue shelter is very busy. The vet keeps all her records as <b>pie charts</b>. Read the charts, work with <b>percentages</b> and finally divide up the new playground yourself!"],
+  lead: ["Trạm cứu hộ thú cưng của thị trấn đang rất bận. Cô bác sĩ thú y dùng <b>biểu đồ hình quạt tròn</b> để ghi chép mọi thứ. Em đọc biểu đồ về thú cưng, khẩu phần ăn và các đội tình nguyện, tính <b>tỉ số phần trăm</b>, rồi cuối cùng tự tay chia mặt bằng sân chơi mới nhé!", "The town's pet rescue shelter is very busy. The vet keeps all her records as <b>pie charts</b>. Read the charts about the pets, their food and the volunteer teams, work with <b>percentages</b>, and finally divide up the new playground yourself!"],
   first: ["Chào em, cô là bác sĩ thú y của trạm! ", "Hi, I'm the shelter's vet! "],
   next: ["Cảm ơn em nhiều! ", "Thanks a lot! "],
   endTitle: ["Các bạn thú cưng vui vẻ!", "Happy pets!"],
-  endText: ["Thú cưng được đếm đủ, ăn đúng món mình thích, các anh chị tình nguyện được phân công hợp lý và sân chơi mới đã xây xong. Các bạn cún, mèo, thỏ chạy nhảy tưng bừng!", "Every pet is counted, fed its favourite food, the volunteers are well organised and the new playground is built. The puppies, kittens and bunnies race around happily!"],
+  endText: ["Thú cưng được đếm đủ, khẩu phần ăn cân đối, các anh chị tình nguyện được phân công hợp lý và sân chơi mới đã xây xong. Các bạn cún, mèo, thỏ chạy nhảy tưng bừng!", "Every pet is counted, the meals are well balanced, the volunteers are well organised and the new playground is built. The puppies, kittens and bunnies race around happily!"],
   lastBtn: ["Mở cửa sân chơi", "Open the playground"]
 };
 C4.tiembanh = {
@@ -5740,7 +5740,7 @@ function pieSvg(cx, cy, R, parts, pre) {
   parts.forEach(function (q, i) { var a1 = a0 + q.pct * 3.6, r0 = a0 * Math.PI / 180, r1 = a1 * Math.PI / 180, mid = (a0 + a1) / 2 * Math.PI / 180;
     o += '<path ' + (pre ? 'data-it="' + pre + i + '" style="cursor:pointer" ' : "") + 'd="M' + cx + " " + cy + " L" + (cx + R * Math.cos(r0)) + " " + (cy + R * Math.sin(r0)) + " A" + R + " " + R + " 0 " + (a1 - a0 > 180 ? 1 : 0) + " 1 " + (cx + R * Math.cos(r1)) + " " + (cy + R * Math.sin(r1)) + ' Z" fill="' + (q.col || PIE_COL[i]) + '" stroke="#fff" stroke-width="2.4"/>';
     var lx = cx + R * 0.62 * Math.cos(mid), ly = cy + R * 0.62 * Math.sin(mid);
-    o += '<g pointer-events="none">' + T2(lx, ly - 2, L(q.lab[0], q.lab[1]), { a: "middle", fs: 11.5, fw: 800, c: "#fff" }) + T2(lx, ly + 14, q.unk ? "?" : q.pct + "%", { a: "middle", fs: 13, fw: 800, c: "#fff" }) + "</g>";
+    o += '<g pointer-events="none">' + T2(lx, ly - 2, L(q.lab[0], q.lab[1]), { a: "middle", fs: (L(q.lab[0], q.lab[1]).length > 10 ? 9.5 : 11.5), fw: 800, c: "#fff" }) + T2(lx, ly + 14, q.unk ? "?" : q.pct + "%", { a: "middle", fs: 13, fw: 800, c: "#fff" }) + "</g>";
     a0 = a1; });
   return o + '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="none" stroke="' + INK + '" stroke-width="2.4"/>';
 }
@@ -5774,30 +5774,36 @@ var P51 = c4Job("thucung", {
 });
 P51.make = function () { var pc = shuffle(pickOne(PCT3)), N = rnd(6, 20) * 20, ask = rnd(0, 2); return { pc: pc, N: N, ask: ask, ans: N * pc[ask] / 100, bottom: 430 }; };
 
-/* P52 · Bữa ăn yêu thích; P53 · Những ngôi nhà nhỏ (thay thế): phần "còn lại" (KM-TK-512, KM-TK-513) */
-function restJob(house) { var cats = house ? [["Xanh", "Blue"], ["Vàng", "Yellow"], ["Đỏ", "Red"], ["Trắng", "White"]] : [["Thịt bò", "Beef"], ["Cá", "Fish"], ["Rau củ", "Veg"], ["Gà", "Chicken"]], cols = house ? ["#42a5f5", "#fbc02d", "#e53935", "#b0bec5"] : PIE_COL;
+/* P52 · Khẩu phần thức ăn theo nhóm thực phẩm; P53 · Những ngôi nhà nhỏ (thay thế): phần "còn lại" (KM-TK-512, KM-TK-513) */
+function restJob(house) {
+  var cats = house ? [["Xanh", "Blue"], ["Vàng", "Yellow"], ["Đỏ", "Red"], ["Trắng", "White"]] : [["Ngũ cốc", "Cereals"], ["Đạm động vật", "Animal protein"], ["Đạm thực vật", "Plant protein"], ["Rau củ", "Vegetables"]];
+  var cols = house ? ["#42a5f5", "#fbc02d", "#e53935", "#b0bec5"] : ["#f9a825", "#e57373", "#66bb6a", "#90a4ae"];
+  var T = function (a, b) { return house ? a : b; };
   return c4Job("thucung", {
-  name: house ? ["Những ngôi nhà nhỏ", "The little houses"] : ["Bữa ăn yêu thích", "Favourite meals"], sub: ["tìm phần trăm còn lại rồi tính số lượng", "find the missing percentage, then the number"],
-  endName: house ? ["dãy nhà gỗ", "the wooden houses"] : ["giờ ăn", "feeding time"], what: house ? ["Số nhà sơn màu trắng", "Number of white houses"] : ["Số thú cưng thích ăn gà", "Pets that like chicken"], get unit() { return house ? L("nhà", "houses") : L("con", "pets"); },
-  btnText: house ? ["Mua sơn trắng", "Buy white paint"] : ["Chia khẩu phần", "Serve the food"], H: 430,
-  lead: house ? ["Trạm có nhiều <b>ngôi nhà gỗ nhỏ</b> cho thú cưng, sơn các màu khác nhau. Biểu đồ ghi phần trăm từng màu, riêng màu trắng bị mờ mất. Em tính số nhà màu trắng để cô mua đủ sơn nhé!", "The shelter has lots of <b>little wooden houses</b> in different colours. The chart shows each colour's percentage, but the white one has faded. Work out how many houses are white so I can buy paint!"]
-    : ["Đến giờ ăn rồi! Biểu đồ cho biết các bạn thú cưng thích món gì, nhưng phần <b>Gà</b> bị dính nước nên mất số. Em tính số bạn thích ăn gà để cô chuẩn bị nhé!", "Feeding time! The chart shows the pets' favourite foods, but the <b>Chicken</b> part got wet and its number is gone. Work out how many like chicken so I can get it ready!"],
-  taskT: function () { return house ? L("<b>Nhiệm vụ:</b> tính số nhà sơn màu <b>trắng</b>.<br><b>Dữ kiện:</b> chạm vào biểu đồ và bảng kiểm kê.", "<b>Task:</b> work out how many houses are <b>white</b>.<br><b>Data:</b> tap the chart and the stock list.") : L("<b>Nhiệm vụ:</b> tính số thú cưng thích ăn <b>gà</b>.<br><b>Dữ kiện:</b> chạm vào biểu đồ và sổ tiếp nhận.", "<b>Task:</b> work out how many pets like <b>chicken</b>.<br><b>Data:</b> tap the chart and the intake book."); },
-  make: function () { var pc = shuffle(pickOne(PCT4)), r = 100 - pc[0] - pc[1] - pc[2], N = house ? rnd(4, 12) * 20 : rnd(5, 25) * 20; return { pc: pc.concat([r]), r: r, N: N, ans: N * r / 100, bottom: 430 }; },
-  base: function (p) { var o = shelterBg(house ? L("Màu sơn nhà gỗ", "House colours") : L("Món ăn yêu thích", "Favourite food")) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: cats[i], col: cols[i], unk: i === 3 }; })); return o + bookSvg(270, 60, house ? L("KIỂM KÊ", "STOCK LIST") : L("SỔ TIẾP NHẬN", "INTAKE BOOK"), L(hv(p, "N", p.N) + (house ? " nhà" : " con"), hv(p, "N", p.N) + (house ? " houses" : " pets")), "N") + adult(300, 400, "#ffffff"); },
-  items: function (p) { var it = { N: I5((house ? "Có tất cả " + p.N + " ngôi nhà" : "Trạm có " + p.N + " thú cưng"), (house ? p.N + " houses in all" : p.N + " pets in all"), p.N, null, "pick", "N") }; return it; },
+  name: T(["Những ngôi nhà nhỏ", "The little houses"], ["Khẩu phần của trạm", "The shelter's food plan"]), sub: ["tìm phần trăm còn lại rồi tính số lượng", "find the missing percentage, then the number"],
+  endName: T(["dãy nhà gỗ", "the wooden houses"], ["kho thức ăn", "the food store"]), what: T(["Số nhà sơn màu trắng", "Number of white houses"], ["Số ki-lô-gam rau củ cần chuẩn bị mỗi tuần", "Kilograms of vegetables needed each week"]),
+  get unit() { return house ? L("nhà", "houses") : "kg"; },
+  btnText: T(["Mua sơn trắng", "Buy white paint"], ["Đặt mua rau củ", "Order vegetables"]), H: 430,
+  lead: T(["Trạm có nhiều <b>ngôi nhà gỗ nhỏ</b> cho thú cưng, sơn các màu khác nhau. Biểu đồ ghi phần trăm từng màu, riêng màu trắng bị mờ mất. Em tính số nhà màu trắng để cô mua đủ sơn nhé!", "The shelter has lots of <b>little wooden houses</b> in different colours. The chart shows each colour's percentage, but the white one has faded. Work out how many houses are white so I can buy paint!"],
+    ["Để các bạn thú cưng khỏe mạnh, cô bác sĩ lên <b>khẩu phần ăn</b> mỗi tuần theo các <b>nhóm thực phẩm</b>: ngũ cốc, đạm động vật, đạm thực vật và rau củ. Biểu đồ bị dính nước nên mất số ở phần <b>rau củ</b>. Em tính xem mỗi tuần cần chuẩn bị bao nhiêu ki-lô-gam rau củ nhé!", "To keep the pets healthy, the vet plans each week's <b>food</b> by <b>food group</b>: cereals, animal protein, plant protein and vegetables. Water got on the chart and the <b>vegetables</b> number is gone. Work out how many kilograms of vegetables are needed each week!"]),
+  taskT: function () { return house ? L("<b>Nhiệm vụ:</b> tính số nhà sơn màu <b>trắng</b>.<br><b>Dữ kiện:</b> đọc biểu đồ; chạm vào bảng kiểm kê để xem tổng số nhà.", "<b>Task:</b> work out how many houses are <b>white</b>.<br><b>Data:</b> read the chart; tap the stock list for the total.") : L("<b>Nhiệm vụ:</b> tính số ki-lô-gam <b>rau củ</b> cần chuẩn bị mỗi tuần.<br><b>Dữ kiện:</b> đọc biểu đồ khẩu phần; chạm vào sổ kho để xem tổng số thức ăn mỗi tuần.", "<b>Task:</b> work out how many kilograms of <b>vegetables</b> are needed each week.<br><b>Data:</b> read the food chart; tap the store book for the total food per week."); },
+  make: function () { var pc = shuffle(pickOne(PCT4)), r = 100 - pc[0] - pc[1] - pc[2], N = house ? rnd(4, 12) * 20 : rnd(2, 15) * 20; return { pc: pc.concat([r]), r: r, N: N, ans: N * r / 100, bottom: 430 }; },
+  base: function (p) { var o = shelterBg(T(L("Màu sơn nhà gỗ", "House colours"), L("Khẩu phần mỗi tuần", "Weekly food plan"))) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: cats[i], col: cols[i], unk: i === 3 }; }));
+    if (!house) [[40, "#f9a825"], [92, "#e57373"], [144, "#66bb6a"], [196, "#90a4ae"]].forEach(function (f) { o += '<path d="M' + f[0] + ' 340 q0 -26 8 -30 h28 q8 4 8 30 Z" fill="#d7b98a" stroke="' + INK + '" stroke-width="1.6"/><rect x="' + (f[0] + 10) + '" y="318" width="24" height="12" rx="2" fill="' + f[1] + '"/>'; });
+    return o + bookSvg(270, 60, T(L("KIỂM KÊ", "STOCK LIST"), L("KHO MỖI TUẦN", "WEEKLY STORE")), L(hv(p, "N", p.N) + T(" nhà", " kg"), hv(p, "N", p.N) + T(" houses", " kg")), "N") + adult(300, 400, "#ffffff"); },
+  items: function (p) { return { N: I5(T("Có tất cả " + p.N + " ngôi nhà", "Mỗi tuần trạm dùng " + p.N + " kg thức ăn"), T(p.N + " houses in all", p.N + " kg of food per week"), p.N, null, "pick", "N") }; },
   extra: function (p) { return p.seen.N ? c4Tick(350, 66) : ""; },
   special: function (p, v) { if (v === p.r) return { ok: false, kind: "short", msg: L("Đó là tỉ số phần trăm (" + p.r + "%). Đề hỏi số lượng.", "That's the percentage (" + p.r + "%). The task asks for the number.") }; return null; },
-  okMsg: house ? ["Đúng rồi! Cô mua đủ sơn trắng.", "Right! I'll buy just enough white paint."] : ["Đúng rồi! Các bạn thích gà được ăn no nê.", "Right! The chicken-lovers all get their dinner."],
+  okMsg: T(["Đúng rồi! Cô mua đủ sơn trắng.", "Right! I'll buy just enough white paint."], ["Đúng rồi! Cô đặt vừa đủ rau củ cho cả tuần.", "Right! I'll order just enough vegetables for the week."]),
   shortMsg: ["Ít quá. Xem lại phần còn lại chiếm bao nhiêu phần trăm.", "Too few. Check what percentage is left."],
   longMsg: ["Nhiều quá. Xem lại phần còn lại chiếm bao nhiêu phần trăm.", "Too many. Check what percentage is left."],
-  passTitle: house ? ["sơn đã mua!", "paint bought!"] : ["các bạn đã ăn no!", "everyone is fed!"],
+  passTitle: T(["sơn đã mua!", "paint bought!"], ["rau củ đã đặt!", "vegetables ordered!"]),
   rows: function (p) { return [[L("Phần còn lại", "The rest"), "100% − (" + p.pc[0] + "% + " + p.pc[1] + "% + " + p.pc[2] + "%) = " + p.r + "%"], [L("Số lượng", "Number"), p.N + " × " + p.r + " : 100 = " + p.ans]]; },
   formula: function () { return L("Cả hình tròn = 100%. Phần còn lại = 100% − tổng các phần đã biết", "The whole circle = 100%. The rest = 100% − the known parts"); },
   hints: function () { return [
     L("Cả hình tròn là 100%. Phần bị mất số = 100% trừ đi các phần đã biết.", "The whole circle is 100%. The missing part = 100% minus the known parts."),
     L("Có phần trăm rồi thì: số lượng = tổng số × phần trăm : 100.", "Once you have the percentage: number = total × percentage ÷ 100."),
-    L("Ví dụ: 40% + 35% + 15% = 90%, còn lại 10%. 500 con: 500 × 10 : 100 = 50 con.", "Example: 40% + 35% + 15% = 90%, so 10% is left. 500 pets: 500 × 10 ÷ 100 = 50.")]; }
+    house ? L("Ví dụ: 45% + 25% + 10% = 80%, còn lại 20%. 200 nhà: 200 × 20 : 100 = 40 nhà.", "Example: 45% + 25% + 10% = 80%, so 20% is left. 200 houses: 200 × 20 ÷ 100 = 40.") : L("Ví dụ: ngũ cốc 40%, đạm động vật 35%, đạm thực vật 15%: tổng 90%, rau củ 10%. Mỗi tuần 200 kg: 200 × 10 : 100 = 20 kg rau củ.", "Example: cereals 40%, animal protein 35%, plant protein 15%: 90% in all, so vegetables are 10%. 200 kg a week: 200 × 10 ÷ 100 = 20 kg of vegetables.")]; }
 }); }
 var P52 = restJob(false), P53 = restJob(true);
 
@@ -6065,7 +6071,7 @@ C4_POOL.tiembanh = [[B51, B52], [B53, B54], [B55], [B56]];
   ["KM-TK-505", "F55", "Máy gắp thú bông", "The claw machine", "lehoi", ["số lần còn lại", "tỉ số"], ["the remaining count", "ratio"], "ti_so", "", "đúng giá trị", 3, ["thi_nghiem"]],
   ["KM-TK-506", "F56", "Dự đoán phần thưởng", "Predicting the prizes", "lehoi", ["tỉ số phần trăm", "dự đoán"], ["percentages", "prediction"], "so_luong", "gấu bông", "đúng tuyệt đối", 3, ["doc_so_lieu"]],
   ["KM-TK-511", "P51", "Báo cáo chăm sóc", "The care report", "thucung", ["biểu đồ hình quạt tròn", "tìm a% của một số"], ["pie charts", "a% of a number"], "so_luong", "con", "đúng tuyệt đối", 1, ["doc_bieu_do"]],
-  ["KM-TK-512", "P52", "Bữa ăn yêu thích", "Favourite meals", "thucung", ["phần trăm còn lại", "tìm a% của một số"], ["the remaining percentage", "a% of a number"], "so_luong", "con", "đúng tuyệt đối", 2, ["doc_bieu_do"]],
+  ["KM-TK-512", "P52", "Khẩu phần của trạm", "The shelter's food plan", "thucung", ["phần trăm còn lại", "tìm a% của một số"], ["the remaining percentage", "a% of a number"], "khoi_luong", "kg", "đúng tuyệt đối", 2, ["doc_bieu_do"]],
   ["KM-TK-513", "P53", "Những ngôi nhà nhỏ", "The little houses", "thucung", ["phần trăm còn lại", "tìm a% của một số"], ["the remaining percentage", "a% of a number"], "so_luong", "nhà", "đúng tuyệt đối", 2, ["doc_bieu_do"]],
   ["KM-TK-514", "P54", "Đội tình nguyện", "The volunteer teams", "thucung", ["so sánh hai phần trăm", "hiệu"], ["comparing percentages", "difference"], "so_luong", "người", "đúng tuyệt đối", 3, ["doc_bieu_do"]],
   ["KM-TK-515", "P55", "Quỹ của trạm", "The shelter's savings", "thucung", ["tìm một số khi biết a% của nó"], ["the whole from a percentage"], "tien", "đồng", "đúng tuyệt đối", 3, ["doc_bieu_do"]],
@@ -9871,7 +9877,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.13";
+var APP_VER = "3.14";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
