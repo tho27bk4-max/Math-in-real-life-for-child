@@ -78,6 +78,13 @@ p { margin: 0; line-height: 1.5; }
 .row { display: flex; gap: 8px; }
 .row input { flex: 1; min-width: 0; font: 700 1.3rem var(--font); padding: 6px 12px; border: 2.5px solid var(--ink); border-radius: 12px; }
 .unit { align-self: center; font-weight: 700; }
+.ransw { position: sticky; bottom: 6px; z-index: 6; padding: 8px 10px; gap: 4px; margin-top: 8px; box-shadow: 0 -3px 12px rgba(38,50,56,.18); }
+.ransw label { font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ransw[hidden] { display: none; }
+.ransw input::placeholder { font-size: 1rem; }
+.ransw .rmsg { margin: 0; color: #c62828; font-weight: 700; }
+.ransw .rmsg:empty { display: none; }
+.ransw .rmsg.ok { color: #2e7d32; }
 #buildMsg { font-weight: 600; min-height: 1.5em; }
 #buildMsg.ok { color: var(--green); }
 #buildMsg.bad { color: #d63b1f; }
@@ -887,6 +894,11 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
     <p class="small">Mỗi gợi ý tốn sao. Hết sao vẫn mở được gợi ý mức 1.</p>
     <div id="hintBox" class="panel"></div>
   </div>
+  <div class="card build ransw" id="rAns">
+    <label for="rVal" id="rLabel"></label>
+    <div class="row"><input id="rVal" inputmode="decimal" autocomplete="off" placeholder="Nhập số"><span class="unit" id="rUnit"></span><button class="btn orange" id="rBuild" type="button"></button></div>
+    <p class="small rmsg" id="rMsg" aria-live="polite"></p>
+  </div>
   <div class="calcsheet" id="calcSheet" hidden role="dialog" aria-label="Ô tính toán">
   <div class="sheethead"><button class="tgtbtn" type="button" id="tgtOther" aria-label="Đặt tên đại lượng"><span id="tgtShow"></span> ✎</button><button class="btn sm" id="cSave" type="button">Ghi sổ tay</button><button class="btn sm orange" id="cUse" type="button">Đáp án</button><button class="sheetx" type="button" id="sheetClose" aria-label="Đóng ô tính toán">×</button></div>
   <div class="row" id="tgtCustom" hidden><input id="tgtName" maxlength="8" placeholder="AC hoặc CAD" autocomplete="off"><button class="btn sm" id="tgtOk" type="button">Đặt tên</button></div>
@@ -996,6 +1008,7 @@ function TX(s) {
   if (LANG === "vi" || s == null || s === "") return s;
   var t = EN[s]; if (t == null) { MISSING[s] = 1; return s; } return t;
 }
+EN[" vào ô. Kiểm tra lại rồi bấm "] = " into the box. Check it, then press "; EN["Nhập kết quả vào ô trước đã."] = "Type your result in the box first.";
 function defT(o, k, vi) { Object.defineProperty(o, k, { get: function () { return TX(vi); }, configurable: true, enumerable: true }); }
 function DEC() { return LANG === "en" ? "." : ","; }
 /* static texts written in the HTML: remember the Vietnamese once, re-translate on every switch */
@@ -4703,6 +4716,13 @@ document.addEventListener("click", function (e) {
 function putAnswer(v) {
   closeSheet();
   $("#inVal").value = v;
+  if (!$("#sRoom").hidden && !OBS[S.i].noInput && !S.done) {
+    $("#rVal").value = v; syncRoomAns(); SFX.pick();
+    var m = $("#rMsg"); m.textContent = TX("Đã đưa ") + v + TX(" vào ô. Kiểm tra lại rồi bấm ") + $("#bBuild").textContent + "."; m.classList.add("ok");
+    clearTimeout(putAnswer.t); putAnswer.t = setTimeout(function () { m.textContent = ""; m.classList.remove("ok"); }, 4000);
+    $("#rAns").scrollIntoView({ block: "nearest" });
+    return;
+  }
   show("sGame", true); render(); drawLayers(); closeTask(true);
   setMsg(TX("Đã đưa ") + v + TX(" vào ô. Kiểm tra lại") + (OBS[S.i].useNote || "") + TX(" rồi bấm ") + $("#bBuild").textContent + ".", "");
   $("#inVal").scrollIntoView({ block: "center" });
@@ -4746,6 +4766,7 @@ function render() {
   $("#bBuild").disabled = S.done || S.busy || !!S.rowing;
   $("#inVal").disabled = S.done;
   document.querySelectorAll(".ftools .btn").forEach(function (b) { b.disabled = S.done || !!S.rowing; });
+  syncRoomAns();
   $("#fnList").innerHTML = noteItems();
   var ft = $("#fnTools"); if (ft) ft.innerHTML = (S.meas.length + S.results.length) ? nbTools(false) : "";
   autosave();
@@ -5046,6 +5067,33 @@ renderRoute();
 
 $("#bBuild").addEventListener("click", doBuild);
 $("#inVal").addEventListener("keydown", function (e) { if (e.key === "Enter") doBuild(); });
+/* Ô nhập kết quả trong Phòng kỹ thuật: cùng một giá trị với ô ở hiện trường */
+function syncRoomAns() {
+  var box = $("#rAns"); if (!box || !OBS || !OBS[S.i]) return;
+  var ob = OBS[S.i];
+  box.hidden = !!ob.noInput || !!S.done;
+  if (box.hidden) return;
+  $("#rLabel").textContent = $("#buildLabel").textContent;
+  var u = $(".build .unit"); $("#rUnit").textContent = u.textContent; $("#rUnit").hidden = u.hidden;
+  $("#rBuild").textContent = $("#bBuild").textContent;
+  $("#rBuild").disabled = $("#bBuild").disabled;
+  var rv = $("#rVal"); if (document.activeElement !== rv && rv.value !== $("#inVal").value) rv.value = $("#inVal").value;
+}
+$("#rVal").addEventListener("input", function () { $("#inVal").value = this.value; });
+$("#inVal").addEventListener("input", function () { $("#rVal").value = this.value; });
+function roomBuild() {
+  var v = $("#rVal").value.trim();
+  if (!v) { SFX.nope(); rMsg(TX("Nhập kết quả vào ô trước đã.")); $("#rVal").focus(); return; }
+  rMsg("");
+  $("#inVal").value = v;
+  closeSheet(); closePar(); hideMenu();
+  show("sGame", true); render(); drawLayers(); closeTask(true);
+  $(".build").scrollIntoView({ block: "center" });
+  setTimeout(doBuild, 60);
+}
+function rMsg(t) { var m = $("#rMsg"); if (m) { m.textContent = t || ""; m.classList.remove("ok"); } }
+$("#rBuild").addEventListener("click", roomBuild);
+$("#rVal").addEventListener("keydown", function (e) { if (e.key === "Enter") roomBuild(); });
 function playBuild() {
   $("#lyrBuild").innerHTML = S.build ? OBS[S.i].build(S.p, S.build.kind, S.build.v) : "";
   var am = $("#lyrBuild animateMotion"); if (am && am.beginElement) am.beginElement();
@@ -7867,7 +7915,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.9";
+var APP_VER = "3.10";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
