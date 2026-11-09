@@ -4283,6 +4283,8 @@ C4_BASE.build = function (p, k, v) {
   return '<g class="pop">' + (this.fx ? this.fx(p, k, v) : "") + tag(180, 22, lab, ok ? "#1f8a4c" : "#c0392b") + "</g>";
 };
 C4_BASE.value = function () { return 1; };
+function hv(p, k, t) { return p && p.seen && p.seen[k] ? t : "?"; }
+C4_BASE.tap = function (p, evt) { S9_BASE.tap.call(this, p, evt); drawScene(); };
 function c4Strip(r) { if (r && r.msg) r.msg = r.msg.replace(/<[^>]+>/g, ""); return r; }
 C4_BASE.check = function (p, g, v) { return c4Strip(S9_BASE.check.call(this, p, g, v)); };
 function c4Job(sc, o) {
@@ -4459,11 +4461,11 @@ var BT2 = c4Job("baotang", {
 /* BT3 · Bia đá cổ: thế kỷ (số La Mã) và số năm đã trôi qua (KM-DL-402) */
 var BT3 = c4Job("baotang", {
   name: ["Bia đá cổ", "The old stone tablet"], sub: ["xác định thế kỷ và tính số năm đã trôi qua", "find the century and the years that have passed"],
-  endName: ["bia đá cổ", "the stone tablet"], what: ["Số năm từ khi dựng bia đến năm nay", "Years from when the tablet was set up to this year"], get unit() { return L("năm", "years"); },
+  endName: ["bia đá cổ", "the stone tablet"], what: ["③ Số năm đã trôi qua (từ năm dựng bia đến năm hiện tại)", "③ Years passed (from the year it was set up to the current year)"], get unit() { return L("năm", "years"); },
   btnText: ["Giải mã", "Decode"], H: 420, plain: true,
-  lead: ["Trong phòng cuối có một <b>tấm bia đá cổ</b>. Em hãy cho biết bia được dựng vào <b>thế kỷ</b> nào (chạm chọn số La Mã) và đến năm nay bia đã có <b>bao nhiêu năm</b>.", "The last gallery has an <b>old stone tablet</b>. Say which <b>century</b> it was set up in (tap a Roman numeral) and <b>how many years</b> old it is this year."],
-  taskT: function () { return L("<b>Nhiệm vụ:</b> 1) chạm vào tấm bia để đọc năm dựng bia, chạm vào tờ lịch để xem năm nay; 2) chạm chọn <b>thế kỷ</b> đúng (số La Mã); 3) nhập <b>số năm</b> từ năm dựng bia đến năm nay.<br><b>Nhớ:</b> thế kỷ I từ năm 1 đến năm 100, thế kỷ II từ năm 101 đến năm 200, …",
-    "<b>Task:</b> 1) tap the tablet to read the year it was set up and tap the calendar for this year; 2) tap the right <b>century</b> (Roman numeral); 3) type the <b>number of years</b> from then until this year.<br><b>Remember:</b> century I is years 1–100, century II is years 101–200, …"); },
+  lead: ["Trong phòng cuối có một <b>tấm bia đá cổ</b>. Em chạm vào bia để xem năm dựng, chọn <b>thế kỷ</b> (số La Mã), rồi tính xem đến năm hiện tại bia đã có <b>bao nhiêu năm</b>.", "The last gallery has an <b>old stone tablet</b>. Tap it to see the year it was set up, choose its <b>century</b> (Roman numeral), then work out <b>how many years</b> old it is now."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> ① chạm vào tấm bia để xem năm dựng bia; ② chọn <b>thế kỷ</b> của năm đó (số La Mã); ③ nhập <b>số năm</b> đã trôi qua, từ năm dựng bia đến năm hiện tại (ghi trên tờ lịch), vào ô bên dưới.<br><b>Nhớ:</b> thế kỷ I từ năm 1 đến năm 100, thế kỷ II từ năm 101 đến năm 200, …",
+    "<b>Task:</b> ① tap the tablet to see the year it was set up; ② choose that year's <b>century</b> (Roman numeral); ③ type the <b>number of years</b> from then to the current year (on the calendar) in the box below.<br><b>Remember:</b> century I is years 1–100, century II is years 101–200, …"); },
   make: function () {
     var r = Math.random(), Y = r < 0.2 ? rnd(5, 19) * 100 : r < 0.4 ? rnd(5, 19) * 100 + 1 : rnd(400, 1990), now = new Date().getFullYear(), c = Math.ceil(Y / 100);
     var opts = [c]; [c - 1, c + 1, c - 2, c + 2].forEach(function (x) { if (opts.length < 4 && x >= 1 && x <= 21) opts.push(x); });
@@ -4473,37 +4475,37 @@ var BT3 = c4Job("baotang", {
     var o = '<rect width="360" height="420" fill="#ece3d0"/><rect y="320" width="360" height="100" fill="#c9a06a"/>';
     o += '<path d="M60 300 V90 Q60 40 150 40 Q240 40 240 90 V300 Z" fill="#9e9e9e" stroke="' + INK + '" stroke-width="2.6"/><path d="M78 290 V96 Q78 58 150 58 Q222 58 222 96 V290 Z" fill="#bdbdbd" stroke="#757575" stroke-width="1.5"/>';
     o += T2(150, 110, L("BIA", "STELE"), { a: "middle", fs: 14, fw: 800, c: "#424242" }) + '<path d="M96 126 h108 M96 146 h108 M96 236 h108 M96 256 h108" stroke="#757575" stroke-width="2" stroke-dasharray="6 4"/>';
-    o += T2(150, 190, L("Dựng năm", "Set up in"), { a: "middle", fs: 13, fw: 700, c: "#424242" }) + T2(150, 216, String(p.Y), { a: "middle", fs: 22, fw: 800, c: "#212121" }) + hitR(60, 40, 180, 260, "Y");
-    o += '<g transform="translate(296 120)"><rect x="-44" y="-50" width="88" height="96" rx="6" fill="#fff" stroke="' + INK + '" stroke-width="2"/><rect x="-44" y="-50" width="88" height="24" rx="6" fill="#e53935" stroke="' + INK + '" stroke-width="2"/>' + T2(0, -33, L("LỊCH", "CALENDAR"), { a: "middle", fs: 11, fw: 800, c: "#fff" }) + T2(0, 8, String(p.now), { a: "middle", fs: 20, fw: 800 }) + T2(0, 30, L("năm nay", "this year"), { a: "middle", fs: 11 }) + "</g>" + hitR(252, 70, 88, 96, "now");
-    return o + T2(180, 344, L("Thế kỷ: chạm để chọn", "Century: tap to choose"), { a: "middle", fs: 12, fw: 800, c: INK });
+    o += T2(150, 190, L("Dựng năm", "Set up in"), { a: "middle", fs: 13, fw: 700, c: "#424242" }) + T2(150, 216, hv(p, "Y", String(p.Y)), { a: "middle", fs: 22, fw: 800, c: "#212121" }) + (p.seen.Y ? "" : T2(150, 270, L("① Chạm để xem", "① Tap to see"), { a: "middle", fs: 12, fw: 800, c: "#c2410c" })) + hitR(60, 40, 180, 260, "Y");
+    o += '<g transform="translate(296 120)"><rect x="-44" y="-50" width="88" height="96" rx="6" fill="#fff" stroke="' + INK + '" stroke-width="2"/><rect x="-44" y="-50" width="88" height="24" rx="6" fill="#e53935" stroke="' + INK + '" stroke-width="2"/>' + T2(0, -33, L("LỊCH", "CALENDAR"), { a: "middle", fs: 11, fw: 800, c: "#fff" }) + T2(0, 8, String(p.now), { a: "middle", fs: 20, fw: 800 }) + T2(0, 30, L("năm hiện tại", "current year"), { a: "middle", fs: 11 }) + "</g>";
+    return o + T2(180, 344, L("② Chọn thế kỷ của năm dựng bia (số La Mã)", "② Choose the century it was set up in"), { a: "middle", fs: 12, fw: 800, c: "#7a3fb0" }) + T2(180, 412, L("③ Nhập số năm đã trôi qua vào ô bên dưới", "③ Type the years passed in the box below"), { a: "middle", fs: 11.5, fw: 800, c: "#4e342e" });
   },
   items: function (p) { return {
-    Y: { note: ["Bia dựng năm " + p.Y, "Tablet set up in " + p.Y], val: p.Y, sym: "Y", sfx: "pick", say: ["Tấm bia được dựng năm <b>" + p.Y + "</b>.", "The tablet was set up in <b>" + p.Y + "</b>."] },
-    now: { note: ["Năm nay là " + p.now, "This year is " + p.now], val: p.now, sym: "N", sfx: "pick", say: ["Năm nay là năm <b>" + p.now + "</b>.", "This year is <b>" + p.now + "</b>."] } }; },
+    Y: { note: ["Bia dựng năm " + p.Y, "Tablet set up in " + p.Y], val: p.Y, sym: "Y", sfx: "pick", say: ["Tấm bia được dựng năm <b>" + p.Y + "</b>.", "The tablet was set up in <b>" + p.Y + "</b>."] } }; },
   extra: function (p) {
     var o = "";
-    if (p.seen.Y) o += c4Tick(226, 80); if (p.seen.now) o += c4Tick(330, 86);
+    if (p.seen.Y) o += c4Tick(226, 80);
     p.opts.forEach(function (c, i) { var x = 18 + i * 84, sel = p.sel === c; o += '<g data-it="c:' + c + '" style="cursor:pointer"><rect x="' + x + '" y="356" width="74" height="40" rx="10" fill="' + (sel ? "#ff7a3d" : "#fff") + '" stroke="' + INK + '" stroke-width="2.4"/>' + T2(x + 37, 382, roman(c), { a: "middle", fs: 18, fw: 800, c: sel ? "#fff" : INK }) + "</g>"; });
     return o;
   },
   tap: function (p, evt) {
     var el = evt.target.closest("[data-it]"); if (!el) return; var id = el.dataset.it;
     if (id.indexOf("c:") === 0) { p.sel = +id.slice(2); SFX.pick(); say(L("Em chọn thế kỷ <b>" + roman(p.sel) + "</b>.", "You chose century <b>" + roman(p.sel) + "</b>.")); tip(""); drawLayers(); render(); return; }
-    S9_BASE.tap.call(this, p, evt);
+    C4_BASE.tap.call(this, p, evt);
   },
-  precheck: function (p) { return p.sel == null ? L("Chạm chọn thế kỷ (số La Mã) trước đã.", "Tap a century (Roman numeral) first.") : ""; },
+  precheck: function (p) { return !p.seen.Y ? L("① Chạm vào tấm bia để xem năm dựng trước đã.", "① Tap the tablet to see the year first.") : p.sel == null ? L("② Chọn thế kỷ (số La Mã) trước đã.", "② Choose the century (Roman numeral) first.") : ""; },
+  noMeasNeed: true,
   special: function (p, v) { if (p.sel !== p.cent) return { ok: false, kind: "bad", msg: L("Thế kỷ " + roman(p.sel) + " chưa đúng. Năm " + p.Y + " thuộc thế kỷ nào? Xem lại cách tính thế kỷ nhé.", "Century " + roman(p.sel) + " isn't right. Which century is " + p.Y + " in? Check how centuries are counted.") }; return null; },
   okMsg: ["Giải mã thành công! Cánh cửa bí mật mở ra.", "Decoded! The secret door slides open."],
-  shortMsg: ["Thế kỷ đúng rồi, nhưng số năm còn ít quá. Lấy năm nay trừ năm dựng bia.", "The century is right, but that's too few years. Subtract the year it was set up from this year."],
-  longMsg: ["Thế kỷ đúng rồi, nhưng số năm nhiều quá. Lấy năm nay trừ năm dựng bia.", "The century is right, but that's too many years. Subtract the year it was set up from this year."],
+  shortMsg: ["Thế kỷ đúng rồi, nhưng số năm còn ít quá. Lấy năm hiện tại trừ năm dựng bia.", "The century is right, but that's too few years. Subtract the year it was set up from this year."],
+  longMsg: ["Thế kỷ đúng rồi, nhưng số năm nhiều quá. Lấy năm hiện tại trừ năm dựng bia.", "The century is right, but that's too many years. Subtract the year it was set up from this year."],
   fx: function (p, k) { return k === "ok" ? '<path d="M78 290 V96 Q78 58 150 58 Q222 58 222 96 V290 Z" fill="#ffe082" fill-opacity=".55"/>' : ""; },
   passTitle: ["bia đã được giải mã!", "the tablet is decoded!"],
   rows: function (p) { return [[L("Năm dựng bia", "Year set up"), String(p.Y)], [L("Thế kỷ", "Century"), roman(p.cent) + (p.sel === p.cent ? " ✓" : "")], [L("Số năm đến " + p.now, "Years until " + p.now), p.now + " − " + p.Y + " = " + p.ans]]; },
-  formula: function () { return L("Thế kỷ thứ n: từ năm (n − 1) × 100 + 1 đến năm n × 100. Số năm = năm nay − năm dựng", "Century n: from year (n − 1) × 100 + 1 to year n × 100. Years = this year − year set up"); },
+  formula: function () { return L("Thế kỷ thứ n: từ năm (n − 1) × 100 + 1 đến năm n × 100. Số năm = năm hiện tại − năm dựng", "Century n: from year (n − 1) × 100 + 1 to year n × 100. Years = this year − year set up"); },
   hints: function (p) { return [
     L("Thế kỷ I: năm 1 → 100; thế kỷ II: năm 101 → 200; … thế kỷ XX: năm 1901 → 2000; thế kỷ XXI: năm 2001 → 2100.", "Century I: years 1 → 100; century II: 101 → 200; … century XX: 1901 → 2000; century XXI: 2001 → 2100."),
     L("Năm tròn trăm (như 1900) thuộc thế kỷ bằng số trăm (XIX). Năm khác: lấy số trăm cộng 1 (năm 1005 có 10 trăm, thuộc thế kỷ XI). Số La Mã: I = 1, V = 5, X = 10.", "A whole-hundred year (like 1900) is in the century equal to its hundreds (XIX). Otherwise add 1 to the hundreds (1005 has 10 hundreds, so century XI). Roman numerals: I = 1, V = 5, X = 10."),
-    L("Ví dụ: năm 1005 thuộc thế kỷ XI. Đến năm 2026 đã qua 2026 − 1005 = 1021 năm.", "Example: 1005 is in century XI. By 2026, 2026 − 1005 = 1021 years have passed.")]; }
+    L("Ví dụ: năm 1005 thuộc thế kỷ XI. Nếu năm hiện tại là 2026 thì đã qua 2026 − 1005 = 1021 năm.", "Example: 1005 is in century XI. If the current year is 2026, 2026 − 1005 = 1021 years have passed.")]; }
 });
 
 /* ===== Câu chuyện 2 · Làng chài ===== */
@@ -4527,7 +4529,7 @@ var LC1 = c4Job("langchai", {
     o += '<rect x="22" y="20" width="316" height="' + (90 + p.ops.length * 40) + '" rx="10" fill="#fffdf3" stroke="' + INK + '" stroke-width="2.4"/>' + T2(180, 46, L("SỔ QUỸ HỢP TÁC XÃ", "CO-OP CASH BOOK"), { a: "middle", fs: 15, fw: 800, c: "#1f6f9f" });
     var lab = { ca: ["Bán cá: thu vào", "Fish sold: income"], luoi: ["Mua lưới, sửa tàu: chi ra", "Nets, boat repair: spent"], muc: ["Bán mực khô: thu vào", "Dried squid sold: income"], dau: ["Mua dầu máy: chi ra", "Engine oil: spent"] };
     var rows = [["A", L("Đầu ngày: quỹ có", "Start of day: fund has"), p.A, "#263238"]].concat(p.ops.map(function (q, i) { return ["o" + i, L(lab[q[1]][0], lab[q[1]][1]), q[2], q[0] === "+" ? "#1f8a4c" : "#c0392b"]; }));
-    rows.forEach(function (r, i) { var y = 80 + i * 40; o += '<rect x="34" y="' + (y - 22) + '" width="292" height="32" rx="6" fill="#f3f8fc" stroke="#b7cfe0" stroke-width="1.2"/>' + T2(44, y, r[1], { fs: 12.5 }) + T2(316, y, L(dVi(r[2]), dEn(r[2])), { a: "end", fs: 13.5, fw: 800, c: r[3] }) + hitR(34, y - 22, 292, 32, r[0]); });
+    rows.forEach(function (r, i) { var y = 80 + i * 40; o += '<rect x="34" y="' + (y - 22) + '" width="292" height="32" rx="6" fill="#f3f8fc" stroke="#b7cfe0" stroke-width="1.2"/>' + T2(44, y, r[1], { fs: 12.5 }) + T2(316, y, p.seen[r[0]] ? L(dVi(r[2]), dEn(r[2])) : L("chạm để xem", "tap to see"), { a: "end", fs: p.seen[r[0]] ? 13.5 : 11, fw: 800, c: p.seen[r[0]] ? r[3] : "#90a4ae" }) + hitR(34, y - 22, 292, 32, r[0]); });
     o += '<g transform="translate(290 370)"><rect x="-40" y="-36" width="80" height="62" rx="6" fill="#607d8b" stroke="' + INK + '" stroke-width="2.4"/><circle r="12" fill="#cfd8dc" stroke="' + INK + '" stroke-width="2"/><path d="M0 -8 V0 H6" stroke="' + INK + '" stroke-width="2"/></g>';
     return o + adult(60, 392, "#2f80ed", "#f3dc8a");
   },
@@ -4564,8 +4566,8 @@ var LC2 = c4Job("langchai", {
     var o = '<rect width="360" height="420" fill="#eef3f7"/><rect y="300" width="360" height="120" fill="#c9a06a"/>';
     o += '<path d="M40 300 V120 L130 70 L220 120 V300 Z" fill="#fff3d6" stroke="' + INK + '" stroke-width="2.4"/><path d="M58 300 V150 H202 V300" fill="#f3dc8a" stroke="' + INK + '" stroke-width="1.6"/>';
     for (var i = 0; i < 9; i++) o += '<ellipse cx="' + (78 + (i % 5) * 26) + '" cy="' + (288 - Math.floor(i / 5) * 18) + '" rx="12" ry="7" fill="#fffde7" stroke="#bfa96a" stroke-width="1.2"/>';
-    o += '<g transform="translate(130 200)"><rect x="-56" y="-26" width="112" height="44" rx="6" fill="#1b2328" stroke="' + INK + '" stroke-width="2"/>' + T2(48, 6, p.tot + " kg", { a: "end", fs: 20, fw: 700, c: "#7CFC9A" }) + "</g>" + T2(130, 160, L("CÂN KHO", "STORE SCALE"), { a: "middle", fs: 12, fw: 800, c: "#7a5533" }) + hitR(70, 150, 120, 80, "tot");
-    o += '<rect x="246" y="250" width="90" height="16" rx="4" fill="#b0bec5" stroke="' + INK + '" stroke-width="2"/><rect x="256" y="266" width="70" height="34" rx="4" fill="#eceff1" stroke="' + INK + '" stroke-width="2"/><rect x="266" y="272" width="50" height="20" rx="3" fill="#1b2328"/>' + T2(312, 287, p.cap + " kg", { a: "end", fs: 13, fw: 700, c: "#7CFC9A" });
+    o += '<g transform="translate(130 200)"><rect x="-56" y="-26" width="112" height="44" rx="6" fill="#1b2328" stroke="' + INK + '" stroke-width="2"/>' + T2(48, 6, hv(p, "tot", p.tot + " kg"), { a: "end", fs: 20, fw: 700, c: "#7CFC9A" }) + "</g>" + T2(130, 160, L("CÂN KHO", "STORE SCALE"), { a: "middle", fs: 12, fw: 800, c: "#7a5533" }) + hitR(70, 150, 120, 80, "tot");
+    o += '<rect x="246" y="250" width="90" height="16" rx="4" fill="#b0bec5" stroke="' + INK + '" stroke-width="2"/><rect x="256" y="266" width="70" height="34" rx="4" fill="#eceff1" stroke="' + INK + '" stroke-width="2"/><rect x="266" y="272" width="50" height="20" rx="3" fill="#1b2328"/>' + T2(312, 287, hv(p, "cap", p.cap + " kg"), { a: "end", fs: 13, fw: 700, c: "#7CFC9A" });
     o += '<path d="M262 250 Q258 200 270 186 H312 Q324 200 320 250 Z" fill="#f5f0e1" stroke="' + INK + '" stroke-width="2"/><path d="M270 186 Q291 176 312 186" fill="none" stroke="' + INK + '" stroke-width="2"/>' + T2(291, 226, L("GẠO", "RICE"), { a: "middle", fs: 12, fw: 800, c: "#7a5533" }) + T2(291, 172, L("Bao mẫu", "Sample bag"), { a: "middle", fs: 12, fw: 800 }) + hitR(246, 160, 96, 140, "cap");
     return o;
   },
@@ -4600,8 +4602,8 @@ var LC3 = c4Job("langchai", {
     o += '<g transform="translate(110 300)"><path d="M-80 0 H80 L60 26 H-60 Z" fill="#1e88e5" stroke="' + INK + '" stroke-width="2.4"/><path d="M-70 0 H70" stroke="#fff" stroke-width="3"/></g>';
     o += '<g transform="translate(270 270)"><path d="M-50 -40 L50 -40 L40 40 L-40 40 Z" fill="none" stroke="#8d6e4a" stroke-width="2"/><path d="M-45 -20 H45 M-42 0 H42 M-41 20 H41 M-25 -40 L-20 40 M0 -40 V40 M25 -40 L20 40" stroke="#8d6e4a" stroke-width="1.4"/></g>';
     o += '<rect x="16" y="20" width="240" height="96" rx="14" fill="#fff" stroke="' + INK + '" stroke-width="2.2"/><path d="M60 116 L70 140 L90 116" fill="#fff" stroke="' + INK + '" stroke-width="2.2"/><path d="M62 114 H88" stroke="#fff" stroke-width="4"/>';
-    o += T2(30, 46, L("“Thuyền và lưới", "“The boat and the net"), { fs: 13 }) + T2(30, 70, L("tổng cộng " + dVi(p.S) + ".”", "cost " + dEn(p.S) + " together.”"), { fs: 14, fw: 800, c: "#1f6f9f" }) + T2(30, 96, L("(chạm để ghi vào sổ)", "(tap to note it)"), { fs: 11, c: "#78909c" }) + hitR(16, 20, 240, 96, "S");
-    o += '<g transform="rotate(-4 290 190)"><rect x="232" y="150" width="116" height="80" rx="4" fill="#fff59d" stroke="' + INK + '" stroke-width="2"/>' + T2(290, 174, L("Ghi chú:", "Note:"), { a: "middle", fs: 12, fw: 800 }) + T2(290, 196, L("Thuyền đắt hơn", "The boat costs"), { a: "middle", fs: 11.5 }) + T2(290, 214, L("lưới " + dVi(p.D), dEn(p.D) + " more"), { a: "middle", fs: 12, fw: 800, c: "#c0392b" }) + "</g>" + hitR(232, 150, 116, 84, "D");
+    o += T2(30, 46, L("“Thuyền và lưới", "“The boat and the net"), { fs: 13 }) + T2(30, 70, L("tổng cộng " + hv(p, "S", dVi(p.S)) + ".”", "cost " + hv(p, "S", dEn(p.S)) + " together.”"), { fs: 14, fw: 800, c: "#1f6f9f" }) + (p.seen.S ? "" : T2(30, 96, L("(chạm để nghe bác đố)", "(tap to hear the riddle)"), { fs: 11, c: "#78909c" })) + hitR(16, 20, 240, 96, "S");
+    o += '<g transform="rotate(-4 290 190)"><rect x="232" y="150" width="116" height="80" rx="4" fill="#fff59d" stroke="' + INK + '" stroke-width="2"/>' + T2(290, 174, L("Ghi chú:", "Note:"), { a: "middle", fs: 12, fw: 800 }) + T2(290, 196, L("Thuyền đắt hơn", "The boat costs"), { a: "middle", fs: 11.5 }) + T2(290, 214, L("lưới " + hv(p, "D", dVi(p.D)), hv(p, "D", dEn(p.D)) + " more"), { a: "middle", fs: 12, fw: 800, c: "#c0392b" }) + "</g>" + hitR(232, 150, 116, 84, "D");
     return o + adult(300, 120, "#6d4c41", "#f3dc8a") + kid(200, 380, "#ff7a3d");
   },
   items: function (p) { return {
@@ -4642,7 +4644,7 @@ var RG1 = c4Job("trongrung", {
     var o = '<rect width="360" height="420" fill="#d6f0ff"/><path d="M-10 330 Q120 250 250 330 Z" fill="#c9b48a" stroke="' + INK + '" stroke-width="2"/><rect y="330" width="360" height="90" fill="#93d47f"/>';
     o += '<rect x="22" y="18" width="316" height="' + (66 + p.n * 40) + '" rx="10" fill="#fffdf3" stroke="' + INK + '" stroke-width="2.4"/>' + T2(180, 44, L("NHẬT KÝ TRỒNG CÂY", "PLANTING LOG"), { a: "middle", fs: 15, fw: 800, c: "#2e7d32" });
     var t = [L("Ngày 1: trồng được " + p.d1 + " cây", "Day 1: planted " + p.d1 + " trees"), L("Ngày 2: nhiều hơn ngày 1 là " + p.x + " cây", "Day 2: " + p.x + " more than day 1"), L("Ngày 3: trồng được " + p.d3 + " cây", "Day 3: planted " + p.d3 + " trees"), L("Ngày 4: ít hơn ngày 3 là " + p.y + " cây", "Day 4: " + p.y + " fewer than day 3")];
-    for (var i = 0; i < p.n; i++) { var yy = 78 + i * 40; o += '<rect x="34" y="' + (yy - 22) + '" width="292" height="32" rx="6" fill="#f1f8e9" stroke="#c5e1a5" stroke-width="1.2"/>' + T2(46, yy, t[i], { fs: 13.5 }) + hitR(34, yy - 22, 292, 32, "d" + i); }
+    for (var i = 0; i < p.n; i++) { var yy = 78 + i * 40; var sn = p.seen["d" + i]; o += '<rect x="34" y="' + (yy - 22) + '" width="292" height="32" rx="6" fill="#f1f8e9" stroke="#c5e1a5" stroke-width="1.2"/>' + T2(46, yy, sn ? t[i] : L("Ngày " + (i + 1) + ": chạm để xem", "Day " + (i + 1) + ": tap to see"), { fs: 13.5, c: sn ? INK : "#90a4ae" }) + hitR(34, yy - 22, 292, 32, "d" + i); }
     for (var k = 0; k < 7; k++) o += pine(40 + k * 26, 326 - 26 * Math.sin(Math.PI * (40 + k * 26) / 260), 6);
     return o + adult(300, 380, "#43a047") + kid(270, 384, "#43a047");
   },
@@ -4682,10 +4684,10 @@ var RG2 = c4Job("trongrung", {
     var o = '<rect width="360" height="420" fill="#d6f0ff"/><rect y="300" width="360" height="120" fill="#93d47f"/><rect y="250" width="360" height="56" fill="#9e9e9e"/><path d="M0 278 H360" stroke="#fff" stroke-width="3" stroke-dasharray="16 12"/>';
     o += '<rect x="20" y="20" width="140" height="170" rx="8" fill="#fff" stroke="' + INK + '" stroke-width="2.2"/><rect x="60" y="12" width="60" height="16" rx="4" fill="#b0bec5" stroke="' + INK + '" stroke-width="2"/>' + T2(90, 52, L("ĐĂNG KÝ", "SIGN-UP"), { a: "middle", fs: 13, fw: 800, c: "#2e7d32" });
     for (var i = 0; i < 6; i++) o += '<path d="M34 ' + (70 + i * 14) + ' h' + (60 + (i * 17) % 50) + '" stroke="#90a4ae" stroke-width="3"/>';
-    o += T2(90, 170, L("Tổng: " + p.N + " bạn", "Total: " + p.N), { a: "middle", fs: 15, fw: 800, c: "#c0392b" }) + hitR(20, 12, 140, 178, "N");
+    o += T2(90, 170, L("Tổng: " + hv(p, "N", p.N) + " bạn", "Total: " + hv(p, "N", p.N)), { a: "middle", fs: 15, fw: 800, c: "#c0392b" }) + hitR(20, 12, 140, 178, "N");
     o += '<g transform="translate(250 230)"><rect x="-88" y="-60" width="176" height="74" rx="14" fill="#ffcf3f" stroke="' + INK + '" stroke-width="2.4"/>';
     for (var w = 0; w < 5; w++) o += '<rect x="' + (-78 + w * 32) + '" y="-50" width="26" height="24" rx="4" fill="#bfe3ff" stroke="' + INK + '" stroke-width="1.6"/>';
-    o += '<circle cx="-52" cy="16" r="13" fill="#37474f" stroke="' + INK + '" stroke-width="2"/><circle cx="52" cy="16" r="13" fill="#37474f" stroke="' + INK + '" stroke-width="2"/>' + c4Card(-46, -20, 92, 24) + T2(0, -3, L(p.k + " chỗ ngồi", p.k + " seats"), { a: "middle", fs: 13, fw: 800 }) + "</g>" + hitR(162, 168, 176, 80, "k");
+    o += '<circle cx="-52" cy="16" r="13" fill="#37474f" stroke="' + INK + '" stroke-width="2"/><circle cx="52" cy="16" r="13" fill="#37474f" stroke="' + INK + '" stroke-width="2"/>' + c4Card(-46, -20, 92, 24) + T2(0, -3, L(hv(p, "k", p.k) + " chỗ ngồi", hv(p, "k", p.k) + " seats"), { a: "middle", fs: 13, fw: 800 }) + "</g>" + hitR(162, 168, 176, 80, "k");
     return o + adult(60, 380, "#43a047") + kid(96, 384, "#43a047") + kid(120, 384, "#ffcf3f");
   },
   items: function (p) { return {
@@ -4718,9 +4720,9 @@ var RG3 = c4Job("trongrung", {
   base: function (p) {
     var o = '<rect width="360" height="420" fill="#d6f0ff"/><path d="M-10 300 Q80 170 180 300 Z" fill="#c9b48a" stroke="' + INK + '" stroke-width="2"/><path d="M170 300 Q270 190 370 300 Z" fill="#d4c095" stroke="' + INK + '" stroke-width="2"/><rect y="300" width="360" height="120" fill="#93d47f"/>';
     o += c4Card(30, 236, 90, 24) + T2(75, 253, L("Đồi Thông", "Pine Hill"), { a: "middle", fs: 12, fw: 800, c: "#2e7d32" }) + c4Card(230, 246, 90, 24) + T2(275, 263, L("Đồi Keo", "Acacia Hill"), { a: "middle", fs: 12, fw: 800, c: "#7a5533" });
-    o += '<rect x="20" y="18" width="200" height="96" rx="10" fill="#fff" stroke="' + INK + '" stroke-width="2.2"/>' + T2(120, 42, L("BẢNG PHÂN CÔNG", "PLANTING PLAN"), { a: "middle", fs: 13, fw: 800, c: "#2e7d32" }) + T2(120, 70, L("Cả hai đồi trồng:", "Both hills together:"), { a: "middle", fs: 12.5 }) + T2(120, 96, L(nVi(p.S) + " cây", nEn(p.S) + " trees"), { a: "middle", fs: 17, fw: 800, c: "#c0392b" }) + hitR(20, 18, 200, 96, "S");
+    o += '<rect x="20" y="18" width="200" height="96" rx="10" fill="#fff" stroke="' + INK + '" stroke-width="2.2"/>' + T2(120, 42, L("BẢNG PHÂN CÔNG", "PLANTING PLAN"), { a: "middle", fs: 13, fw: 800, c: "#2e7d32" }) + T2(120, 70, L("Cả hai đồi trồng:", "Both hills together:"), { a: "middle", fs: 12.5 }) + T2(120, 96, L(hv(p, "S", nVi(p.S)) + " cây", hv(p, "S", nEn(p.S)) + " trees"), { a: "middle", fs: 17, fw: 800, c: "#c0392b" }) + hitR(20, 18, 200, 96, "S");
     o += '<rect x="222" y="40" width="132" height="96" rx="12" fill="#fff" stroke="' + INK + '" stroke-width="2"/><path d="M276 136 L284 154 L296 136" fill="#fff" stroke="' + INK + '" stroke-width="2"/><path d="M278 134 H294" stroke="#fff" stroke-width="4"/>';
-    o += T2(288, 64, L("“Đồi Thông", "“Pine Hill gets"), { a: "middle", fs: 12 }) + T2(288, 86, L("nhiều hơn đồi Keo", nEn(p.D) + " more trees"), { a: "middle", fs: 12, fw: LANG === "en" ? 800 : 700, c: LANG === "en" ? "#1f6f9f" : INK }) + T2(288, 108, L(nVi(p.D) + " cây.”", "than Acacia.”"), { a: "middle", fs: LANG === "en" ? 12 : 13, fw: LANG === "en" ? 700 : 800, c: LANG === "en" ? INK : "#1f6f9f" }) + hitR(222, 40, 132, 96, "D");
+    o += T2(288, 64, L("“Đồi Thông", "“Pine Hill gets"), { a: "middle", fs: 12 }) + T2(288, 86, L("nhiều hơn đồi Keo", hv(p, "D", nEn(p.D)) + " more trees"), { a: "middle", fs: 12, fw: LANG === "en" ? 800 : 700, c: LANG === "en" ? "#1f6f9f" : INK }) + T2(288, 108, L(hv(p, "D", nVi(p.D)) + " cây.”", "than Acacia.”"), { a: "middle", fs: LANG === "en" ? 12 : 13, fw: LANG === "en" ? 700 : 800, c: LANG === "en" ? INK : "#1f6f9f" }) + hitR(222, 40, 132, 96, "D");
     o += adult(290, 196, "#43a047");
     o += '<g transform="translate(110 360)"><rect x="-60" y="-30" width="90" height="40" rx="4" fill="#8d6e4a" stroke="' + INK + '" stroke-width="2"/><rect x="30" y="-22" width="40" height="32" rx="4" fill="#ffcf3f" stroke="' + INK + '" stroke-width="2"/><circle cx="-36" cy="14" r="10" fill="#37474f"/><circle cx="46" cy="14" r="10" fill="#37474f"/>';
     for (var i = 0; i < 6; i++) o += pine(-52 + i * 14, -32, 5);
@@ -4821,7 +4823,7 @@ function XD2_shapes(p) {
 }
 var XD2 = c4Job("xaydung", {
   name: ["Viền cờ hình thoi", "The diamond pennant"], sub: ["chọn mảnh vải hình thoi, đo cạnh, tính chu vi", "pick the rhombus, measure a side, find the perimeter"],
-  endName: ["cờ hiệu", "the pennant"], what: ["Chiều dài dây viền quanh cờ", "Length of trim around the pennant"], get unit() { return "cm"; },
+  endName: ["cờ hiệu", "the pennant"], what: ["③ Chiều dài dây viền quanh cờ", "③ Length of trim around the pennant"], get unit() { return "cm"; },
   btnText: ["May viền", "Sew the trim"], H: 430,
   lead: ["Công viên cần một lá cờ hiệu có <b>4 cạnh bằng nhau nhưng không có góc vuông nào</b>. Em chọn đúng mảnh vải, đo cạnh rồi tính chiều dài dây viền để may kín xung quanh.", "The park needs a pennant with <b>4 equal sides but no right angles</b>. Pick the right piece of cloth, measure a side and work out the trim needed to go all the way round."],
   taskT: function () { return L("<b>Nhiệm vụ:</b> 1) chạm vào <b>giữa</b> mảnh vải để chọn mảnh có 4 cạnh bằng nhau nhưng không có góc vuông; 2) chạm vào <b>cạnh</b> của mảnh vải để đo (thước kẻ, đơn vị cm); 3) tính chiều dài dây viền đủ để may kín xung quanh lá cờ.", "<b>Task:</b> 1) tap the <b>middle</b> of a piece to choose the one with 4 equal sides and no right angles; 2) tap a piece's <b>side</b> to measure it (ruler, in cm); 3) work out the trim needed to go all the way round the pennant."); },
@@ -4843,8 +4845,8 @@ var XD2 = c4Job("xaydung", {
         if (p.got[key]) { var mx = (q[0] + n2[0]) / 2, my = (q[1] + n2[1]) / 2, ox = mx - s.cx, oy = my - s.cy, ln = Math.hypot(ox, oy) || 1; o += tag(mx + ox / ln * 16, my + oy / ln * 12, s.len[j] + " cm", "#c2410c"); }
         o += '<line data-it="m:' + i + ":" + j + '" x1="' + q[0] + '" y1="' + q[1] + '" x2="' + n2[0] + '" y2="' + n2[1] + '" stroke="#000" stroke-opacity="0" stroke-width="14" pointer-events="stroke" style="cursor:pointer"/>'; });
     });
-    if (p.sel != null) o += tag(180, 380, L("Đã chọn mảnh " + (p.sel + 1), "Piece " + (p.sel + 1) + " chosen"), "#7a3fb0");
-    return o + T2(180, 412, L("Chạm giữa mảnh để chọn, chạm cạnh để đo", "Tap a middle to choose, a side to measure"), { a: "middle", fs: 12, c: "#7a5533" });
+    if (p.sel != null) o += tag(180, 374, L("Đã chọn mảnh " + (p.sel + 1), "Piece " + (p.sel + 1) + " chosen"), "#7a3fb0");
+    return o + T2(180, 404, L("① Chạm giữa mảnh vải để chọn  ② Chạm cạnh để đo", "① Tap a middle to choose  ② Tap a side to measure"), { a: "middle", fs: 11.5, fw: 800, c: "#7a5533" }) + T2(180, 422, L("③ Nhập chu vi vào ô bên dưới", "③ Type the perimeter in the box below"), { a: "middle", fs: 11.5, fw: 800, c: "#7a5533" });
   },
   tap: function (p, evt) {
     var el = evt.target.closest("[data-it]"); if (!el) return; var m = el.dataset.it.split(":");
@@ -4892,7 +4894,7 @@ var XD3 = c4Job("xaydung", {
     o += '<path d="M' + g.D[0] + " " + g.D[1] + " V" + g.H[1] + '" stroke="' + INK + '" stroke-width="2" stroke-dasharray="6 4"/><path d="M' + (g.H[0] + 9) + " " + g.H[1] + " V" + (g.H[1] - 9) + " H" + g.H[0] + '" fill="none" stroke="' + INK + '" stroke-width="1.5"/>';
     [["A", g.A, -8, 18], ["B", g.B, 4, 18], ["C", g.C, 6, -6], ["D", g.D, -6, -8], ["H", g.H, -4, 18]].forEach(function (q) { o += T2(q[1][0] + q[2], q[1][1] + q[3], q[0], { fs: 13, fw: 800 }); });
     o += hitL(g.A[0], g.A[1], g.B[0], g.B[1], "a") + hitL(g.A[0], g.A[1], g.D[0], g.D[1], "c") + hitL(g.D[0], g.D[1], g.H[0], g.H[1], "h");
-    o += '<g transform="rotate(3 280 360)"><rect x="220" y="318" width="124" height="88" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(282, 342, L("PHIẾU ĐẶT HÀNG", "ORDER SLIP"), { a: "middle", fs: 11.5, fw: 800, c: "#c0392b" }) + T2(282, 368, L("Gạch ngọc bích:", "Jade tiles:"), { a: "middle", fs: 12 }) + T2(282, 392, L(p.N + " viên", p.N + " tiles"), { a: "middle", fs: 16, fw: 800 }) + "</g>" + hitR(220, 318, 124, 92, "N");
+    o += '<g transform="rotate(3 280 360)"><rect x="220" y="318" width="124" height="88" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(282, 342, L("PHIẾU ĐẶT HÀNG", "ORDER SLIP"), { a: "middle", fs: 11.5, fw: 800, c: "#c0392b" }) + T2(282, 368, L("Gạch ngọc bích:", "Jade tiles:"), { a: "middle", fs: 12 }) + T2(282, 392, L(hv(p, "N", p.N) + " viên", hv(p, "N", p.N) + " tiles"), { a: "middle", fs: 16, fw: 800 }) + "</g>" + hitR(220, 318, 124, 92, "N");
     return o + adult(60, 392, "#1e88e5", "#ffcf3f") + kid(100, 396, "#ff9800");
   },
   items: function (p) { return {
@@ -4963,7 +4965,7 @@ var NT1 = c4Job("nongtrai", {
   tap: function (p, evt) {
     var el = evt.target.closest("[data-it]"); if (!el) return; var id = el.dataset.it;
     if (id.indexOf("roll:") === 0) { p.sel = +id.slice(5); var r = p.rolls[p.sel]; SFX.pick(); say(L("Em chọn cuộn bạt <b>" + nVi(r.v) + " " + r.u + "</b>.", "You chose the <b>" + nEn(r.v) + " " + r.u + "</b> cover.")); tip(""); drawLayers(); render(); return; }
-    S9_BASE.tap.call(this, p, evt);
+    C4_BASE.tap.call(this, p, evt);
   },
   precheck: function (p) { return p.sel == null ? L("Chạm chọn một cuộn bạt trước đã.", "Tap a cover to choose it first.") : ""; },
   check: function (p) {
@@ -4992,8 +4994,8 @@ var NT2 = c4Job("nongtrai", {
   base: function (p) {
     var o = '<rect width="360" height="430" fill="#93d47f"/>', k = Math.min(12, 240 / p.l, 120 / p.w), W = p.l * k, H = p.w * k, x = 150 - W / 2, y = 110 + (140 - H) / 2;
     o += '<rect x="' + x + '" y="' + y + '" width="' + W + '" height="' + H + '" fill="#a1744f" stroke="#6d4c41" stroke-width="5" stroke-dasharray="2 5"/>' + T2(150, y + H / 2 + 5, "?", { a: "middle", fs: 22, fw: 800, c: "#fff" });
-    o += '<g transform="rotate(-3 300 90)"><rect x="252" y="20" width="96" height="120" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(300, 42, L("HÓA ĐƠN", "RECEIPT"), { a: "middle", fs: 12, fw: 800, c: "#c0392b" }) + T2(300, 66, L("Lưới rào:", "Fencing:"), { a: "middle", fs: 12 }) + T2(300, 90, p.P + " m", { a: "middle", fs: 17, fw: 800 }) + T2(300, 112, L("(quây vừa kín)", "(once round)"), { a: "middle", fs: 10 }) + "</g>" + hitR(250, 18, 100, 126, "P");
-    o += '<g transform="rotate(4 70 340)"><rect x="14" y="296" width="140" height="84" rx="4" fill="#fff59d" stroke="' + INK + '" stroke-width="2"/>' + T2(84, 320, L("Ghi chú của cô Mai:", "Ms Mai's note:"), { a: "middle", fs: 11.5, fw: 800 }) + T2(84, 344, L("Chiều dài hơn", "Length is " + p.D + " m"), { a: "middle", fs: 12 }) + T2(84, 364, L("chiều rộng " + p.D + " m", "more than width"), { a: "middle", fs: 12, fw: 800, c: "#1f6f9f" }) + "</g>" + hitR(12, 292, 146, 92, "D");
+    o += '<g transform="rotate(-3 300 90)"><rect x="252" y="20" width="96" height="120" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(300, 42, L("HÓA ĐƠN", "RECEIPT"), { a: "middle", fs: 12, fw: 800, c: "#c0392b" }) + T2(300, 66, L("Lưới rào:", "Fencing:"), { a: "middle", fs: 12 }) + T2(300, 90, hv(p, "P", p.P) + " m", { a: "middle", fs: 17, fw: 800 }) + T2(300, 112, L("(quây vừa kín)", "(once round)"), { a: "middle", fs: 10 }) + "</g>" + hitR(250, 18, 100, 126, "P");
+    o += '<g transform="rotate(4 70 340)"><rect x="14" y="296" width="140" height="84" rx="4" fill="#fff59d" stroke="' + INK + '" stroke-width="2"/>' + T2(84, 320, L("Ghi chú của cô Mai:", "Ms Mai's note:"), { a: "middle", fs: 11.5, fw: 800 }) + T2(84, 344, L("Chiều dài hơn", "Length is " + hv(p, "D", p.D) + " m"), { a: "middle", fs: 12 }) + T2(84, 364, L("chiều rộng " + hv(p, "D", p.D) + " m", "more than width"), { a: "middle", fs: 12, fw: 800, c: "#1f6f9f" }) + "</g>" + hitR(12, 292, 146, 92, "D");
     o += '<g transform="rotate(-2 270 350)"><rect x="200" y="304" width="140" height="80" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(270, 328, L("CỬA HÀNG HẠT GIỐNG", "SEED SHOP"), { a: "middle", fs: 10.5, fw: 800, c: "#2e7d32" }) + T2(270, 352, L("1 gói hạt", "1 packet"), { a: "middle", fs: 12 }) + T2(270, 372, L("cho mỗi 1 m²", "per 1 m²"), { a: "middle", fs: 12, fw: 800 }) + "</g>";
     return o + adult(60, 250, "#7e57c2", "#f3dc8a");
   },
@@ -5022,7 +5024,7 @@ var NT2 = c4Job("nongtrai", {
 /* NT3 · Bù nhìn rơm: ghép hai tam giác vuông thành hình chữ nhật, tính diện tích (KM-HH-406) */
 var NT3 = c4Job("nongtrai", {
   name: ["Bù nhìn rơm", "The scarecrow"], sub: ["ghép hai tam giác vuông thành hình chữ nhật, tính diện tích", "join two right triangles into a rectangle, find its area"],
-  endName: ["bù nhìn rơm", "the scarecrow"], what: ["Diện tích thân bù nhìn (hình chữ nhật)", "Area of the scarecrow's body (rectangle)"], get unit() { return "dm²"; },
+  endName: ["bù nhìn rơm", "the scarecrow"], what: ["③ Diện tích thân bù nhìn (hình chữ nhật)", "③ Area of the scarecrow's body (rectangle)"], get unit() { return "dm²"; },
   btnText: ["Dựng bù nhìn", "Put it up"], H: 430,
   lead: ["Lũ chim đang kéo đến phá ruộng! Em làm thân bù nhìn từ <b>2 tấm rơm hình tam giác vuông giống hệt nhau</b>: xoay tấm thứ hai cho khớp để ghép thành <b>hình chữ nhật</b>, rồi tính diện tích thân bù nhìn để cô Mai cắt vải áo.", "The birds are coming for the field! Make the scarecrow's body from <b>2 identical right-triangle straw panels</b>: turn the second one so they fit together as a <b>rectangle</b>, then find the body's area so Ms Mai can cut the cloth."],
   taskT: function () { return L("<b>Nhiệm vụ:</b> 1) bấm ⟳ để xoay tấm rơm thứ hai, bấm <b>Ghép vào</b> để thử ghép thành hình chữ nhật; 2) chạm vào hai cạnh góc vuông để đo (dm); 3) tính diện tích hình chữ nhật vừa ghép.", "<b>Task:</b> 1) press ⟳ to turn the second panel and <b>Join</b> to try making a rectangle; 2) tap the two sides of the right angle to measure them (dm); 3) find the area of the rectangle."); },
@@ -5048,7 +5050,7 @@ var NT3 = c4Job("nongtrai", {
     if (p.got.a) o += tag((A[0] + B[0]) / 2, A[1] + 18, p.a + " dm", "#c2410c");
     if (p.got.b) o += tag(A[0] - 2, (A[1] + C[1]) / 2, p.b + " dm", "#c2410c");
     if (p.formed) o += tag(A[0] + g.w / 2, C[1] - 16, L("Hình chữ nhật!", "A rectangle!"), "#1f8a4c");
-    return o + T2(180, 410, L("Chạm cạnh tam giác 1 để đo", "Tap the sides of triangle 1 to measure"), { a: "middle", fs: 12, c: "#7a5533" });
+    return o + T2(180, 396, L("① Xoay tấm 2 (⟳) rồi bấm Ghép vào", "① Turn panel 2 (⟳), then press Join"), { a: "middle", fs: 11.5, fw: 800, c: "#7a5533" }) + T2(180, 414, L("② Chạm 2 cạnh góc vuông của tấm 1 để đo  ③ Nhập ở ô dưới", "② Tap panel 1's two short sides  ③ Type below"), { a: "middle", fs: 11, fw: 800, c: "#7a5533" });
   },
   tap: function (p, evt) {
     var el = evt.target.closest("[data-it]"); if (!el) return; var id = el.dataset.it;
@@ -5098,7 +5100,7 @@ var QN1 = c4Job("quaynuoc", {
   },
   base: function (p) {
     var o = '<rect width="360" height="430" fill="#fff3d6"/><rect x="10" y="150" width="340" height="270" rx="14" fill="#e3f2fd" stroke="' + INK + '" stroke-width="2.4"/><path d="M10 290 H350" stroke="' + INK + '" stroke-width="2"/>';
-    o += '<g transform="rotate(-3 110 70)"><rect x="40" y="22" width="150" height="100" rx="6" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(115, 46, L("CÔNG THỨC SINH TỐ", "SMOOTHIE RECIPE"), { a: "middle", fs: 11, fw: 800, c: "#c2185b" }) + T2(115, 72, L("Sữa tươi:", "Fresh milk:"), { a: "middle", fs: 12 }) + T2(115, 104, p.n + "/" + p.d + L(" lít", " l"), { a: "middle", fs: 22, fw: 800, c: "#1f6f9f" }) + "</g>" + hitR(38, 18, 156, 108, "R");
+    o += '<g transform="rotate(-3 110 70)"><rect x="40" y="22" width="150" height="100" rx="6" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(115, 46, L("CÔNG THỨC SINH TỐ", "SMOOTHIE RECIPE"), { a: "middle", fs: 11, fw: 800, c: "#c2185b" }) + T2(115, 72, L("Sữa tươi:", "Fresh milk:"), { a: "middle", fs: 12 }) + T2(115, 104, hv(p, "R", p.n + "/" + p.d + L(" lít", " l")), { a: "middle", fs: 22, fw: 800, c: "#1f6f9f" }) + "</g>" + hitR(38, 18, 156, 108, "R");
     o += '<g transform="translate(280 90)" stroke="' + INK + '" stroke-width="2"><rect x="-26" y="-50" width="52" height="80" rx="10" fill="#cfd8dc"/><rect x="-20" y="-20" width="40" height="44" rx="6" fill="#fff" fill-opacity=".7"/><rect x="-30" y="30" width="60" height="18" rx="4" fill="#ec407a"/></g>';
     return o;
   },
@@ -5112,7 +5114,7 @@ var QN1 = c4Job("quaynuoc", {
   tap: function (p, evt) {
     var el = evt.target.closest("[data-it]"); if (!el) return; var id = el.dataset.it;
     if (id.indexOf("b:") === 0) { var i = +id.slice(2); if (p.sel.indexOf(i) >= 0) { p.sel = p.sel.filter(function (k) { return k !== i; }); SFX.pull(); } else { p.sel.push(i); SFX.pick(); } tip(""); drawLayers(); render(); return; }
-    S9_BASE.tap.call(this, p, evt);
+    C4_BASE.tap.call(this, p, evt);
   },
   precheck: function (p) { return p.sel.length ? "" : L("Chạm chọn các chai sữa trước đã.", "Tap the bottles you choose first."); },
   check: function (p) {
@@ -5135,7 +5137,7 @@ var QN1 = c4Job("quaynuoc", {
 var QN2_DIV = { 6: [2, 3, 6], 8: [2, 4, 8], 10: [2, 5, 10], 12: [2, 3, 4, 6, 12] };
 var QN2 = c4Job("quaynuoc", {
   name: ["Pha nước ép", "Mixing the juice"], sub: ["cộng, trừ phân số khác mẫu số", "add and subtract fractions with different denominators"],
-  endName: ["bình nước ép", "the juice jug"], what: ["Số lít nước ép còn trong bình", "Litres of juice left in the jug"], get unit() { return L("lít", "l"); },
+  endName: ["bình nước ép", "the juice jug"], what: ["③ Số lít nước ép còn trong bình (phân số)", "③ Litres of juice left in the jug (fraction)"], get unit() { return L("lít", "l"); },
   btnText: ["Rót ra cốc", "Serve"], H: 430, frac: true, intAns: false, ph: ["VD: 5/8", "e.g. 5/8"],
   lead: ["Em pha nước ép hoa quả trong bình lớn. Chạm vào từng ca để <b>đổ vào bình</b>. Cẩn thận, máy khuấy có thể làm nước <b>trào ra</b> một ít đấy!", "Mix the fruit juice in the big jug. Tap each jug to <b>pour it in</b>. Careful, the mixer may make some <b>spill over</b>!"],
   taskT: function () { return L("<b>Nhiệm vụ:</b> đổ hết hai ca nước vào bình, xem lượng nước bị trào ra, rồi tính số lít nước ép <b>còn lại</b> trong bình.<br><b>Cách nhập:</b> viết phân số dạng <b>tử/mẫu</b>, ví dụ 5/8.", "<b>Task:</b> pour both jugs into the big jug, see how much spills, then work out how many litres are <b>left</b> in the jug.<br><b>How to type:</b> write a fraction as <b>top/bottom</b>, e.g. 5/8."); },
@@ -5167,7 +5169,8 @@ var QN2 = c4Job("quaynuoc", {
       o += '<g data-it="pour:' + i + '" style="cursor:pointer;opacity:' + (done ? 0.45 : 1) + '"><path d="M' + (x - 30) + ' 200 h60 v90 q0 10 -10 10 h-40 q-10 0 -10 -10 Z" fill="' + (done ? "#eceff1" : c[0]) + '" stroke="' + INK + '" stroke-width="2.2"/><path d="M' + (x + 30) + ' 220 q18 0 18 22 q0 22 -18 22" fill="none" stroke="' + INK + '" stroke-width="3"/>' + T2(x, 244, f[0] + "/" + f[1], { a: "middle", fs: 18, fw: 800 }) + T2(x, 262, L("lít", "l"), { a: "middle", fs: 11 }) + T2(x, 318, c[1], { a: "middle", fs: 12, fw: 800 }) + "</g>" + (done ? c4Tick(x, 190) : "");
     });
     if (both) { o += '<g data-it="sp" style="cursor:pointer"><ellipse cx="250" cy="346" rx="44" ry="12" fill="#ffb74d" stroke="' + INK + '" stroke-width="1.6"/>' + tag(250, 376, L("trào ra " + p.f[2][0] + "/" + p.f[2][1] + " lít", "spilled " + p.f[2][0] + "/" + p.f[2][1] + " l"), "#c0392b") + "</g>" + (p.seen.sp ? c4Tick(312, 346) : ""); }
-    else o += T2(180, 400, L("Chạm vào từng ca để đổ vào bình", "Tap each jug to pour it in"), { a: "middle", fs: 12.5, fw: 800, c: "#fff" });
+    else o += T2(180, 400, L("① Chạm vào từng ca để đổ vào bình", "① Tap each jug to pour it in"), { a: "middle", fs: 12.5, fw: 800, c: "#fff" });
+    if (both) o += T2(110, 412, p.seen.sp ? L("③ Nhập số lít còn lại ở ô dưới", "③ Type the litres left below") : L("② Chạm vũng nước trào ra", "② Tap the spilled puddle"), { a: "middle", fs: 12, fw: 800, c: "#fff" });
     return o;
   },
   tap: function (p, evt) {
@@ -5179,7 +5182,7 @@ var QN2 = c4Job("quaynuoc", {
       say(L("Đã đổ <b>" + f[0] + "/" + f[1] + " lít</b> vào bình. Đã ghi vào sổ tay.", "Poured <b>" + f[0] + "/" + f[1] + " l</b> into the jug. Saved in the notebook.") + (p.poured[0] && p.poured[1] ? L(" Ôi, nước trào ra! Chạm vào vũng nước để xem.", " Oh, it's spilling! Tap the puddle to see.") : ""));
       tip(""); drawLayers(); render(); return;
     }
-    S9_BASE.tap.call(this, p, evt);
+    C4_BASE.tap.call(this, p, evt);
   },
   precheck: function (p) { return p.poured[0] && p.poured[1] ? (p.seen.sp ? "" : L("Chạm vào vũng nước bị trào ra để xem bao nhiêu lít.", "Tap the spilled puddle to see how much.")) : L("Đổ cả hai ca vào bình trước đã.", "Pour both jugs in first."); },
   special: function (p, v) {
@@ -5210,10 +5213,10 @@ var QN3 = c4Job("quaynuoc", {
   make: function () { var m, k, N, fs; do { m = pickOne([12, 20, 24]); k = rnd(3, 8); N = m * k; fs = QN3_F.filter(function (f) { return N % f[1] === 0; }); } while (!fs.length); var f = pickOne(fs); return { m: m, k: k, N: N, a: f[0], b: f[1], cls: pickOne(["4A", "4B", "4C", "5A", "5B"]), ans: N / f[1] * f[0], bottom: 430 }; },
   base: function (p) {
     var o = '<rect width="360" height="430" fill="#eef3f7"/><rect y="310" width="360" height="120" fill="#c9a06a"/>';
-    o += c4Card(20, 20, 150, 70) + T2(95, 44, L("BẢNG KHO", "STORE BOARD"), { a: "middle", fs: 12, fw: 800, c: "#1f6f9f" }) + T2(95, 74, L("Nước cam: " + p.k + " thùng", "Orange: " + p.k + " crates"), { a: "middle", fs: 14, fw: 800 }) + hitR(20, 20, 150, 70, "k");
-    for (var i = 0; i < p.k; i++) { var x = 20 + (i % 4) * 60, y = 230 - Math.floor(i / 4) * 52; o += '<g data-it="m"><rect x="' + x + '" y="' + y + '" width="54" height="46" rx="4" fill="#ffb74d" stroke="' + INK + '" stroke-width="2"/><path d="M' + x + " " + (y + 14) + " h54" + '" stroke="' + INK + '" stroke-width="1.4"/>' + T2(x + 27, y + 36, p.m, { a: "middle", fs: 13, fw: 800 }) + "</g>"; }
+    o += c4Card(20, 20, 150, 70) + T2(95, 44, L("BẢNG KHO", "STORE BOARD"), { a: "middle", fs: 12, fw: 800, c: "#1f6f9f" }) + T2(95, 74, L("Nước cam: " + hv(p, "k", p.k) + " thùng", "Orange: " + hv(p, "k", p.k) + " crates"), { a: "middle", fs: 14, fw: 800 }) + hitR(20, 20, 150, 70, "k");
+    for (var i = 0; i < p.k; i++) { var x = 20 + (i % 4) * 60, y = 230 - Math.floor(i / 4) * 52; o += '<g data-it="m"><rect x="' + x + '" y="' + y + '" width="54" height="46" rx="4" fill="#ffb74d" stroke="' + INK + '" stroke-width="2"/><path d="M' + x + " " + (y + 14) + " h54" + '" stroke="' + INK + '" stroke-width="1.4"/>' + T2(x + 27, y + 36, hv(p, "m", p.m), { a: "middle", fs: 13, fw: 800 }) + "</g>"; }
     o += T2(140, 296, L("Chạm một thùng để xem số chai", "Tap a crate to see how many bottles"), { a: "middle", fs: 11.5, c: "#5d4037" });
-    o += '<g transform="rotate(4 296 150)"><rect x="236" y="96" width="114" height="110" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(293, 120, L("PHIẾU ĐẶT", "ORDER SLIP"), { a: "middle", fs: 12, fw: 800, c: "#c0392b" }) + T2(293, 144, L("Lớp " + p.cls + " đặt", "Class " + p.cls + " wants"), { a: "middle", fs: 12 }) + T2(293, 172, p.a + "/" + p.b, { a: "middle", fs: 22, fw: 800, c: "#1f6f9f" }) + T2(293, 194, L("số chai trong kho", "of the bottles"), { a: "middle", fs: 11 }) + "</g>" + hitR(234, 92, 120, 120, "f");
+    o += '<g transform="rotate(4 296 150)"><rect x="236" y="96" width="114" height="110" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(293, 120, L("PHIẾU ĐẶT", "ORDER SLIP"), { a: "middle", fs: 12, fw: 800, c: "#c0392b" }) + T2(293, 144, L("Lớp " + p.cls + " đặt", "Class " + p.cls + " wants"), { a: "middle", fs: 12 }) + T2(293, 172, hv(p, "f", p.a + "/" + p.b), { a: "middle", fs: 22, fw: 800, c: "#1f6f9f" }) + T2(293, 194, L("số chai trong kho", "of the bottles"), { a: "middle", fs: 11 }) + "</g>" + hitR(234, 92, 120, 120, "f");
     return o + adult(300, 380, "#ec407a") + kid(260, 384, "#2f80ed");
   },
   items: function (p) { return {
@@ -5407,7 +5410,7 @@ var V52 = c4Job("vuonhoa", {
     var g = this.geo(p), o = gardenTop("");
     o += '<polygon points="' + [g.A, g.B, g.C].map(function (q) { return q.join(","); }).join(" ") + '" fill="#ffb74d" stroke="' + INK + '" stroke-width="2.4"/>' + lab(g.A, "A", -14, 16) + lab(g.B, "B", 4, 16) + lab(g.C, "C", -4, -8);
     o += hitL(g.A[0], g.A[1], g.B[0], g.B[1], "b");
-    o += '<g transform="rotate(-4 290 370)"><rect x="236" y="336" width="112" height="70" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(292, 358, L("NHÃN BẠT", "LABEL"), { a: "middle", fs: 11.5, fw: 800, c: "#c0392b" }) + T2(292, 388, L("Diện tích: " + decVi(p.A) + " m²", "Area: " + p.A + " m²"), { a: "middle", fs: 13, fw: 800 }) + "</g>" + hitR(234, 332, 116, 78, "A");
+    o += '<g transform="rotate(-4 290 370)"><rect x="236" y="336" width="112" height="70" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(292, 358, L("NHÃN BẠT", "LABEL"), { a: "middle", fs: 11.5, fw: 800, c: "#c0392b" }) + T2(292, 388, L("Diện tích: " + hv(p, "A", decVi(p.A)) + " m²", "Area: " + hv(p, "A", p.A) + " m²"), { a: "middle", fs: 13, fw: 800 }) + "</g>" + hitR(234, 332, 116, 78, "A");
     return o + adult(60, 400, "#2e7d32", "#f3dc8a");
   },
   items: function (p) { var g = this.geo(p); return { b: I5("Đáy AB = " + p.b + " m", "Base AB = " + p.b + " m", p.b, midTag(g.A, g.B, p.b + " m", 0, 22), "tape", "AB"), A: I5("Diện tích tấm bạt " + decVi(p.A) + " m²", "Sunshade area " + p.A + " m²", p.A, null, "pick", "S") }; },
@@ -5525,7 +5528,7 @@ var V56 = c4Job("vuonhoa", {
     o += '<rect x="170" y="' + (200 + 26) + '" width="' + R + '" height="12" fill="#ffcf3f" stroke="' + INK + '" stroke-width="1.6"/>';
     for (var i = 0; i <= 10; i++) o += '<path d="M' + (170 + i * R / 10) + ' 226 v' + (i % 5 ? 5 : 9) + '" stroke="' + INK + '" stroke-width="1"/>';
     o += '<path d="M170 200 V226 M' + (170 + R) + ' 200 V226" stroke="' + INK + '" stroke-width="1" stroke-dasharray="3 3"/>' + hitR(166, 220, R + 8, 26, "r");
-    o += '<g transform="translate(300 360)"><rect x="-44" y="-30" width="88" height="56" rx="4" fill="#c27c40" stroke="' + INK + '" stroke-width="2"/>' + T2(0, -10, L("Gạch hoa", "Tiles"), { a: "middle", fs: 11, fw: 800, c: "#fff" }) + T2(0, 12, L(p.k + " viên/m²", p.k + " per m²"), { a: "middle", fs: 13, fw: 800, c: "#fff" }) + "</g>" + hitR(256, 330, 88, 56, "k");
+    o += '<g transform="translate(300 360)"><rect x="-44" y="-30" width="88" height="56" rx="4" fill="#c27c40" stroke="' + INK + '" stroke-width="2"/>' + T2(0, -10, L("Gạch hoa", "Tiles"), { a: "middle", fs: 11, fw: 800, c: "#fff" }) + T2(0, 12, L(hv(p, "k", p.k) + " viên/m²", hv(p, "k", p.k) + " per m²"), { a: "middle", fs: 13, fw: 800, c: "#fff" }) + "</g>" + hitR(256, 330, 88, 56, "k");
     return o + adult(60, 400, "#2e7d32", "#f3dc8a");
   },
   items: function (p) { return { r: I5("Bán kính đáy đài r = " + decVi(p.r) + " m", "Fountain radius r = " + p.r + " m", p.r, [230, 262, fmt(p.r, 1) + " m"], "tape", "r"), k: I5("Mỗi m² lát " + p.k + " viên", p.k + " tiles per m²", p.k, null, "pick", "k") }; },
@@ -5561,13 +5564,13 @@ function simplestCheck(p, v) {
 }
 /* bảng đếm: hàng nhãn + số lần */
 function tally(x, y, w, rows) { var o = c4Card(x, y, w, 24 + rows.length * 24); rows.forEach(function (r, i) { o += T2(x + 10, y + 20 + i * 24, r[0], { fs: 12.5 }) + T2(x + w - 10, y + 20 + i * 24, String(r[1]), { a: "end", fs: 14, fw: 800, c: r[2] || INK }); }); return o; }
-function expBtns(p, lab1, labN, n2) { return p.n < p.N ? c4Btn(30, 368, 140, 40, lab1, "go:1", "#ef6c00", 14) + c4Btn(190, 368, 140, 40, labN, "go:" + n2, "#6d4c41", 14) : tag(180, 388, L("Đã làm đủ " + p.N + " lần", "All " + p.N + " done"), "#1f8a4c"); }
+function expBtns(p, lab1, labN, n2) { return p.n < p.N ? T2(180, 362, L("① Làm đủ " + p.N + " lần", "① Do all " + p.N), { a: "middle", fs: 12, fw: 800, c: "#4e342e" }) + c4Btn(30, 370, 140, 38, lab1, "go:1", "#ef6c00", 14) + c4Btn(190, 370, 140, 38, labN, "go:" + n2, "#6d4c41", 14) : tag(180, 380, L("Đã làm đủ " + p.N + " lần", "All " + p.N + " done"), "#1f8a4c") + T2(180, 414, L("② Viết tỉ số vào ô bên dưới", "② Write the ratio in the box below"), { a: "middle", fs: 12, fw: 800, c: "#4e342e" }); }
 
 /* F51 · Vòng quay trái cây (KM-TK-501) */
 var F51_FR = [["Táo", "Apple", "#e53935"], ["Cam", "Orange", "#ff9800"], ["Nho", "Grape", "#8e24aa"]];
 var F51 = fracJob("lehoi", {
   name: ["Vòng quay trái cây", "The fruit wheel"], sub: ["quay thật nhiều lần, viết tỉ số số lần quay vào một ô", "spin many times, write the ratio for one fruit"],
-  endName: ["vòng quay trái cây", "the fruit wheel"], get what() { var p = curP(); return p.t != null ? L("Tỉ số số lần vào ô " + F51_FR[p.t][0] + " trên tổng số lần quay", "Ratio of " + F51_FR[p.t][1] + " to the total spins") : L("Tỉ số", "Ratio"); }, get unit() { return ""; },
+  endName: ["vòng quay trái cây", "the fruit wheel"], get what() { var p = curP(); return p.t != null ? L("② Tỉ số số lần vào ô " + F51_FR[p.t][0] + " trên tổng số lần quay", "② Ratio of " + F51_FR[p.t][1] + " to the total spins") : L("Tỉ số", "Ratio"); }, get unit() { return ""; },
   btnText: ["Nhận hạt giống", "Get the seeds"], H: 430,
   lead: ["Hãy quay vòng quay để nhận hạt giống trái cây! Em quay đủ số lần, đếm xem mũi tên chỉ vào mỗi ô bao nhiêu lần, rồi viết <b>tỉ số</b> nhé.", "Spin the wheel for fruit seeds! Spin the set number of times, count how often the arrow lands on each fruit, then write the <b>ratio</b>."],
   taskT: function (p) { return L("<b>Nhiệm vụ:</b> quay vòng quay đủ <b>" + (p.N || "") + " lần</b>. Viết tỉ số của số lần mũi tên chỉ vào ô <b>" + (p.t != null ? F51_FR[p.t][0] : "") + "</b> và tổng số lần quay (dạng phân số, ví dụ 3/10).", "<b>Task:</b> spin the wheel <b>" + (p.N || "") + " times</b>. Write the ratio of landings on <b>" + (p.t != null ? F51_FR[p.t][1] : "") + "</b> to the total spins (as a fraction, e.g. 3/10)."); },
@@ -5610,7 +5613,7 @@ function drawJob(coin) { return fracJob("lehoi", {
   name: coin ? ["Tung đồng xu", "Flipping a coin"] : ["Túi hạt giống", "The seed bag"],
   sub: coin ? ["tung thật, viết tỉ số mặt sấp dạng tối giản", "flip for real, write the tails ratio in simplest form"] : ["bốc thật, viết tỉ số dạng phân số tối giản", "draw for real, write the ratio in simplest form"],
   endName: coin ? ["sân bóng", "the football pitch"] : ["túi hạt giống", "the seed bag"],
-  what: coin ? ["Tỉ số số lần mặt sấp (phân số tối giản)", "Ratio of tails (simplest form)"] : ["Tỉ số số lần bốc được hạt hướng dương (phân số tối giản)", "Ratio of sunflower seeds (simplest form)"], get unit() { return ""; },
+  what: coin ? ["② Tỉ số số lần mặt sấp (phân số tối giản)", "② Ratio of tails (simplest form)"] : ["② Tỉ số số lần bốc được hạt hướng dương (phân số tối giản)", "② Ratio of sunflower seeds (simplest form)"], get unit() { return ""; },
   btnText: coin ? ["Báo trọng tài", "Tell the referee"] : ["Gieo hạt", "Sow"], H: 430,
   lead: coin ? ["Ở sân bóng mini của hội chợ, trọng tài nhờ em kiểm tra đồng xu có “công bằng” không. Em tung thật nhiều lần, đếm số lần mặt sấp rồi viết tỉ số dạng <b>phân số tối giản</b>.", "At the fair's mini football pitch, the referee asks you to check the coin is “fair”. Flip it many times, count the tails and write the ratio in <b>simplest form</b>."]
     : ["Bác nông dân có một túi trộn lẫn <b>hạt hướng dương</b> và <b>hạt đậu</b>. Em bốc từng hạt (xem xong lại bỏ vào túi), đếm rồi viết tỉ số dạng <b>phân số tối giản</b>.", "The farmer has a bag mixing <b>sunflower</b> and <b>bean</b> seeds. Draw one seed at a time (look, then put it back), count, and write the ratio in <b>simplest form</b>."],
@@ -5656,7 +5659,7 @@ function countJob(claw) { return fracJob("lehoi", {
   name: claw ? ["Máy gắp thú bông", "The claw machine"] : ["Trò chơi xúc xắc", "The dice game"],
   sub: claw ? ["máy chỉ đếm lần trượt: tính lần trúng và tỉ số", "the machine counts misses only: find the wins and the ratio"] : ["bảng chỉ đếm mặt chẵn: tính mặt lẻ và tỉ số", "the board counts evens only: find the odds and the ratio"],
   endName: claw ? ["máy gắp thú", "the claw machine"] : ["quầy kẹo", "the sweet stall"],
-  what: claw ? ["Tỉ số số lần gắp trúng trên tổng số lần chơi", "Ratio of wins to total plays"] : ["Tỉ số số lần ra mặt lẻ trên tổng số lần gieo", "Ratio of odd rolls to total rolls"], get unit() { return ""; },
+  what: claw ? ["② Tỉ số số lần gắp trúng trên tổng số lần chơi", "② Ratio of wins to total plays"] : ["② Tỉ số số lần ra mặt lẻ trên tổng số lần gieo", "② Ratio of odd rolls to total rolls"], get unit() { return ""; },
   btnText: claw ? ["Nhận quà", "Collect prize"] : ["Nhận kẹo", "Collect sweets"], H: 430,
   lead: claw ? ["Máy gắp thú ở hội chợ chỉ có bảng đếm <b>số lần gắp trượt</b>. Em chơi đủ số lượt rồi tự tính số lần gắp trúng và viết tỉ số nhé.", "The fair's claw machine only counts the <b>misses</b>. Play all your turns, then work out the wins yourself and write the ratio."]
     : ["Quầy kẹo phát thưởng theo xúc xắc. Bảng điểm của quầy <b>chỉ đếm số lần ra mặt chẵn</b>. Em gieo đủ số lần, tự tính số lần ra mặt lẻ và viết tỉ số nhé.", "The sweet stall gives prizes with dice. Its scoreboard <b>only counts even rolls</b>. Roll the set number of times, work out the odd rolls and write the ratio."],
@@ -5707,10 +5710,10 @@ var F56 = c4Job("lehoi", {
   make: function () { var k = rnd(8, 30), N = rnd(2, 8) * 100; return { k: k, N: N, ans: N * k / 100, bottom: 430 }; },
   base: function (p) {
     var o = fairBg("");
-    o += c4Card(16, 40, 200, 100) + T2(116, 64, L("KẾT QUẢ BUỔI SÁNG", "MORNING RESULTS"), { a: "middle", fs: 12, fw: 800, c: "#bf360c" }) + T2(116, 92, L("100 bạn chơi", "100 children played"), { a: "middle", fs: 13 }) + T2(116, 120, L(p.k + " bạn trúng gấu bông", p.k + " won a teddy"), { a: "middle", fs: 14, fw: 800, c: "#1f6f9f" }) + hitR(16, 40, 200, 100, "k");
+    o += c4Card(16, 40, 200, 100) + T2(116, 64, L("KẾT QUẢ BUỔI SÁNG", "MORNING RESULTS"), { a: "middle", fs: 12, fw: 800, c: "#bf360c" }) + T2(116, 92, L("100 bạn chơi", "100 children played"), { a: "middle", fs: 13 }) + T2(116, 120, L(hv(p, "k", p.k) + " bạn trúng gấu bông", hv(p, "k", p.k) + " won a teddy"), { a: "middle", fs: 14, fw: 800, c: "#1f6f9f" }) + hitR(16, 40, 200, 100, "k");
     o += '<g transform="rotate(3 290 140)"><rect x="236" y="70" width="110" height="140" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(291, 94, L("ĐĂNG KÝ", "SIGN-UPS"), { a: "middle", fs: 12, fw: 800, c: "#2e7d32" }) + T2(291, 112, L("buổi chiều", "afternoon"), { a: "middle", fs: 11 });
     for (var i = 0; i < 4; i++) o += '<path d="M248 ' + (128 + i * 12) + ' h' + (60 + i * 7 % 26) + '" stroke="#90a4ae" stroke-width="3"/>';
-    o += T2(291, 196, L(p.N + " bạn", p.N + " children"), { a: "middle", fs: 15, fw: 800, c: "#c0392b" }) + "</g>" + hitR(234, 66, 116, 148, "N");
+    o += T2(291, 196, L(hv(p, "N", p.N) + " bạn", hv(p, "N", p.N) + " children"), { a: "middle", fs: 15, fw: 800, c: "#c0392b" }) + "</g>" + hitR(234, 66, 116, 148, "N");
     for (var t = 0; t < 5; t++) o += '<g transform="translate(' + (40 + t * 30) + ' 300)" stroke="' + INK + '" stroke-width="1.6"><circle cy="-14" r="10" fill="#c8a27a"/><circle cx="-8" cy="-22" r="4" fill="#c8a27a"/><circle cx="8" cy="-22" r="4" fill="#c8a27a"/><ellipse rx="12" ry="10" fill="#c8a27a"/></g>';
     return o + adult(300, 330, "#6d4c41", "#f3dc8a");
   },
@@ -5754,8 +5757,8 @@ var P51 = c4Job("thucung", {
   btnText: ["Gửi báo cáo", "Send the report"], H: 430,
   lead: ["Trạm vừa nhận thêm nhiều bạn thú cưng đi lạc. Biểu đồ trên bảng gỗ cho biết mỗi loài chiếm bao nhiêu phần trăm. Em giúp cô tính số con của một loài nhé!", "The shelter has taken in lots of lost pets. The chart on the wooden board shows each kind's percentage. Help me work out how many there are of one kind!"],
   taskT: function (p) { return L("<b>Nhiệm vụ:</b> tính số <b>" + (p.ask != null ? P51_SP[p.ask][0].toLowerCase() : "") + "</b> đang ở trạm.<br><b>Dữ kiện:</b> chạm vào biểu đồ và sổ tiếp nhận.", "<b>Task:</b> work out how many <b>" + (p.ask != null ? P51_SP[p.ask][1].toLowerCase() : "") + "</b> are at the shelter.<br><b>Data:</b> tap the chart and the intake book."); },
-  base: function (p) { var o = shelterBg(L("Thú cưng ở trạm", "Pets at the shelter")) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: P51_SP[i] }; }), "s"); return o + bookSvg(270, 60, L("SỔ TIẾP NHẬN", "INTAKE BOOK"), L(p.N + " con", p.N + " pets"), "N") + adult(300, 400, "#ffffff"); },
-  items: function (p) { var it = { N: I5("Trạm có tất cả " + p.N + " thú cưng", p.N + " pets at the shelter in all", p.N, null, "pick", "N") }; p.pc.forEach(function (v, i) { it["s" + i] = I5(P51_SP[i][0] + " chiếm " + v + "%", P51_SP[i][1] + ": " + v + "%", v); }); return it; },
+  base: function (p) { var o = shelterBg(L("Thú cưng ở trạm", "Pets at the shelter")) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: P51_SP[i] }; })); return o + bookSvg(270, 60, L("SỔ TIẾP NHẬN", "INTAKE BOOK"), L(hv(p, "N", p.N) + " con", hv(p, "N", p.N) + " pets"), "N") + adult(300, 400, "#ffffff"); },
+  items: function (p) { var it = { N: I5("Trạm có tất cả " + p.N + " thú cưng", p.N + " pets at the shelter in all", p.N, null, "pick", "N") }; return it; },
   extra: function (p) { return p.seen.N ? c4Tick(350, 66) : ""; },
   special: function (p, v) { if (v === p.pc[p.ask]) return { ok: false, kind: "short", msg: L("Đó là tỉ số phần trăm. Đề hỏi số con.", "That's the percentage. The task asks how many animals.") }; return null; },
   okMsg: ["Chính xác! Cô gửi báo cáo lên thị trấn.", "Exactly! The report goes to the town."],
@@ -5781,8 +5784,8 @@ function restJob(house) { var cats = house ? [["Xanh", "Blue"], ["Vàng", "Yello
     : ["Đến giờ ăn rồi! Biểu đồ cho biết các bạn thú cưng thích món gì, nhưng phần <b>Gà</b> bị dính nước nên mất số. Em tính số bạn thích ăn gà để cô chuẩn bị nhé!", "Feeding time! The chart shows the pets' favourite foods, but the <b>Chicken</b> part got wet and its number is gone. Work out how many like chicken so I can get it ready!"],
   taskT: function () { return house ? L("<b>Nhiệm vụ:</b> tính số nhà sơn màu <b>trắng</b>.<br><b>Dữ kiện:</b> chạm vào biểu đồ và bảng kiểm kê.", "<b>Task:</b> work out how many houses are <b>white</b>.<br><b>Data:</b> tap the chart and the stock list.") : L("<b>Nhiệm vụ:</b> tính số thú cưng thích ăn <b>gà</b>.<br><b>Dữ kiện:</b> chạm vào biểu đồ và sổ tiếp nhận.", "<b>Task:</b> work out how many pets like <b>chicken</b>.<br><b>Data:</b> tap the chart and the intake book."); },
   make: function () { var pc = shuffle(pickOne(PCT4)), r = 100 - pc[0] - pc[1] - pc[2], N = house ? rnd(4, 12) * 20 : rnd(5, 25) * 20; return { pc: pc.concat([r]), r: r, N: N, ans: N * r / 100, bottom: 430 }; },
-  base: function (p) { var o = shelterBg(house ? L("Màu sơn nhà gỗ", "House colours") : L("Món ăn yêu thích", "Favourite food")) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: cats[i], col: cols[i], unk: i === 3 }; }), "s"); return o + bookSvg(270, 60, house ? L("KIỂM KÊ", "STOCK LIST") : L("SỔ TIẾP NHẬN", "INTAKE BOOK"), L(p.N + (house ? " nhà" : " con"), p.N + (house ? " houses" : " pets")), "N") + adult(300, 400, "#ffffff"); },
-  items: function (p) { var it = { N: I5((house ? "Có tất cả " + p.N + " ngôi nhà" : "Trạm có " + p.N + " thú cưng"), (house ? p.N + " houses in all" : p.N + " pets in all"), p.N, null, "pick", "N") }; for (var i = 0; i < 3; i++) it["s" + i] = I5(cats[i][0] + ": " + p.pc[i] + "%", cats[i][1] + ": " + p.pc[i] + "%", p.pc[i]); it.s3 = { only: [cats[3][0] + ": phần này bị mờ, em tự tính nhé.", cats[3][1] + ": this part has faded, work it out."] }; return it; },
+  base: function (p) { var o = shelterBg(house ? L("Màu sơn nhà gỗ", "House colours") : L("Món ăn yêu thích", "Favourite food")) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: cats[i], col: cols[i], unk: i === 3 }; })); return o + bookSvg(270, 60, house ? L("KIỂM KÊ", "STOCK LIST") : L("SỔ TIẾP NHẬN", "INTAKE BOOK"), L(hv(p, "N", p.N) + (house ? " nhà" : " con"), hv(p, "N", p.N) + (house ? " houses" : " pets")), "N") + adult(300, 400, "#ffffff"); },
+  items: function (p) { var it = { N: I5((house ? "Có tất cả " + p.N + " ngôi nhà" : "Trạm có " + p.N + " thú cưng"), (house ? p.N + " houses in all" : p.N + " pets in all"), p.N, null, "pick", "N") }; return it; },
   extra: function (p) { return p.seen.N ? c4Tick(350, 66) : ""; },
   special: function (p, v) { if (v === p.r) return { ok: false, kind: "short", msg: L("Đó là tỉ số phần trăm (" + p.r + "%). Đề hỏi số lượng.", "That's the percentage (" + p.r + "%). The task asks for the number.") }; return null; },
   okMsg: house ? ["Đúng rồi! Cô mua đủ sơn trắng.", "Right! I'll buy just enough white paint."] : ["Đúng rồi! Các bạn thích gà được ăn no nê.", "Right! The chicken-lovers all get their dinner."],
@@ -5807,8 +5810,8 @@ var P54 = c4Job("thucung", {
   lead: ["Hôm nay có rất nhiều anh chị <b>tình nguyện viên</b> đến trạm. Biểu đồ cho biết mỗi đội chiếm bao nhiêu phần trăm. Cô cần biết đội này đông hơn đội kia bao nhiêu người để điều bớt sang đội khác.", "Lots of <b>volunteers</b> came today. The chart shows each team's percentage. I need to know how many more people one team has than another so I can move some across."],
   taskT: function (p) { return L("<b>Nhiệm vụ:</b> đội <b>" + (p.a != null ? P54_T[p.a][0] : "") + "</b> nhiều hơn đội <b>" + (p.b != null ? P54_T[p.b][0] : "") + "</b> bao nhiêu người?<br><b>Dữ kiện:</b> chạm vào biểu đồ và danh sách tình nguyện viên.", "<b>Task:</b> how many more people are in <b>" + (p.a != null ? P54_T[p.a][1] : "") + "</b> than in <b>" + (p.b != null ? P54_T[p.b][1] : "") + "</b>?<br><b>Data:</b> tap the chart and the volunteer list."); },
   make: function () { var b4 = pickOne([[35, 20, 30, 15], [40, 25, 20, 15], [30, 15, 35, 20], [45, 20, 25, 10], [35, 25, 25, 15]]), pc = shuffle(b4), N = rnd(3, 12) * 20, i, j; do { i = rnd(0, 3); j = rnd(0, 3); } while (pc[i] <= pc[j]); return { pc: pc, N: N, a: i, b: j, ans: N * (pc[i] - pc[j]) / 100, bottom: 430 }; },
-  base: function (p) { var o = shelterBg(L("Các đội tình nguyện", "Volunteer teams")) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: P54_T[i] }; }), "s"); return o + bookSvg(270, 60, L("DANH SÁCH", "VOLUNTEERS"), L(p.N + " người", p.N + " people"), "N") + adult(300, 400, "#ffffff") + kid(240, 404, "#ff9800") + kid(260, 404, "#2f80ed"); },
-  items: function (p) { var it = { N: I5("Có " + p.N + " tình nguyện viên", p.N + " volunteers", p.N, null, "pick", "N") }; p.pc.forEach(function (v, i) { it["s" + i] = I5("Đội " + P54_T[i][0] + ": " + v + "%", P54_T[i][1] + " team: " + v + "%", v); }); return it; },
+  base: function (p) { var o = shelterBg(L("Các đội tình nguyện", "Volunteer teams")) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: P54_T[i] }; })); return o + bookSvg(270, 60, L("DANH SÁCH", "VOLUNTEERS"), L(hv(p, "N", p.N) + " người", hv(p, "N", p.N) + " people"), "N") + adult(300, 400, "#ffffff") + kid(240, 404, "#ff9800") + kid(260, 404, "#2f80ed"); },
+  items: function (p) { var it = { N: I5("Có " + p.N + " tình nguyện viên", p.N + " volunteers", p.N, null, "pick", "N") }; return it; },
   extra: function (p) { return p.seen.N ? c4Tick(350, 66) : ""; },
   special: function (p, v) { var na = p.N * p.pc[p.a] / 100, nb = p.N * p.pc[p.b] / 100; if (v === na || v === nb) return { ok: false, kind: v < p.ans ? "short" : "long", msg: L("Đó là số người của một đội. Đề hỏi đội này <b>nhiều hơn</b> đội kia bao nhiêu.", "That's one team's size. The task asks how many <b>more</b>.") }; if (v === p.pc[p.a] - p.pc[p.b]) return { ok: false, kind: "short", msg: L("Đó là hiệu phần trăm. Đổi ra số người nhé.", "That's the difference in percent. Change it to people.") }; return null; },
   okMsg: ["Chuẩn! Cô điều người sang đội khác cho đều.", "Spot on! I'll move people so the teams are even."],
@@ -5831,8 +5834,8 @@ var P55 = c4Job("thucung", {
   lead: ["Trạm vừa dùng một phần quỹ tiết kiệm để mua <b>bát ăn</b> mới. Biểu đồ chi tiêu cho biết tiền mua bát chiếm bao nhiêu phần trăm, còn hóa đơn ghi số tiền mua bát. Em tính xem quỹ ban đầu có bao nhiêu tiền nhé.", "The shelter just used part of its savings on new <b>food bowls</b>. The spending chart shows the bowls' percentage, and the receipt shows what they cost. Work out how much was in the savings to start with."],
   taskT: function () { return L("<b>Nhiệm vụ:</b> tính tổng số tiền tiết kiệm của trạm.<br><b>Dữ kiện:</b> chạm vào biểu đồ chi tiêu và hóa đơn mua bát.", "<b>Task:</b> work out the shelter's total savings.<br><b>Data:</b> tap the spending chart and the bowls receipt."); },
   make: function () { var a = pickOne([10, 20, 25, 40, 50]), rest = pickOne([[50, 30], [40, 35], [45, 30], [30, 30]]).slice(), T = rnd(8, 40) * 100000; var pc = [a]; var left = 100 - a; var r1 = Math.min(left - 5, Math.round(left * 0.6 / 5) * 5); pc.push(r1, left - r1); return { pc: pc, T: T, X: T * a / 100, ans: T, bottom: 430 }; },
-  base: function (p) { var cats = [["Bát ăn", "Bowls"], ["Thức ăn", "Food"], ["Thuốc", "Medicine"]], o = shelterBg(L("Chi tiêu từ quỹ", "Spending from savings")) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: cats[i] }; }), "s"); return o + bookSvg(270, 60, L("HÓA ĐƠN BÁT", "BOWLS BILL"), L(dVi(p.X), dEn(p.X)), "X") + adult(300, 400, "#ffffff"); },
-  items: function (p) { var cats = [["Bát ăn", "Bowls"], ["Thức ăn", "Food"], ["Thuốc", "Medicine"]], it = { X: I5("Tiền mua bát: " + dVi(p.X), "Bowls cost " + dEn(p.X), p.X, null, "pick", "X") }; p.pc.forEach(function (v, i) { it["s" + i] = I5(cats[i][0] + ": " + v + "% quỹ", cats[i][1] + ": " + v + "% of savings", v); }); return it; },
+  base: function (p) { var cats = [["Bát ăn", "Bowls"], ["Thức ăn", "Food"], ["Thuốc", "Medicine"]], o = shelterBg(L("Chi tiêu từ quỹ", "Spending from savings")) + pieSvg(150, 160, 92, p.pc.map(function (v, i) { return { pct: v, lab: cats[i] }; })); return o + bookSvg(270, 60, L("HÓA ĐƠN BÁT", "BOWLS BILL"), L(hv(p, "X", dVi(p.X)), hv(p, "X", dEn(p.X))), "X") + adult(300, 400, "#ffffff"); },
+  items: function (p) { var cats = [["Bát ăn", "Bowls"], ["Thức ăn", "Food"], ["Thuốc", "Medicine"]], it = { X: I5("Tiền mua bát: " + dVi(p.X), "Bowls cost " + dEn(p.X), p.X, null, "pick", "X") }; return it; },
   extra: function (p) { return p.seen.X ? c4Tick(350, 66) : ""; },
   special: function (p, v) { if (v === p.X * p.pc[0] / 100) return { ok: false, kind: "short", msg: L("Ngược rồi! Tiền mua bát chính là " + p.pc[0] + "% của quỹ, cần tìm cả quỹ (100%).", "Backwards! The bowls' cost IS " + p.pc[0] + "% of the savings; find the whole (100%).") }; if (v === p.X) return { ok: false, kind: "short", msg: L("Đó mới là tiền mua bát, chỉ là một phần của quỹ.", "That's just the bowls, only part of the savings.") }; return null; },
   okMsg: ["Đúng rồi! Sổ quỹ khớp.", "Right! The books balance."],
@@ -5908,7 +5911,7 @@ function cubeJob(inv) { return c4Job("tiembanh", {
   taskT: function () { return inv ? L("<b>Nhiệm vụ:</b> tính diện tích giấy dán <b>một mặt</b> của hộp kẹo.<br><b>Dữ kiện:</b> chạm vào nhãn hộp. Bấm <b>Mở hộp</b> để xem hình khai triển.", "<b>Task:</b> find the paper area for <b>one face</b> of the box.<br><b>Data:</b> tap the label. Press <b>Unfold</b> to see the net.") : L("<b>Nhiệm vụ:</b> tính diện tích giấy gói kín toàn bộ mặt ngoài hộp (cm²).<br><b>Dụng cụ:</b> chạm vào một cạnh hộp để đo. Bấm <b>Mở hộp</b> để xem hình khai triển.", "<b>Task:</b> find the paper area to cover the whole outside of the box (cm²).<br><b>Tools:</b> tap an edge to measure. Press <b>Unfold</b> to see the net."); },
   make: function () { var a = inv ? rnd(3, 12) : rnd(10, 25); return { a: a, S: 6 * a * a, ans: inv ? a * a : 6 * a * a, net: false, bottom: 430 }; },
   geo: function (p) { return boxGeo(150, 290, p.a, p.a, p.a, 200, 200); },
-  base: function (p) { var o = bakeryBg(L("Quầy gói quà", "Wrapping counter")); if (inv) o += '<g transform="rotate(-4 292 380)"><rect x="236" y="346" width="112" height="66" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(292, 366, L("Giấy dán kín hộp:", "Paper for whole box:"), { a: "middle", fs: 10.5, fw: 700 }) + T2(292, 394, nL(p.S) + " cm²", { a: "middle", fs: 15, fw: 800, c: "#ad1457" }) + "</g>" + hitR(234, 342, 116, 74, "S"); return o + adult(50, 400, "#ec407a"); },
+  base: function (p) { var o = bakeryBg(L("Quầy gói quà", "Wrapping counter")); if (inv) o += '<g transform="rotate(-4 292 380)"><rect x="236" y="346" width="112" height="66" rx="4" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(292, 366, L("Giấy dán kín hộp:", "Paper for whole box:"), { a: "middle", fs: 10.5, fw: 700 }) + T2(292, 394, hv(p, "S", nL(p.S)) + " cm²", { a: "middle", fs: 15, fw: 800, c: "#ad1457" }) + "</g>" + hitR(234, 342, 116, 74, "S"); return o + adult(50, 400, "#ec407a"); },
   items: function (p) { var g = this.geo(p); return inv ? { S: I5("Giấy dán kín cả hộp: " + nVi(p.S) + " cm²", "Paper for the whole box: " + nEn(p.S) + " cm²", p.S, null, "pick", "S") } : { a: I5("Cạnh hộp a = " + p.a + " cm", "Edge a = " + p.a + " cm", p.a, midTag(g.A, g.B, p.a + " cm", 0, 20), "tape", "a") }; },
   extra: function (p) {
     var o = "", g = this.geo(p);
@@ -5917,7 +5920,7 @@ function cubeJob(inv) { return c4Job("tiembanh", {
     if (inv && p.seen.S) o += c4Tick(344, 352);
     return o + c4Btn(250, 60, 96, 34, p.net ? L("Gấp hộp", "Fold") : L("Mở hộp", "Unfold"), "net", "#7e57c2", 13);
   },
-  tap: function (p, evt) { var el = evt.target.closest("[data-it]"); if (!el) return; if (el.dataset.it === "net") { p.net = !p.net; SFX.pick(); tip(""); drawLayers(); render(); return; } if (p.net && !inv) { tip(L("Gấp hộp lại rồi mới đo cạnh được.", "Fold the box back up to measure an edge.")); return; } S9_BASE.tap.call(this, p, evt); },
+  tap: function (p, evt) { var el = evt.target.closest("[data-it]"); if (!el) return; if (el.dataset.it === "net") { p.net = !p.net; SFX.pick(); tip(""); drawLayers(); render(); return; } if (p.net && !inv) { tip(L("Gấp hộp lại rồi mới đo cạnh được.", "Fold the box back up to measure an edge.")); return; } C4_BASE.tap.call(this, p, evt); },
   special: function (p, v) {
     if (inv) { if (v === p.S / 4) return { ok: false, kind: "long", msg: L("Hình lập phương có 6 mặt chứ không phải 4!", "A cube has 6 faces, not 4!") }; return null; }
     if (v === 4 * p.a * p.a) return { ok: false, kind: "short", msg: L("Đó là diện tích xung quanh (4 mặt). Gói kín phải tính cả mặt trên và mặt đáy: 6 mặt.", "That's the side area (4 faces). Wrapping it all needs the top and bottom too: 6 faces.") };
@@ -5986,8 +5989,8 @@ var B55 = c4Job("tiembanh", {
   make: function () { var V = pickOne([1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6]), c = pickOne([250, 300, 400, 500, 750]), tot = Math.round(V * 1000); return { V: V, c: c, tot: tot, ans: Math.floor(tot / c), rem: tot % c, bottom: 430 }; },
   base: function (p) {
     var o = bakeryBg(L("Góc pha chế", "Mixing corner"));
-    o += '<g transform="translate(90 240)"><path d="M-50 70 V-40 L-30 -70 H30 L50 -40 V70 Z" fill="#e3f2fd" stroke="' + INK + '" stroke-width="2.4"/><path d="M-50 -40 H50" stroke="' + INK + '" stroke-width="2"/>' + c4Card(-40, -20, 80, 60) + T2(0, 0, L("SỮA TƯƠI", "MILK"), { a: "middle", fs: 11, fw: 800, c: "#1565c0" }) + T2(0, 28, decVi(p.V).replace(",", LANG === "en" ? "." : ",") + " dm³", { a: "middle", fs: 16, fw: 800 }) + "</g>" + hitR(40, 168, 100, 142, "V");
-    o += '<g transform="translate(270 260)"><path d="M-28 50 V-20 Q-28 -40 -14 -44 H14 Q28 -40 28 -20 V50 Z" fill="#fff" stroke="' + INK + '" stroke-width="2.4"/><path d="M28 -10 q16 0 16 18 q0 18 -16 18" fill="none" stroke="' + INK + '" stroke-width="3"/>' + T2(0, 14, p.c + " cm³", { a: "middle", fs: 11.5, fw: 800, c: "#1565c0" }) + "</g>" + hitR(236, 210, 76, 106, "c");
+    o += '<g transform="translate(90 240)"><path d="M-50 70 V-40 L-30 -70 H30 L50 -40 V70 Z" fill="#e3f2fd" stroke="' + INK + '" stroke-width="2.4"/><path d="M-50 -40 H50" stroke="' + INK + '" stroke-width="2"/>' + c4Card(-40, -20, 80, 60) + T2(0, 0, L("SỮA TƯƠI", "MILK"), { a: "middle", fs: 11, fw: 800, c: "#1565c0" }) + T2(0, 28, hv(p, "V", decVi(p.V).replace(",", LANG === "en" ? "." : ",")) + " dm³", { a: "middle", fs: 16, fw: 800 }) + "</g>" + hitR(40, 168, 100, 142, "V");
+    o += '<g transform="translate(270 260)"><path d="M-28 50 V-20 Q-28 -40 -14 -44 H14 Q28 -40 28 -20 V50 Z" fill="#fff" stroke="' + INK + '" stroke-width="2.4"/><path d="M28 -10 q16 0 16 18 q0 18 -16 18" fill="none" stroke="' + INK + '" stroke-width="3"/>' + T2(0, 14, hv(p, "c", p.c) + " cm³", { a: "middle", fs: 11.5, fw: 800, c: "#1565c0" }) + "</g>" + hitR(236, 210, 76, 106, "c");
     return o + adult(180, 400, "#ec407a");
   },
   items: function (p) { return { V: I5("Thùng sữa " + decVi(p.V) + " dm³", "Milk carton " + p.V + " dm³", p.V, null, "pick", "V"), c: I5("Mỗi bình nhỏ chứa " + p.c + " cm³", "Each jug holds " + p.c + " cm³", p.c, null, "pick", "c") }; },
@@ -9868,7 +9871,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.12";
+var APP_VER = "3.13";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
