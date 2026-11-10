@@ -558,6 +558,17 @@ body.nbws #pNote .note { padding: 8px 10px; }
 .mfyn { display: flex; gap: 5px; flex-basis: 100%; margin-top: 2px; }
 .mfyn button { flex: 1; padding: 7px 6px; border: 2.5px solid var(--ink); border-radius: 10px; background: #fff; font: 800 .92rem var(--font); color: var(--ink); cursor: pointer; }
 .mfyn button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.chbtn { flex: none; width: 36px; height: 34px; padding: 0; border-radius: 10px; border: 2px solid #8fa2ad; background: #3b4a54; color: #fff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.chbtn svg { width: 22px; height: 22px; }
+.chbtn[aria-pressed="true"] { background: #ffcf3f; color: #1b2328; border-color: #ffcf3f; }
+.chist { background: #eef3e6; border: 2px solid #8fa2ad; border-radius: 12px; padding: 6px; max-height: calc(var(--vh, 800px) * 0.32); overflow-y: auto; flex: none; }
+.chist[hidden] { display: none !important; }
+.chist .chh { display: flex; align-items: center; justify-content: space-between; gap: 6px; font: 800 .85rem var(--font); color: #1b2328; margin-bottom: 4px; }
+.chist .chh button { border: 0; background: none; color: #b0413e; font: 700 .8rem var(--font); text-decoration: underline; cursor: pointer; }
+.chist .chi { display: block; width: 100%; text-align: left; border: 1.5px solid #b7c4bd; background: #fff; border-radius: 8px; padding: 5px 8px; margin: 3px 0; font: 600 .92rem var(--font); color: #1b2328; cursor: pointer; font-variant-numeric: tabular-nums; }
+.chist .chi b { color: #1f6f9f; }
+.chist .chi small { color: #78909c; font-weight: 700; margin-right: 6px; }
+.chist .che { font-size: .85rem; color: #546e7a; margin: 4px 2px; }
 .dtbtn { display: none; }
 body.lv1 .boardbtns .dtbtn { display: inline-flex; align-items: center; gap: 4px; height: 34px; min-height: 34px; padding: 0 9px; background: #fff3d6; font-size: .88rem; }
 .dtbtn svg { width: 22px; height: 22px; flex: none; }
@@ -1002,8 +1013,9 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
     <p class="small rmsg" id="rMsg" aria-live="polite"></p>
   </div>
   <div class="calcsheet" id="calcSheet" hidden role="dialog" aria-label="Ô tính toán">
-  <div class="sheethead"><button class="tgtbtn" type="button" id="tgtOther" aria-label="Đặt tên đại lượng"><span id="tgtShow"></span> ✎</button><button class="btn sm" id="cSave" type="button">Ghi sổ tay</button><button class="btn sm orange" id="cUse" type="button">Đáp án</button><button class="sheetx" type="button" id="sheetClose" aria-label="Đóng ô tính toán">×</button></div>
+  <div class="sheethead"><button class="tgtbtn" type="button" id="tgtOther" aria-label="Đặt tên đại lượng"><span id="tgtShow"></span> ✎</button><button class="chbtn" id="cHist" type="button" aria-label="Lịch sử tính" title="Lịch sử tính"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M3.6 3.8v4.6h4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7.8V12l3 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button><button class="btn sm" id="cSave" type="button">Ghi sổ tay</button><button class="btn sm orange" id="cUse" type="button">Đáp án</button><button class="sheetx" type="button" id="sheetClose" aria-label="Đóng ô tính toán">×</button></div>
   <div class="row" id="tgtCustom" hidden><input id="tgtName" maxlength="8" placeholder="AC hoặc CAD" autocomplete="off"><button class="btn sm" id="tgtOk" type="button">Đặt tên</button></div>
+  <div class="chist" id="cHistBox" hidden></div>
   <div class="lcd cwlcd" id="cLcd"></div>
   <div class="cchips" id="cChips" hidden></div>
   <div class="cwkeys" id="keys"></div>
@@ -9070,7 +9082,7 @@ window.addEventListener("resize", function () { if (isWS()) fitSheet(); });
 function closeSheet() {
   dtClose();
   var sh = $("#calcSheet"); if (!sh || sh.hidden) return;
-  sh.hidden = true; document.body.classList.remove("calc"); if ($("#parSheet").hidden) document.body.classList.remove("ws");
+  sh.hidden = true; document.body.classList.remove("calc"); if ($("#parSheet").hidden) document.body.classList.remove("ws"); if ($("#cHistBox")) { $("#cHistBox").hidden = true; $("#cHist").setAttribute("aria-pressed", "false"); }
   if (document.body.classList.contains("nbws")) { document.body.classList.remove("nbws"); if (!$("#pNote").hidden) renderNotes(); } S.tgt = null; $("#tgtCustom").hidden = true; hideMenu(); sizeBoard();
   var bw = $(".boardwrap"); if (bw && !$("#sRoom").hidden) window.scrollTo(0, Math.max(0, bw.getBoundingClientRect().top + window.scrollY - 80));
 }
@@ -9961,7 +9973,7 @@ function doEq(approx) {
   if (!C.root.items.length) { if (C.just) return; return; }
   if (typeof TLM !== "undefined") TLM.calcN++;
   pushHist();
-  try { var F = {}, v = evalRow(C.root, F); showOut(v, F, approx ? "dec" : ""); }
+  try { var F = {}, v = evalRow(C.root, F); showOut(v, F, approx ? "dec" : ""); histAdd(); }
   catch (e) { showErr(e); }
 }
 function startNew(withAns) { calcClear(); if (withAns) insNode({ t: "ch", c: "Ans" }); }
@@ -10482,7 +10494,7 @@ var KD = {
   log: ["log<sub>▢</sub>▢", "tp:logab", "10<sup>▢</sup>", "tp:ten", "", "", "k-fn"], ln: ["ln", "fn:ln", "e<sup>▢</sup>", "tp:exp", "", "", "k-fn"],
   neg: ["(−)", "ins:−", "∠", "ins:∠", "A", "ins:A", "k-fn"], dms: ["°′″", "cmd:dms", "FACT", "cmd:fact", "B", "ins:B", "k-fn"], inv: ["x⁻¹", "tp:inv", "x!", "ins:!", "C", "ins:C", "k-fn"],
   sin: ["sin", "fn:sin", "sin⁻¹", "fn:sin⁻¹", "D", "ins:D", "k-fn"], cos: ["cos", "fn:cos", "cos⁻¹", "fn:cos⁻¹", "E", "ins:E", "k-fn"], tan: ["tan", "fn:tan", "tan⁻¹", "fn:tan⁻¹", "F", "ins:F", "k-fn"],
-  sto: ["STO", "cmd:sto", "RCL", "cmd:recall", "", "", "k-fn"], eng: ["ENG", "cmd:eng", "←", "cmd:engl", "𝑖", "ins:i", "k-fn"], lp: ["(", "ins:(", "%", "ins:%", "", "", "k-fn"],
+  sto: ["STO", "cmd:sto", "RCL", "cmd:recall", "", "", "k-fn"], eng: ["ENG", "cmd:eng", "←", "cmd:engl", "𝑖", "ins:i", "k-fn"], lp: ["(", "ins:(", "Abs", "tp:abs", "%", "ins:%", "k-fn"],
   rp: [")", "ins:)", "SEP", "ins:,", "X", "ins:X", "k-fn"], sd: ["S⇔D", "cmd:sd", "a<sup>b</sup>/<sub>c</sub>", "cmd:mix", "Y", "ins:Y", "k-fn"], mplus: ["M+", "cmd:m+", "M−", "cmd:m-", "M", "ins:M", "k-fn"],
   "7": ["7", "ins:7", "CONST", "cmd:const"], "8": ["8", "ins:8", "CONV", "cmd:conv"], "9": ["9", "ins:9", "RESET", "cmd:reset"], del: ["DEL", "cmd:del", "", "", "UNDO", "cmd:undo", "k-del"], ac: ["AC", "cmd:ac", "OFF", "cmd:off", "", "", "k-del"],
   "4": ["4", "ins:4"], "5": ["5", "ins:5"], "6": ["6", "ins:6"], mul: ["×", "ins:×", "nPr", "ins:nPr", "÷R", "ins:÷R"], div: ["÷", "ins:÷", "nCr", "ins:nCr"],
@@ -11184,7 +11196,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.19";
+var APP_VER = "3.20";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
@@ -12158,7 +12170,40 @@ document.addEventListener("click", function (e) {
   SFX.click(); mfCollect(box); inp.focus();
 });
 
-Object.assign(EN, { "Lớp 10, 11, 12": "Grades 10, 11, 12", "Khe Mây · Hình giải tích": "Khe Mây · Coordinate geometry" });
+/* ---------- lịch sử tính (bản 3.20): ghi mọi phép tính bấm "=", còn nguyên khi đóng máy tính, sang ô đáp án rồi quay lại,
+   cả khi tải lại trang (lưu trong máy). Nút đồng hồ trên đầu máy tính mở danh sách; chạm một dòng để gọi lại phép tính.
+   Phím ▲ ▼ (giống máy thật) cũng gọi lại được. */
+var CH_KEY = "khemay-calc-hist";
+CAS.histL = (function () { try { var a = JSON.parse(lsGet(CH_KEY) || "[]"); return Array.isArray(a) ? a.slice(-40) : []; } catch (e) { return []; } })();
+if (!CAS.hist.length && CAS.histL.length) CAS.hist = CAS.histL.map(function (h) { return h.s; }).filter(Boolean).slice(-30);
+function histAdd() {
+  if (!C.just || !C.lastTxt) return;
+  var r = String(C.res == null ? "" : C.res).replace(/<[^>]*>/g, ""), last = CAS.histL[CAS.histL.length - 1];
+  if (last && last.t === C.lastTxt && last.r === r) return;
+  var it = { t: C.lastTxt, r: r, s: serRow(C.root), k: OBS && OBS[S.i] ? OBS[S.i].key : "", m: CAS.mode };
+  CAS.histL.push(it); if (CAS.histL.length > 40) CAS.histL.shift();
+  lsSet(CH_KEY, JSON.stringify(CAS.histL));
+  if (!$("#cHistBox").hidden) histRender();
+}
+function histRender() {
+  var box = $("#cHistBox"), L0 = CAS.histL.slice().reverse();
+  box.innerHTML = '<div class="chh"><span>' + L("Lịch sử tính (mới nhất ở trên)", "Calculation history (newest first)") + "</span>" + (L0.length ? '<button type="button" data-chclr>' + L("Xóa lịch sử", "Clear") + "</button>" : "") + "</div>" +
+    (L0.length ? L0.map(function (h, i) { var k = CAS.histL.length - 1 - i; return '<button type="button" class="chi" data-chi="' + k + '">' + (h.k && OBS && OBS[S.i] && h.k === OBS[S.i].key ? "" : "<small>" + L("bài trước", "earlier") + "</small>") + esc(h.t) + " = <b>" + esc(h.r) + "</b></button>"; }).join("") : '<p class="che">' + L("Chưa có phép tính nào. Bấm = để tính, phép tính sẽ được ghi lại ở đây.", "No calculations yet. Press = and they will be listed here.") + "</p>") +
+    '<p class="che">' + L("Chạm một dòng để gọi lại phép tính, sửa rồi bấm = . Phím ▲ ▼ cũng gọi lại được.", "Tap a line to bring the calculation back, edit it and press =. The ▲ ▼ keys also scroll through them.") + "</p>";
+}
+function histToggle(on) {
+  var box = $("#cHistBox"), b = $("#cHist"); if (on == null) on = box.hidden;
+  box.hidden = !on; b.setAttribute("aria-pressed", on ? "true" : "false"); if (on) histRender(); fitSheet();
+}
+$("#cHist").addEventListener("click", function () { SFX.click(); histToggle(); });
+$("#cHistBox").addEventListener("click", function (e) {
+  if (e.target.closest("[data-chclr]")) { CAS.histL = []; CAS.hist = []; CAS.hi = -1; lsSet(CH_KEY, "[]"); SFX.pull(); histRender(); return; }
+  var b = e.target.closest("[data-chi]"); if (!b) return; var h = CAS.histL[+b.dataset.chi]; if (!h || !h.s) return;
+  if (h.m && h.m !== CAS.mode) { toast(L("Phép tính này làm ở chế độ khác của máy tính.", "That calculation was made in another calculator mode.")); SFX.nope(); return; }
+  try { loadRow(h.s); SFX.pick(); histToggle(false); updLcd(); toast(L("Đã gọi lại phép tính. Sửa nếu cần rồi bấm =.", "Calculation restored. Edit if needed, then press =.")); } catch (er) { SFX.nope(); }
+});
+
+Object.assign(EN, { "Lịch sử tính": "Calculation history", "Lớp 10, 11, 12": "Grades 10, 11, 12", "Khe Mây · Hình giải tích": "Khe Mây · Coordinate geometry" });
 applyStatic(); syncSnd(); renderRoute(); renderResume();
 window.__khemay = { S12OB: S12OB, DT: DT, dtKey: dtKey, openDt: openDt, S9OB: S9OB, setLang: setLang, MISSING: MISSING, TX: TX,  readSave: readSave, snapshot: snapshot,  OB4: OB4, OB5: OB5, OB6: OB6, ROW: ROW, setRoute: function (a) { S.route = a.map(function (n) { return OBK[n]; }); renderRoute(); }, view: function () { return VIEW; }, OB3: OB3, getOBS: function () { return OBS; }, loadOb: loadOb, SFX: SFX, SND: SND, showReport: showReport, CAS: CAS, keyPress: keyPress, calcVars: calcVars, calcC: function () { return C; }, outTxt: outTxt, OB1: OB1, OB2: OB2, S: S, findPt: findPt, P: P };
 })();
