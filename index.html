@@ -544,6 +544,57 @@ body.nbws #pNote .note { padding: 8px 10px; }
 .scenpick button { flex: 1; min-width: 140px; font: 800 .95rem var(--font); padding: 8px 10px; border-radius: 14px; border: 2.5px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer; box-shadow: 0 3px 0 var(--ink); }
 .scenpick button[aria-pressed="true"] { background: var(--accent); color: #fff; }
 .scenpick .s9lab { flex-basis: 100%; font-weight: 800; font-size: .85rem; color: var(--muted); margin-top: 2px; }
+.scenpick button { position: relative; }
+.scenpick button .ktag { display: block; font: 600 .72rem var(--font); opacity: .82; margin-top: 2px; line-height: 1.2; }
+.scenpick button[data-prog] { padding-right: 20px; }
+.scenpick button[data-prog]::after { position: absolute; top: 4px; right: 7px; margin: 0; }
+.dtbtn { display: none; }
+body.lv1 .boardbtns .dtbtn { display: inline-flex; align-items: center; gap: 4px; height: 34px; min-height: 34px; padding: 0 9px; background: #fff3d6; font-size: .88rem; }
+.dtbtn svg { width: 22px; height: 22px; flex: none; }
+body.ws .boardbtns .dtbtn { display: none !important; }
+.dtsheet { background: #fffdf6; color: var(--ink); border-color: #1565c0; gap: 6px; }
+.dtsheet .sheethead { color: var(--ink); }
+.dtsheet .dttitle { flex: 1; min-width: 0; color: #1565c0; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.dtsheet .sheetx { background: #e3f2fd; color: var(--ink); border-color: #90caf9; }
+.dtops { display: flex; gap: 4px; flex: none; }
+.dtops button { width: 38px; height: 34px; padding: 0; border: 2px solid var(--ink); border-radius: 10px; background: #fff; font: 800 1.25rem var(--font); color: var(--ink); cursor: pointer; box-shadow: 0 2px 0 var(--ink); }
+.dtops button[aria-pressed="true"] { background: #1565c0; color: #fff; }
+.dtfields { display: flex; flex-direction: column; gap: 5px; }
+.dtfrow { display: flex; align-items: center; gap: 6px; }
+.dtsg { flex: none; width: 18px; text-align: center; font: 800 1.25rem var(--font); }
+.dtf { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; padding: 3px 10px; border: 2px solid #90a4ae; border-radius: 10px; background: #fff; color: var(--ink); cursor: pointer; text-align: left; font: inherit; }
+.dtf[aria-pressed="true"] { border-color: #1565c0; box-shadow: 0 0 0 3px #bbdefb; }
+.dtfl { font-size: .8rem; font-weight: 700; color: var(--muted); }
+.dtfv { font: 800 1.2rem var(--font); font-variant-numeric: tabular-nums; }
+.dtfv i { font: italic 500 .85rem var(--font); color: #90a4ae; }
+.dtfx { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #b0bec5; background: #fff; color: #c62828; font: 800 1.1rem var(--font); cursor: pointer; padding: 0; }
+.dtkeys { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+.dtk { height: clamp(34px, calc(var(--vh, 800px) * 0.05), 42px); padding: 0; border: 2px solid var(--ink); border-radius: 10px; background: #fff; font: 800 1.2rem var(--font); color: var(--ink); box-shadow: 0 2px 0 var(--ink); cursor: pointer; }
+.dtk:active { transform: translateY(2px); box-shadow: none; }
+.dtk.del { background: #ffe0d6; }
+.dtact { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.dtact .btn { min-height: 34px; padding: 2px 12px; }
+.dtmsg { margin: 0; font-size: .85rem; font-weight: 700; color: #c62828; }
+.dtmsg.ok { color: #2e7d32; }
+.dtmsg:empty { display: none; }
+.dthint { margin: 0; font-size: .8rem; line-height: 1.3; color: var(--muted); }
+.dtread { margin: 0; font-size: .9rem; }
+.dtread b { color: #1a3fa0; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.dtgridbox { flex: none; overflow-x: auto; display: flex; justify-content: center; padding: 6px 4px; background: #fff; border: 1.5px solid #cfe0f5; border-radius: 10px; }
+.dtgrid { --c: 30px; display: flex; flex-direction: column; width: max-content; }
+.dtr { display: flex; }
+.dtr.ln { border-top: 2.5px solid #e53935; margin-top: 2px; padding-top: 1px; }
+.dts { flex: none; width: calc(var(--c) * .7); height: var(--c); display: flex; align-items: center; justify-content: center; font: 800 calc(var(--c) * .62) var(--font); color: var(--ink); }
+.dc { position: relative; flex: none; box-sizing: border-box; width: var(--c); height: var(--c); padding: 0; margin: 0; border: 0; display: flex; align-items: center; justify-content: center; font: 800 calc(var(--c) * .66) var(--font); font-variant-numeric: tabular-nums; color: var(--ink); background: none; box-shadow: inset 0 0 0 .5px #d6e6f7; }
+.dc.de { background: #fff; color: #1a3fa0; cursor: pointer; box-shadow: inset 0 0 0 1px #9ec5ef; border-radius: 3px; }
+.dc.de.on { background: #fff3c4; box-shadow: inset 0 0 0 2.5px #f9a825; }
+.dtr.sm .dts, .dtr.sm .dc { height: calc(var(--c) * .62); }
+.dtr.sm .dc { font-size: calc(var(--c) * .44); }
+.dtr.sm .dc.de { color: #c62828; box-shadow: inset 0 0 0 1px #f3b4b4; }
+.dtr.sm .dc.de.on { box-shadow: inset 0 0 0 2px #e53935; }
+.dcm { position: absolute; right: -.14em; bottom: -.1em; font-style: normal; line-height: 1; z-index: 1; }
+.dc.bar { width: calc(var(--c) * .5); box-shadow: none; background: linear-gradient(90deg, transparent calc(50% - 1.25px), var(--ink) 0, var(--ink) calc(50% + 1.25px), transparent 0); }
+.dc.tl { border-top: 2.5px solid var(--ink); }
 .corder { list-style: decimal; }
 .corder li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 3px 0; }
 .corder li span { flex: 1; min-width: 0; }
@@ -919,7 +970,7 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
       <div class="lockinfo measonly" id="lockInfo"></div>
       <button class="btn sm measonly" id="tSaveLine" type="button">Ghi đoạn vừa kẻ vào sổ</button>
     </div>
-    <div class="card boardwrap"><canvas id="board"></canvas><div class="boardbtns"><button class="btn sm penbtn" id="bPen" type="button" aria-label="Bút chì" title="Bút chì" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 38 L13 29 L33 9 L39 15 L19 35 Z" fill="#ffcf3f" stroke="#263238" stroke-width="3" stroke-linejoin="round"/><path d="M10 38 L13 29 L19 35 Z" fill="#f2c28b" stroke="#263238" stroke-width="2.4"/></svg></button><button class="btn sm parbtn" id="bPar" type="button" aria-label="Lập parabol" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20 Q12 -6 21 20" fill="none" stroke="#8e24aa" stroke-width="2.4"/><path d="M2 20 H22 M12 3 V21" stroke="#263238" stroke-width="1.4"/></svg><span>Parabol</span></button><button class="btn sm calcbtn" id="bCalc" type="button" aria-label="Máy tính" title="Máy tính"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="3" fill="#2f3b44" stroke="#263238" stroke-width="1.6"/><rect x="7" y="5.5" width="10" height="4" rx="1" fill="#cfe8c9"/><g fill="#fff"><circle cx="8.5" cy="13" r="1.3"/><circle cx="12" cy="13" r="1.3"/><circle cx="15.5" cy="13" r="1.3"/><circle cx="8.5" cy="17" r="1.3"/><circle cx="12" cy="17" r="1.3"/></g><circle cx="15.5" cy="17" r="1.3" fill="#ff7a3d"/></svg><span>Máy tính</span></button></div><div class="zoomctl" role="group" aria-label="Phóng to thu nhỏ hình"><button type="button" data-z="in" aria-label="Phóng to">+</button><button type="button" data-z="out" aria-label="Thu nhỏ">−</button><button type="button" data-z="fit" aria-label="Vừa khung">⤢</button></div><div class="ctxmenu" id="ctxMenu" hidden></div><div class="edctl" role="group" aria-label="Sửa hình"><button type="button" id="bUndo" aria-label="Hoàn tác" title="Hoàn tác" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7H4V2" fill="none" stroke="#263238" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 7A8.5 8.5 0 1 1 6 18" fill="none" stroke="#263238" stroke-width="2.4" stroke-linecap="round"/></svg></button><button type="button" id="bRedo" aria-label="Làm lại" title="Làm lại" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 7h5V2" fill="none" stroke="#263238" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.5 7A8.5 8.5 0 1 0 18 18" fill="none" stroke="#263238" stroke-width="2.4" stroke-linecap="round"/></svg></button><button type="button" id="bObjs" class="objbtn" aria-expanded="false" aria-label="Đối tượng" title="Đối tượng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" fill="#fff" stroke="#263238" stroke-width="1.8"/><circle cx="12" cy="12" r="3.2" fill="#263238"/></svg><span>Đối tượng</span></button></div><div class="figtoast" id="cMsg" aria-live="polite"></div></div><div class="card objpanel" id="objPanel" hidden role="dialog" aria-label="Đối tượng trên hình"><div class="ophead"><b>Đối tượng trên hình</b><button type="button" class="sheetx" id="opClose" aria-label="Đóng">×</button></div><p class="small ophint">Ẩn để hình gọn, xóa nếu không cần. Bấm ↶ để hoàn tác.</p><div id="objList"></div><div class="opfoot"><button type="button" class="btn sm" id="opShowAll">Hiện tất cả</button><button type="button" class="btn sm" id="opRestore">Khôi phục hình gốc</button></div></div>
+    <div class="card boardwrap"><canvas id="board"></canvas><div class="boardbtns"><button class="btn sm dtbtn" id="bDt" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3" width="17" height="18" rx="2" fill="#fff" stroke="#263238" stroke-width="1.7"/><path d="M3.5 9h17M3.5 15h17M9.2 3v18M14.8 3v18" stroke="#9ec5ef" stroke-width="1"/><path d="M5 12h2.6M6.3 10.7v2.6" stroke="#e53935" stroke-width="1.6" stroke-linecap="round"/><path d="M5 17.6h14" stroke="#e53935" stroke-width="1.6"/></svg><span>Đặt tính</span></button><button class="btn sm penbtn" id="bPen" type="button" aria-label="Bút chì" title="Bút chì" aria-pressed="false"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 38 L13 29 L33 9 L39 15 L19 35 Z" fill="#ffcf3f" stroke="#263238" stroke-width="3" stroke-linejoin="round"/><path d="M10 38 L13 29 L19 35 Z" fill="#f2c28b" stroke="#263238" stroke-width="2.4"/></svg></button><button class="btn sm parbtn" id="bPar" type="button" aria-label="Lập parabol" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20 Q12 -6 21 20" fill="none" stroke="#8e24aa" stroke-width="2.4"/><path d="M2 20 H22 M12 3 V21" stroke="#263238" stroke-width="1.4"/></svg><span>Parabol</span></button><button class="btn sm calcbtn" id="bCalc" type="button" aria-label="Máy tính" title="Máy tính"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="3" fill="#2f3b44" stroke="#263238" stroke-width="1.6"/><rect x="7" y="5.5" width="10" height="4" rx="1" fill="#cfe8c9"/><g fill="#fff"><circle cx="8.5" cy="13" r="1.3"/><circle cx="12" cy="13" r="1.3"/><circle cx="15.5" cy="13" r="1.3"/><circle cx="8.5" cy="17" r="1.3"/><circle cx="12" cy="17" r="1.3"/></g><circle cx="15.5" cy="17" r="1.3" fill="#ff7a3d"/></svg><span>Máy tính</span></button></div><div class="zoomctl" role="group" aria-label="Phóng to thu nhỏ hình"><button type="button" data-z="in" aria-label="Phóng to">+</button><button type="button" data-z="out" aria-label="Thu nhỏ">−</button><button type="button" data-z="fit" aria-label="Vừa khung">⤢</button></div><div class="ctxmenu" id="ctxMenu" hidden></div><div class="edctl" role="group" aria-label="Sửa hình"><button type="button" id="bUndo" aria-label="Hoàn tác" title="Hoàn tác" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7H4V2" fill="none" stroke="#263238" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 7A8.5 8.5 0 1 1 6 18" fill="none" stroke="#263238" stroke-width="2.4" stroke-linecap="round"/></svg></button><button type="button" id="bRedo" aria-label="Làm lại" title="Làm lại" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 7h5V2" fill="none" stroke="#263238" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.5 7A8.5 8.5 0 1 0 18 18" fill="none" stroke="#263238" stroke-width="2.4" stroke-linecap="round"/></svg></button><button type="button" id="bObjs" class="objbtn" aria-expanded="false" aria-label="Đối tượng" title="Đối tượng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" fill="#fff" stroke="#263238" stroke-width="1.8"/><circle cx="12" cy="12" r="3.2" fill="#263238"/></svg><span>Đối tượng</span></button></div><div class="figtoast" id="cMsg" aria-live="polite"></div></div><div class="card objpanel" id="objPanel" hidden role="dialog" aria-label="Đối tượng trên hình"><div class="ophead"><b>Đối tượng trên hình</b><button type="button" class="sheetx" id="opClose" aria-label="Đóng">×</button></div><p class="small ophint">Ẩn để hình gọn, xóa nếu không cần. Bấm ↶ để hoàn tác.</p><div id="objList"></div><div class="opfoot"><button type="button" class="btn sm" id="opShowAll">Hiện tất cả</button><button type="button" class="btn sm" id="opRestore">Khôi phục hình gốc</button></div></div>
     <p class="small" id="drawMsg"></p>
     <div class="results card" id="resList" hidden></div>
   </div>
@@ -952,6 +1003,7 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
   <div class="pres" id="parRes"></div>
   <div class="pact"><button class="btn sm orange" id="parSolve" type="button">Giải hệ</button><button class="btn sm green" id="parSave" type="button" hidden>Lưu a, b, c</button></div>
 </div>
+<div class="calcsheet dtsheet" id="dtSheet" hidden role="dialog" aria-label="Đặt tính"></div>
 </section>
 
 <div class="zoomback" id="zoomBack" hidden></div>
@@ -1074,6 +1126,7 @@ function applyStatic() {
 /* display texts of notebook entries are rebuilt from data, so they follow the current language */
 function measNote(m) { if (m.type === "txt") return LANG === "en" ? m.en : m.vi; return m.type === "tape" ? m.a + m.b + " = " + fmt(m.val) + " " + (m.u || "m") : TX("Góc ") + m.a + m.v + m.b + " = " + fmt(m.val) + "°"; }
 function resNote(r) {
+  if (r.kind === "dt") return dtNote(r);
   if (r.kind === "fn") return r.n + " = " + nfmt(r.val) + " (" + TX("hàm") + " y = " + r.eq + ", " + TX("gốc tại ") + r.o + ")";
   if (r.kind === "draw") return r.n + " = " + fmt(r.val, 2) + " m (" + TX("đoạn vẽ ") + fmt(r.cm, 2) + " cm, " + TX("tỉ lệ") + " 1 cm = " + fmt(r.sc, 2) + " m)";
   if (r.how != null) return dispName(r.n) + " = " + fc(Math.round(r.val * 100) / 100) + (r.unit === "m" ? " m" : r.unit) + " (" + TX("tính") + ": " + r.how.replace(/,/g, DEC()) + ")";
@@ -4196,7 +4249,7 @@ var S9_CAT = [
   { id: "KM-HH-904", key: "H2", ten: { vi: "Góc nhìn từ hải đăng", en: "View from the lighthouse" }, kb: "haitrinh", chu_de: { vi: ["tỉ số lượng giác", "góc hạ"], en: ["trig ratios", "angle of depression"] }, dap_an: { loai: "do_dai", don_vi: "m", sai_so: "±1,5 %" } },
   { id: "KM-HH-905", key: "X1", ten: { vi: "Hộp đựng bóng tennis", en: "Tennis ball tube" }, kb: "xuong3d", chu_de: { vi: ["thể tích hình trụ", "thể tích hình cầu", "tỉ số phần trăm"], en: ["volume of a cylinder", "volume of a sphere", "percentages"] }, dap_an: { loai: "phan_tram", don_vi: "%", sai_so: "±0,5" } },
   { id: "KM-HH-906", key: "X2", ten: { vi: "Chiếc nón quê hương", en: "Conical hats" }, kb: "xuong3d", chu_de: { vi: ["diện tích xung quanh hình nón", "đổi đơn vị diện tích"], en: ["curved surface area of a cone", "area unit conversion"] }, dap_an: { loai: "dien_tich", don_vi: "m²", sai_so: "±0,5 %" } }
-].map(function (m) { m.cap = [2]; m.lop = [9]; m.yccd = { vi: ["Ôn thi vào lớp 10"], en: ["Grade 10 entrance exam practice"] }; m.do_kho = { cap2: m.key === "D6" ? 2 : 3 }; m.goc_nhin = "chinh_dien"; m.dung_cu_can = ["doc_so_lieu"]; m.vai_tro = "cap2_on10"; m.trang_thai = "dang_dung"; return m; });
+].map(function (m) { m.cap = [2]; m.lop = [9]; m.yccd = { vi: ["Ôn thi vào lớp 10"], en: ["Grade 10 entrance exam practice"] }; m.do_kho = { cap2: m.key === "D6" ? 2 : 3 }; var T9 = { D1: ["nhin_ngang", ["thuoc_day", "thuoc_ngam"]], D2: ["tren_xuong", ["thuoc_day", "thuoc_ngam"]], D3: ["nhin_ngang", ["thuoc_day"]], D5: ["nhin_ngang", ["thuoc_day", "thuoc_ngam"]], H2: ["nhin_ngang", ["thuoc_day", "thuoc_ngam"]], X1: ["chinh_dien", ["thuoc_day"]], X2: ["chinh_dien", ["thuoc_day"]] }[m.key]; m.goc_nhin = T9 ? T9[0] : "chinh_dien"; m.dung_cu_can = T9 ? T9[1] : ["doc_so_lieu"]; m.vai_tro = "cap2_on10"; m.trang_thai = "dang_dung"; return m; });
 
 /* ==========================================================================
    CẤP 1 · TOÁN LỚP 4 (bản 3.10): 6 câu chuyện, mỗi câu chuyện 3 việc làm lần lượt từ dễ đến khó.
@@ -6498,6 +6551,7 @@ function renderStory() {
   sp1.querySelector(".c4lab").hidden = S.g !== 4; sp1.querySelector(".c5lab").hidden = S.g !== 5;
   C4_ORDER.concat(C5_ORDER).forEach(function (k) { var b = sp1.querySelector("[data-scen=" + k + "]"); b.textContent = L(C4[k].btn[0], C4[k].btn[1]); b.hidden = C4[k].lop !== S.g; });
   document.querySelectorAll("#scenPick [data-scen]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.scen === (S.scen || "vuon") ? "true" : "false"); });
+  scenTags();
   $("#storyHero").innerHTML = c.hero(); $("#storyLevel").textContent = c.level; $("#storyTitle").textContent = c.title; $("#storyLead").innerHTML = c.lead;
   renderRoute(); decoratePickers();
 }
@@ -6779,7 +6833,9 @@ function itemVar(id) { var k = +id.slice(1); return id[0] === "m" ? (S.meas[k] &
 var PAPER_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h9l4 4v14H5z" fill="#fff" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3v4h4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 14h7m-2.5-3 3 3-3 3" fill="none" stroke="#2f80ed" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var dragC = null;
 function nbTools(inWs) {
-  return (calcOK() && !inWs ? '<button class="btn sm nbb" type="button" data-nbcalc>' + CALC_SVG + L("Máy tính", "Calculator") + "</button>" : "") +
+  var dtb = S.g <= 5 && !inWs ? '<button class="btn sm nbb" type="button" data-nbdt>' + DT_SVG + L("Đặt tính", "Column method") + "</button>" : "";
+  if (!(S.meas.length + S.results.length)) return dtb;
+  return dtb + (calcOK() && !inWs ? '<button class="btn sm nbb" type="button" data-nbcalc>' + CALC_SVG + L("Máy tính", "Calculator") + "</button>" : "") +
     '<button class="btn sm nbb" type="button" data-allpaper>' + PAPER_SVG + L("Tất cả sang nháp", "All to paper") + "</button>";
 }
 function nbMsg(t) { document.querySelectorAll(".nbmsg").forEach(function (m) { m.innerHTML = t || ""; }); }
@@ -6893,7 +6949,7 @@ document.addEventListener("click", function (e) {
     if (!sheetOpen()) openNbCalc();
     insVar(v); SFX.pick(); return;
   }
-  if (a) { var w = itemVar(a.dataset.ans); if (!w) return; SFX.pick(); putAnswer(fc(Math.round(w.val * 100) / 100)); }
+  if (a) { var w = itemVar(a.dataset.ans); if (!w) return; SFX.pick(); var rr = a.dataset.ans.charAt(0) === "r" ? S.results[+a.dataset.ans.slice(1)] : null; putAnswer(rr && rr.kind === "dt" ? dtShow(rr.s) : fc(Math.round(w.val * 100) / 100)); }
 });
 function enoughMeas() {
   var nd = OBS[S.i].need(S.g), t = S.meas.filter(function (m) { return m.type === "tape"; }).length;
@@ -6916,7 +6972,7 @@ function render() {
   $("#inVal").placeholder = ob.ph ? L(ob.ph[0], ob.ph[1]) : TX("Nhập số"); $("#inVal").inputMode = ob.ph ? "text" : "decimal";
   var unitT = ob.unit ? ob.unit : ob.intAns ? L("đồng", "VND") : ob.s9 || ob.unit === "" ? "" : "m"; $(".build .unit").textContent = unitT; if (!unitT) $(".build .unit").hidden = true; $("#bBuild").textContent = ob.btnText || (ob.garden ? TX("Gửi ông") : TX("Lắp đặt"));
   if (ob.market) $("#wallet").textContent = money(S.wallet || 0);
-  document.body.classList.toggle("nocalc", !calcOK());
+  document.body.classList.toggle("nocalc", !calcOK()); document.body.classList.toggle("lv1", S.g <= 5);
   $("#obName").textContent = ob.name;
   $("#stars").textContent = S.stars;
   var m = ""; for (var k = 0; k < 3; k++) m += '<span class="mat' + (k < S.att ? " used" : "") + '"></span>';
@@ -6928,7 +6984,7 @@ function render() {
   syncRoomAns();
   if (inGame) bankSave();
   $("#fnList").innerHTML = noteItems();
-  var ft = $("#fnTools"); if (ft) ft.innerHTML = (S.meas.length + S.results.length) ? nbTools(false) : "";
+  var ft = $("#fnTools"); if (ft) ft.innerHTML = (S.meas.length + S.results.length) || S.g <= 5 ? nbTools(false) : "";
   autosave();
 }
 
@@ -7403,7 +7459,7 @@ function goFig() {
 $("#bFig").addEventListener("click", goFig);
 function renderNotes() {
   var h = TX("<h3>Sổ tay hiện trường: ") + OBS[S.i].name + "</h3>";
-  if (S.meas.length + S.results.length) h += '<div class="nbtools">' + nbTools(document.body.classList.contains("nbws")) + '</div><p class="nbmsg"></p>';
+  if (S.meas.length + S.results.length || (S.g <= 5 && !document.body.classList.contains("nbws"))) h += '<div class="nbtools">' + nbTools(document.body.classList.contains("nbws")) + '</div><p class="nbmsg"></p>';
   h += (S.meas.length + S.results.length) ? '<ul class="nlist">' + noteItems() + "</ul>" : TX("<p>Chưa có số đo. Ra hiện trường cắm cọc, dùng thước dây và thước ngắm.</p>");
   if (OBS[S.i].noteTip) h += "<p>" + OBS[S.i].noteTip + "</p>";
   h += TX('<div class="memohead"><label class="small" for="roomMemo">Ghi chép của em</label><button class="linkbtn" type="button" data-clearmemo>Xóa ghi chép</button></div><textarea id="roomMemo" rows="4"></textarea>') + mathBar("roomMemo");
@@ -7477,7 +7533,7 @@ function setTool(t) {
   if (!LAB_MEASURE && (t === "ruler" || t === "prot")) t = "pen";
   tool = t; hideMenu(); cv.style.touchAction = "none";
   document.querySelectorAll(".dtools .ticon").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.tool === t ? "true" : "false"); });
-  $("#readout").textContent = { ruler: TX("Thước kẻ: kéo ngón tay để kẻ đoạn thẳng. 1 ô lớn = 1 cm."), prot: TX("Thước đo độ: bắt đầu từ đầu mút một đoạn có sẵn để dựng hoặc đo góc."), pen: TX("Bút chì: vẽ nháp tự do."), calc: calcOK() ? TX("Chạm vào một cạnh, một điểm hoặc một số đo để tính. Kéo để di chuyển hình, chụm hai ngón (hoặc nút + −) để phóng to.") : TX("Cấp 1 tự tính: bấm nút bút chì để đặt tính ra giấy nháp. Bấm lại để kéo, phóng to hình.") }[t];
+  $("#readout").textContent = { ruler: TX("Thước kẻ: kéo ngón tay để kẻ đoạn thẳng. 1 ô lớn = 1 cm."), prot: TX("Thước đo độ: bắt đầu từ đầu mút một đoạn có sẵn để dựng hoặc đo góc."), pen: TX("Bút chì: vẽ nháp tự do."), calc: calcOK() ? TX("Chạm vào một cạnh, một điểm hoặc một số đo để tính. Kéo để di chuyển hình, chụm hai ngón (hoặc nút + −) để phóng to.") : L("Cấp 1 tự tính: bấm Đặt tính để tính theo cột, hoặc bút chì để viết nháp.", "Primary level works it out by hand: tap Column method, or the pencil to jot notes.") }[t];
   var bp = $("#bPen"); if (bp) bp.setAttribute("aria-pressed", t === "pen" ? "true" : "false");
 }
 document.querySelector(".dtools").addEventListener("click", function (e) { var b = e.target.closest(".ticon"); if (b) setTool(b.dataset.tool); });
@@ -7946,7 +8002,7 @@ function showMenu(p, items) {
 }
 function sheetOpen() { return !$("#calcSheet").hidden; }
 function openSheet(tgt) {
-  if (!calcOK()) { toast(TX("Cấp 1 tự tính: bấm bút chì để đặt tính ra giấy nháp.")); SFX.nope(); return; }
+  if (!calcOK()) { toast(L("Cấp 1 tự tính: bấm nút Đặt tính để tính theo cột.", "Primary level works it out by hand: tap Column method.")); SFX.nope(); return; }
   if (tgt !== undefined) S.tgt = tgt;
   closePar(); var sh = $("#calcSheet"); setVH(); sh.hidden = false; document.body.classList.add("ws"); document.body.classList.add("calc"); window.scrollTo(0, 0);
   if (C.just) { calcClear(); }
@@ -7958,7 +8014,7 @@ function setVH() {
   document.documentElement.style.setProperty("--vh", Math.round(h) + "px");
 }
 function fitSheet() {
-  if ($("#calcSheet").hidden && $("#parSheet").hidden) return;
+  if ($("#calcSheet").hidden && $("#parSheet").hidden && $("#dtSheet").hidden) return;
   setVH(); sizeBoard();
 }
 if (window.visualViewport) window.visualViewport.addEventListener("resize", function () { if (isWS()) fitSheet(); });
@@ -7980,6 +8036,7 @@ $("#parForms").addEventListener("click", function (e) { var b = e.target.closest
 $("#parRows").addEventListener("click", function (e) { var b = e.target.closest("[data-pdel]"); if (!b) return; S.par.rows.splice(+b.dataset.pdel, 1); S.par.sol = null; SFX.pull(); parRender(); draw(); });
 window.addEventListener("resize", function () { if (isWS()) fitSheet(); });
 function closeSheet() {
+  dtClose();
   var sh = $("#calcSheet"); if (!sh || sh.hidden) return;
   sh.hidden = true; document.body.classList.remove("calc"); if ($("#parSheet").hidden) document.body.classList.remove("ws");
   if (document.body.classList.contains("nbws")) { document.body.classList.remove("nbws"); if (!$("#pNote").hidden) renderNotes(); } S.tgt = null; $("#tgtCustom").hidden = true; hideMenu(); sizeBoard();
@@ -10095,7 +10152,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.17";
+var APP_VER = "3.18";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
@@ -10716,8 +10773,295 @@ function celebrateEnd() {
   SFX.celebrate();
   setTimeout(function () { fireworks(S.g <= 5 ? 5600 : 3800, S.g <= 5 ? 9 : 5, true); }, 350);
 }
+/* ---------- Đặt tính theo cột (Cấp 1, bản 3.18) ----------
+   Máy chỉ xếp các số thẳng cột trên nền ô li; học sinh tự viết từng chữ số của kết quả, ô nhỏ màu đỏ để ghi số nhớ.
+   Mỗi ô giữ 1 chữ số, có thể kèm dấu phẩy ở góc dưới bên phải (dấu phẩy đứng ngay sau chữ số đó).
+   Không chấm đúng sai trong lúc tính: viết sai thì hậu quả hiện ra khi lắp đáp án, giống làm ngoài giấy.
+   Cấp 2 trở lên dùng máy tính, không có công cụ này. */
+var DT_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3" width="17" height="18" rx="2" fill="#fff" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 9h17M3.5 15h17M9.2 3v18M14.8 3v18" stroke="#9ec5ef" stroke-width="1"/><path d="M5 12h2.6M6.3 10.7v2.6" stroke="#e53935" stroke-width="1.6" stroke-linecap="round"/><path d="M5 17.6h14" stroke="#e53935" stroke-width="1.6"/></svg>';
+var DT = { ob: null, op: "+", ins: ["", ""], f: 0, g: null, cur: null, back: null };
+var DT_OPS = { "+": "+", "-": "−", "*": "×", "/": ":" };
+function dtOpen() { var s = $("#dtSheet"); return !!s && !s.hidden; }
+function dtReset() { DT.ob = OBS[S.i]; DT.op = "+"; DT.ins = ["", ""]; DT.f = 0; DT.g = null; DT.cur = null; DT.back = null; }
+function dtShow(s) { return String(s).replace(/,/g, DEC()); }
+function dtGroup(s) { var p = String(s).split(","), i = p[0]; if (i.length >= 4) i = i.replace(/\B(?=(\d{3})+(?!\d))/g, LANG === "en" ? "," : "."); return i + (p.length > 1 ? DEC() + p[1] : ""); }
+function dtNorm(s) {
+  s = String(s || ""); if (s.slice(-1) === ",") s = s.slice(0, -1);
+  var p = s.split(","), i = p[0].replace(/^0+(?=\d)/, ""); if (i === "") i = "0";
+  return p.length > 1 && p[1] !== "" ? i + "," + p[1] : i;
+}
+function dtNum(s) { return s === "" ? NaN : parseFloat(String(s).replace(",", ".")); }
+function dtStrOf(v) { return String(parseFloat(Number(v).toFixed(4))).replace(".", ","); }
+function dtDig(s) { var p = s.split(","); return { ds: p[0] + (p[1] || ""), il: p[0].length, fl: (p[1] || "").length, dec: p.length > 1 }; }
+/* số liệu có sẵn trong sổ tay: số đo có tên (AB = 12) và các số nằm trong dòng ghi chép (5.240.000đ) */
+function dtChips() {
+  var out = [], seen = {};
+  function add(v, nm) { if (typeof v !== "number" || !isFinite(v) || v < 0) return; var s = dtStrOf(v); if (seen[s]) return; seen[s] = 1; out.push({ s: s, nm: nm || "" }); }
+  calcVars().forEach(function (v) { if (v.name.charAt(0) !== "∠") add(v.val, v.name); });
+  (S.meas || []).forEach(function (m) {
+    if (noteVar(m)) return;
+    var t = String(measNote(m) || "").replace(/<[^>]*>/g, " ");
+    var re = LANG === "en" ? /\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?/g : /\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+(?:,\d+)?/g;
+    (t.match(re) || []).forEach(function (x) { add(LANG === "en" ? parseFloat(x.replace(/,/g, "")) : parseFloat(x.replace(/\./g, "").replace(",", "."))); });
+  });
+  return out;
+}
+function dtLabels() {
+  if (DT.op === "+") return DT.ins.map(function (x, i) { return L("Số hạng " + (i + 1), "Number " + (i + 1)); });
+  if (DT.op === "-") return [L("Số bị trừ", "Number"), L("Số trừ", "Take away")];
+  if (DT.op === "*") return [L("Thừa số thứ nhất", "Number"), L("Thừa số thứ hai", "Times")];
+  return [L("Số bị chia", "Number"), L("Số chia", "Divided by")];
+}
+function dtKeys() {
+  return '<div class="dtkeys">' + ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", "⌫"].map(function (k) {
+    return '<button type="button" class="dtk' + (k === "⌫" ? " del" : "") + '" data-dk="' + k + '"' + (k === "⌫" ? ' aria-label="' + L("Xóa", "Delete") + '"' : "") + ">" + (k === "," ? DEC() : k) + "</button>";
+  }).join("") + "</div>";
+}
+function dtSetupHTML() {
+  var lb = dtLabels(), chips = dtChips();
+  var h = '<div class="sheethead"><b class="dttitle">' + L("Đặt tính", "Column method") + '</b><span class="dtops">' + ["+", "-", "*", "/"].map(function (o) {
+    return '<button type="button" data-dop="' + o + '" aria-pressed="' + (o === DT.op) + '" aria-label="' + { "+": L("Phép cộng", "Add"), "-": L("Phép trừ", "Subtract"), "*": L("Phép nhân", "Multiply"), "/": L("Phép chia", "Divide") }[o] + '">' + DT_OPS[o] + "</button>";
+  }).join("") + '</span><button class="sheetx" type="button" data-dclose aria-label="' + L("Đóng", "Close") + '">×</button></div>';
+  h += '<div class="dtfields">' + DT.ins.map(function (v, i) {
+    return '<div class="dtfrow"><span class="dtsg">' + (i ? DT_OPS[DT.op] : "") + '</span><button type="button" class="dtf" data-df="' + i + '" aria-pressed="' + (i === DT.f) + '"><span class="dtfl">' + lb[i] + '</span><span class="dtfv">' + (v ? dtShow(v) : "<i>" + L("chạm rồi gõ số", "tap, then type") + "</i>") + "</span></button>" +
+      (DT.op === "+" && i >= 2 ? '<button type="button" class="dtfx" data-dfx="' + i + '" aria-label="' + L("Bỏ số này", "Remove this number") + '">×</button>' : "") + "</div>";
+  }).join("") + "</div>";
+  if (chips.length) h += '<div class="cchips dtchips">' + chips.map(function (c) { return '<button type="button" class="cchip" data-dchip="' + c.s + '">' + (c.nm ? c.nm + " = " : "") + dtGroup(c.s) + "</button>"; }).join("") + "</div>";
+  h += dtKeys() + '<div class="dtact">' + (DT.op === "+" && DT.ins.length < 4 ? '<button type="button" class="btn sm" data-dadd>+ ' + L("Thêm số hạng", "Add a number") + "</button>" : "") +
+    '<button type="button" class="btn sm green" data-dgo>' + L("Đặt tính", "Set it out") + '</button></div><p class="dtmsg" aria-live="polite"></p>';
+  return h;
+}
+function dtCell(d, e, c) { return { d: d || "", c: !!c, e: !!e }; }
+function dtRow(W, kind, e, o) { var r = { kind: kind, cells: [], sign: "", ln: false, sm: kind === "carry" }; for (var c = 0; c < W; c++) r.cells.push(e ? dtCell("", true) : null); if (o) for (var k in o) r[k] = o[k]; return r; }
+function dtPlace(r, s, right) { var p = dtDig(s), n = p.ds.length; for (var k = 0; k < n; k++) r.cells[right + n - 1 - k] = dtCell(p.ds[k], false, p.dec && k === p.il - 1); }
+function dtErr(t) { SFX.nope(); dtMsg(t); return null; }
+function dtBuild() {
+  var op = DT.op, xs;
+  if (op === "+") xs = DT.ins.filter(function (s) { return s !== ""; }).map(dtNorm);
+  else xs = DT.ins[0] !== "" && DT.ins[1] !== "" ? [dtNorm(DT.ins[0]), dtNorm(DT.ins[1])] : [];
+  if (xs.length < 2) return dtErr(L("Em nhập đủ các số trước đã.", "Fill in the numbers first."));
+  var big = L("Số dài quá, không vừa màn hình. Em tính phần này ra giấy nháp nhé.", "These numbers are too long for the screen. Work this one on scratch paper.");
+  var g = { op: op, xs: xs, rows: [], expr: xs.join(" " + DT_OPS[op] + " ") };
+  if (op === "+" || op === "-") {
+    if (op === "-" && dtNum(xs[0]) < dtNum(xs[1])) return dtErr(L("Số bị trừ phải lớn hơn hoặc bằng số trừ.", "The first number must not be smaller than the one you take away."));
+    var F = 0, I = 0; xs.forEach(function (s) { var p = dtDig(s); F = Math.max(F, p.fl); I = Math.max(I, p.il); });
+    var W = I + F + (op === "+" ? 1 : 0); if (W > 12) return dtErr(big);
+    g.W = W; g.rows.push(dtRow(W, "carry", true));
+    var sg = Math.floor(xs.length / 2);
+    xs.forEach(function (s, i) { var r = dtRow(W, "num", false); dtPlace(r, s, F - dtDig(s).fl); if (i === sg) r.sign = DT_OPS[op]; g.rows.push(r); });
+    g.rows.push(dtRow(W, "res", true, { ln: true })); g.res = g.rows.length - 1; g.dec = F > 0;
+    g.start = [g.res, 0];
+  } else if (op === "*") {
+    var A = dtDig(xs[0]), B = dtDig(xs[1]), La = A.ds.length, Lb = B.ds.length, W2 = La + Lb;
+    if (W2 > 12 || Lb > 4) return dtErr(big);
+    g.W = W2; g.rows.push(dtRow(W2, "carry", true));
+    var ra = dtRow(W2, "num", false); dtPlace(ra, xs[0], 0); g.rows.push(ra);
+    var rb = dtRow(W2, "num", false, { sign: "×" }); dtPlace(rb, xs[1], 0); g.rows.push(rb);
+    if (Lb > 1) {
+      for (var k = 0; k < Lb; k++) { var rp = dtRow(W2, "part", false, { ln: k === 0, sign: k === 1 ? "+" : "" }); for (var c = k; c <= Math.min(W2 - 1, k + La); c++) rp.cells[c] = dtCell("", true); g.rows.push(rp); }
+      g.start = [3, 0];
+    }
+    g.rows.push(dtRow(W2, "res", true, { ln: true })); g.res = g.rows.length - 1; g.dec = A.dec || B.dec;
+    if (!g.start) g.start = [g.res, 0];
+  } else {
+    if (/,/.test(xs[0] + xs[1])) return dtErr(L("Phép chia ở đây dùng cho số tự nhiên. Số thập phân em tính ra giấy nháp nhé.", "Division here works with whole numbers. Use scratch paper for decimals."));
+    var a = xs[0], b = xs[1], La2 = a.length, Lb2 = b.length;
+    if (+b === 0) return dtErr(L("Không chia được cho 0.", "You can't divide by 0."));
+    if (+a < +b) return dtErr(L("Số bị chia phải lớn hơn số chia.", "The first number must be bigger than the one you divide by."));
+    if (La2 > 7 || Lb2 > 3) return dtErr(big);
+    var Q = La2 - Lb2 + 1, R = Math.max(Lb2, Q), W3 = La2 + 1 + R;
+    g.W = W3; g.div = true; g.R = R; g.Q = Q;
+    var r0 = dtRow(W3, "num", false); dtPlace(r0, a, R + 1); dtPlace(r0, b, R - Lb2); g.rows.push(r0);
+    for (var j = 1; j <= Q; j++) {
+      var rw = dtRow(W3, "work", false); for (var c2 = R + 1; c2 < W3; c2++) rw.cells[c2] = dtCell("", true);
+      if (j === 1) for (var c3 = R - 1; c3 >= R - Q; c3--) rw.cells[c3] = dtCell("", true);
+      g.rows.push(rw);
+    }
+    g.res = 1; g.start = [1, R - 1];
+  }
+  return g;
+}
+/* đọc một hàng học sinh viết (từ trái sang phải); báo lỗi nếu còn ô trống xen giữa */
+function dtRowRead(r, from, to) {
+  var s = "", started = false, gap = false, hole = false;
+  for (var c = from; c >= to; c--) {
+    var x = r.cells[c]; if (!x || !x.e) continue;
+    if (!x.d) { if (started) gap = true; continue; }
+    if (gap) hole = true; s += x.d; started = true; if (x.c && s.indexOf(",") < 0) s += ",";
+  }
+  if (hole) return { err: "hole" };
+  if (!s) return { err: "empty" };
+  return { s: dtNorm(s) };
+}
+function dtRead() { var g = DT.g; return g.div ? dtRowRead(g.rows[g.res], g.R - 1, 0) : dtRowRead(g.rows[g.res], g.W - 1, 0); }
+function dtRem() { var g = DT.g; if (!g.div) return null; for (var j = g.rows.length - 1; j >= 1; j--) { var x = dtRowRead(g.rows[j], g.W - 1, g.R + 1); if (x.s) return x.s; } return null; }
+function dtGridHTML() {
+  var g = DT.g, W = g.W, h = '<div class="dtgrid">';
+  g.rows.forEach(function (r, ri) {
+    h += '<div class="dtr' + (r.sm ? " sm" : "") + (r.ln ? " ln" : "") + '"><span class="dts">' + (r.sign || "") + "</span>";
+    for (var c = W - 1; c >= 0; c--) {
+      if (g.div && c === g.R) { h += '<span class="dc bar"></span>'; continue; }
+      var x = r.cells[c], cls = "dc" + (g.div && ri === 1 && c < g.R ? " tl" : "");
+      if (!x) { h += '<span class="' + cls + '"></span>'; continue; }
+      var inner = esc(x.d) + (x.c ? '<i class="dcm">' + DEC() + "</i>" : "");
+      if (x.e) h += '<button type="button" class="' + cls + " de" + (DT.cur && DT.cur[0] === ri && DT.cur[1] === c ? " on" : "") + '" data-dr="' + ri + '" data-dcl="' + c + '" aria-label="' + (r.sm ? L("ô nhớ", "carry box") : L("ô", "box")) + '">' + inner + "</button>";
+      else h += '<span class="' + cls + ' fx">' + inner + "</span>";
+    }
+    h += "</div>";
+  });
+  return h + "</div>";
+}
+function dtHint() {
+  var g = DT.g, t;
+  if (g.div) t = L("Thương viết dưới vạch kẻ bên phải, số dư viết dưới số bị chia.", "Answer under the line on the right, remainders under the first number.");
+  else if (g.op === "*" && g.rows.some(function (r) { return r.kind === "part"; })) t = L("Tích riêng sau lùi sang trái một ô, rồi cộng ở hàng cuối.", "Each partial product starts one box further left; add them on the bottom row.");
+  else t = L("Viết từ phải sang trái. Ô nhỏ màu đỏ: số nhớ.", "Write from right to left. Small red boxes: carrying.");
+  if (g.dec) t += L(" Dấu phẩy: chạm ô rồi bấm , (dấu phẩy đứng sau chữ số đó).", " Decimal point: tap a box, then press . (it goes after that digit).");
+  return t;
+}
+function dtWorkHTML() {
+  var g = DT.g, rd = dtRead(), rm = dtRem();
+  return '<div class="sheethead"><b class="dttitle">' + dtShow(g.expr) + '</b><button class="btn sm" type="button" data-dsave>' + L("Ghi sổ tay", "To notebook") + '</button><button class="btn sm orange" type="button" data-duse>' + L("Đáp án", "Answer") + '</button><button class="sheetx" type="button" data-dclose aria-label="' + L("Đóng", "Close") + '">×</button></div>' +
+    '<p class="dthint">' + dtHint() + "</p>" +
+    '<div class="dtgridbox">' + dtGridHTML() + "</div>" +
+    '<p class="dtread">' + (g.div ? L("Thương em viết: ", "Your answer: ") : L("Kết quả em viết: ", "Your answer: ")) + "<b>" + (rd.s ? dtGroup(rd.s) : "…") + "</b>" + (g.div && rm && +rm > 0 ? L(" (dư ", " (remainder ") + rm + ")" : "") + "</p>" +
+    dtKeys() +
+    '<div class="dtact"><button type="button" class="btn sm" data-dback>' + L("← Đổi phép tính", "← Change numbers") + '</button><button type="button" class="btn sm" data-dclr>' + L("Viết lại", "Start again") + '</button></div><p class="dtmsg" aria-live="polite"></p>';
+}
+function dtSize() {
+  var sh = $("#dtSheet"), gd = sh && sh.querySelector(".dtgrid"); if (!gd || !DT.g) return;
+  var avail = sh.clientWidth - 34, cols = DT.g.W + 0.7 - (DT.g.div ? 0.5 : 0);
+  gd.style.setProperty("--c", Math.max(20, Math.min(34, Math.floor(avail / cols))) + "px");
+}
+function dtRender(msg) {
+  var sh = $("#dtSheet"); if (!sh) return; var st = sh.scrollTop;
+  sh.classList.toggle("work", !!DT.g);
+  sh.innerHTML = DT.g ? dtWorkHTML() : dtSetupHTML();
+  dtSize(); sh.scrollTop = st; if (msg) dtMsg(msg);
+}
+function dtMsg(t) { var m = $("#dtSheet .dtmsg"); if (m) m.textContent = t || ""; }
+function dtGo() {
+  var g = dtBuild(); if (!g) return;
+  DT.g = g; DT.cur = g.start; DT.back = null; SFX.pick(); dtRender();
+}
+function dtCellAt(p) { return DT.g.rows[p[0]].cells[p[1]]; }
+function dtStep(cur, s) {
+  var g = DT.g, r = g.rows[cur[0]], c = cur[1] + s * (g.div ? -1 : 1), y = r.cells[c];
+  return y && y.e && !(g.div && c === g.R) ? [cur[0], c] : null;
+}
+function dtKey(k) {
+  if (!DT.g) {
+    var s = DT.ins[DT.f] || "";
+    if (k === "⌫") s = s.slice(0, -1);
+    else if (k === ",") { if (s.indexOf(",") < 0) s = (s || "0") + ","; }
+    else if (s.replace(",", "").length < 10) s = s === "0" ? k : s + k;
+    DT.ins[DT.f] = s; dtRender(); return;
+  }
+  var cur = DT.cur; if (!cur) { dtMsg(L("Chạm vào một ô để viết.", "Tap a box to write in it.")); return; }
+  var r = DT.g.rows[cur[0]], x = dtCellAt(cur);
+  if (k === ",") {
+    if (r.kind === "carry" || DT.g.div) { SFX.nope(); dtRender(L("Ô này không đặt dấu phẩy được.", "No decimal point in this box.")); return; }
+    var on = !x.c; r.cells.forEach(function (y) { if (y && y.e) y.c = false; }); x.c = on;
+  } else if (k === "⌫") {
+    if (x.d || x.c) { x.d = ""; x.c = false; }
+    else { var p = dtStep(cur, -1); if (p) { DT.cur = p; var y = dtCellAt(p); y.d = ""; y.c = false; } }
+  } else {
+    x.d = k;
+    if (r.kind === "carry") { if (DT.back) DT.cur = DT.back; }
+    else { var nx = dtStep(cur, 1); if (nx) DT.cur = nx; }
+  }
+  dtRender();
+}
+function dtSave(toAns) {
+  var rd = dtRead();
+  if (rd.err) { SFX.nope(); dtMsg(rd.err === "hole" ? L("Kết quả còn ô trống xen giữa các chữ số.", "There's an empty box between the digits of your answer.") : (DT.g.div ? L("Em chưa viết thương (dưới vạch kẻ bên phải).", "Write the answer under the line on the right first.") : L("Em chưa viết kết quả ở hàng cuối.", "Write your answer on the bottom row first."))); return; }
+  if (toAns) { SFX.pick(); putAnswer(dtShow(rd.s)); return; }
+  var n = "KQ" + (++S.kq), rm = dtRem();
+  S.results.push({ n: n, val: dtNum(rd.s), unit: "", kind: "dt", s: rd.s, how: DT.g.expr, rem: DT.g.div && rm && +rm > 0 ? rm : null });
+  var k = S.results.length - 1; if (S.board) cardAdd("r" + k);
+  SFX.pick(); render(); draw(); if (typeof autosave === "function") autosave();
+  if (!$("#pNote").hidden) { renderNotes(); var nl = $("#pNote .nlist li:last-child"); if (nl) { nl.classList.add("justin"); nl.scrollIntoView({ block: "nearest" }); } }
+  dtMsg(L("Đã ghi ", "Saved ") + n + " = " + dtGroup(rd.s) + L(" vào sổ tay và giấy nháp.", " to the notebook and scratch paper."));
+  var m = $("#dtSheet .dtmsg"); if (m) m.classList.add("ok");
+}
+function dtNote(r) { return dispName(r.n) + " = " + dtGroup(r.s) + (r.rem ? L(" dư ", " remainder ") + r.rem : "") + " (" + L("đặt tính", "column method") + ": " + dtShow(r.how) + ")"; }
+function openDt(fromNote) {
+  if (S.g > 5) return;
+  if (DT.ob !== OBS[S.i]) dtReset();
+  closeSheet(); closePar(); hideMenu();
+  if ($("#sRoom").hidden) { show("sRoom"); $("#toolbox").hidden = true; $("#bBox").setAttribute("aria-expanded", "false"); setTool("calc"); }
+  if (fromNote) { openTab("note"); document.body.classList.add("nbws"); renderNotes(); } else { $("#toolbox").hidden = true; $("#bBox").setAttribute("aria-expanded", "false"); openTab("draw"); }
+  var sh = $("#dtSheet"); setVH(); sh.hidden = false; sh.scrollTop = 0; document.body.classList.add("ws"); window.scrollTo(0, 0);
+  dtRender(); wsSwapLbl(); fitSheet(); dtSize(); if (!fromNote) draw();
+}
+function dtClose() {
+  var sh = $("#dtSheet"); if (!sh || sh.hidden) return;
+  sh.hidden = true;
+  if ($("#calcSheet").hidden && $("#parSheet").hidden) document.body.classList.remove("ws");
+  if (document.body.classList.contains("nbws")) { document.body.classList.remove("nbws"); if (!$("#pNote").hidden) renderNotes(); }
+  sizeBoard();
+}
+$("#dtSheet").addEventListener("click", function (e) {
+  var t = e.target.closest("button"); if (!t) return; var d = t.dataset;
+  if ("dclose" in d) { SFX.click(); dtClose(); return; }
+  if (d.dk) { SFX.click(); dtKey(d.dk); return; }
+  if (d.dr != null) { var cr = DT.g.rows[+d.dr]; if (cr.kind === "carry" && DT.cur && DT.g.rows[DT.cur[0]].kind !== "carry") DT.back = DT.cur; if (cr.kind !== "carry") DT.back = null; DT.cur = [+d.dr, +d.dcl]; SFX.click(); dtRender(); return; }
+  if (d.dop) { DT.op = d.dop; if (DT.op !== "+") DT.ins = [DT.ins[0] || "", DT.ins[1] || ""]; DT.f = Math.min(DT.f, DT.ins.length - 1); SFX.click(); dtRender(); return; }
+  if (d.df != null) { DT.f = +d.df; SFX.click(); dtRender(); return; }
+  if (d.dfx != null) { DT.ins.splice(+d.dfx, 1); DT.f = Math.min(DT.f, DT.ins.length - 1); SFX.pull(); dtRender(); return; }
+  if ("dadd" in d) { DT.ins.push(""); DT.f = DT.ins.length - 1; SFX.click(); dtRender(); return; }
+  if (d.dchip != null) { DT.ins[DT.f] = d.dchip; if (DT.f < DT.ins.length - 1) DT.f++; SFX.pick(); dtRender(); return; }
+  if ("dgo" in d) { dtGo(); return; }
+  if ("dback" in d) { DT.g = null; DT.cur = null; SFX.click(); dtRender(); return; }
+  if ("dclr" in d) { DT.g.rows.forEach(function (r) { r.cells.forEach(function (x) { if (x && x.e) { x.d = ""; x.c = false; } }); }); DT.cur = DT.g.start; DT.back = null; SFX.pull(); dtRender(); return; }
+  if ("dsave" in d) { dtSave(false); return; }
+  if ("duse" in d) { dtSave(true); return; }
+});
+document.addEventListener("keydown", function (e) {
+  if (!dtOpen() || e.ctrlKey || e.metaKey || e.altKey) return;
+  var tg = e.target; if (tg && (tg.isContentEditable || /^(INPUT|TEXTAREA)$/.test(tg.nodeName))) return;
+  var k = e.key; if (k === ".") k = ","; if (k === "Backspace") k = "⌫";
+  if (/^[0-9,⌫]$/.test(k)) { e.preventDefault(); dtKey(k); }
+  else if (k === "Enter" && !DT.g) { e.preventDefault(); dtGo(); }
+});
+document.addEventListener("click", function (e) { if (e.target.closest("[data-nbdt]")) { SFX.click(); openDt(true); } });
+$("#bDt").addEventListener("click", function () { SFX.click(); openDt(false); });
+if (window.ResizeObserver) new ResizeObserver(function () { if (isWS()) requestAnimationFrame(function () { fitSheet(); dtSize(); }); }).observe($("#dtSheet"));
+Object.assign(EN, { "Đặt tính": "Column method" });
+
+/* ---------- dòng chữ nhỏ dưới tên mỗi câu chuyện: em sẽ ôn kiến thức gì (bản 3.18) ----------
+   Câu chuyện trải từ 2 mạch kiến thức trở lên thì ghi "Kiến thức tổng hợp". */
+var SCEN_TAG = {
+  vuon: function (g) { return g === 4 ? ["Diện tích hình chữ nhật", "Rectangle area"] : ["Diện tích các hình", "Areas of shapes"]; },
+  cho: ["Kiến thức tổng hợp", "Mixed topics"],
+  baotang: ["Góc · Khối lượng · Thế kỷ", "Angles · Mass · Centuries"],
+  langchai: ["Cộng trừ số lớn · Phép chia · Tổng – hiệu", "Big numbers · Division · Sum and difference"],
+  trongrung: ["Trung bình cộng · Chia có dư · Tổng – hiệu", "Averages · Remainders · Sum and difference"],
+  xaydung: ["Song song, vuông góc · Hình thoi · Hình bình hành", "Parallel, perpendicular · Rhombus · Parallelogram"],
+  nongtrai: ["Diện tích · Đổi m², dm², cm²", "Area · m², dm², cm²"],
+  quaynuoc: ["Phân số", "Fractions"],
+  vuonhoa: ["Tam giác · Hình thang · Hình tròn", "Triangle · Trapezium · Circle"],
+  lehoi: ["Tỉ số · Khả năng xảy ra · Phần trăm", "Ratios · Chance · Percentages"],
+  thucung: ["Biểu đồ hình quạt · Phần trăm", "Pie charts · Percentages"],
+  tiembanh: ["Hình hộp: diện tích, thể tích", "Boxes: surface area, volume"],
+  km: ["Kiến thức tổng hợp", "Mixed topics"],
+  trai: ["Kiến thức tổng hợp", "Mixed topics"],
+  dothi: ["Kiến thức tổng hợp", "Mixed topics"],
+  taichinh: ["Hàm số bậc nhất · Hệ phương trình", "Linear functions · Simultaneous equations"],
+  haitrinh: ["Kiến thức tổng hợp", "Mixed topics"],
+  xuong3d: ["Hình trụ, hình cầu, hình nón", "Cylinder, sphere, cone"]
+};
+function scenTags() {
+  document.querySelectorAll("#scenPick [data-scen], #scenPick2 [data-scen2]").forEach(function (b) {
+    var t = SCEN_TAG[b.dataset.scen || b.dataset.scen2]; if (typeof t === "function") t = t(S.g);
+    var sp = b.querySelector(".ktag"); if (!t) { if (sp) sp.remove(); return; }
+    if (!sp) { sp = document.createElement("span"); sp.className = "ktag"; b.appendChild(sp); }
+    sp.textContent = L(t[0], t[1]);
+  });
+}
+
 applyStatic(); syncSnd(); renderRoute(); renderResume();
-window.__khemay = { S9OB: S9OB, setLang: setLang, MISSING: MISSING, TX: TX,  readSave: readSave, snapshot: snapshot,  OB4: OB4, OB5: OB5, OB6: OB6, ROW: ROW, setRoute: function (a) { S.route = a.map(function (n) { return OBK[n]; }); renderRoute(); }, view: function () { return VIEW; }, OB3: OB3, getOBS: function () { return OBS; }, loadOb: loadOb, SFX: SFX, SND: SND, showReport: showReport, CAS: CAS, keyPress: keyPress, calcVars: calcVars, calcC: function () { return C; }, outTxt: outTxt, OB1: OB1, OB2: OB2, S: S, findPt: findPt, P: P };
+window.__khemay = { DT: DT, dtKey: dtKey, openDt: openDt, S9OB: S9OB, setLang: setLang, MISSING: MISSING, TX: TX,  readSave: readSave, snapshot: snapshot,  OB4: OB4, OB5: OB5, OB6: OB6, ROW: ROW, setRoute: function (a) { S.route = a.map(function (n) { return OBK[n]; }); renderRoute(); }, view: function () { return VIEW; }, OB3: OB3, getOBS: function () { return OBS; }, loadOb: loadOb, SFX: SFX, SND: SND, showReport: showReport, CAS: CAS, keyPress: keyPress, calcVars: calcVars, calcC: function () { return C; }, outTxt: outTxt, OB1: OB1, OB2: OB2, S: S, findPt: findPt, P: P };
 })();
 </script>
 
