@@ -9049,7 +9049,13 @@ function openSheet(tgt) {
   if (!calcOK()) { toast(L("Cấp 1 tự tính: bấm nút Đặt tính để tính theo cột.", "Primary level works it out by hand: tap Column method.")); SFX.nope(); return; }
   if (tgt !== undefined) S.tgt = tgt;
   closePar(); var sh = $("#calcSheet"); setVH(); sh.hidden = false; document.body.classList.add("ws"); document.body.classList.add("calc"); window.scrollTo(0, 0);
-  if (C.just) { calcClear(); }
+  /* bản 3.21: mở lại máy tính thì giữ nguyên phép tính, kết quả và chế độ lần trước (như máy thật chỉ bị ẩn đi);
+     lần mở đầu tiên sau khi tải lại trang thì hiện lại phép tính gần nhất trong lịch sử */
+  if (!CAS.restored) {
+    CAS.restored = true;
+    var hL = CAS.histL && CAS.histL[CAS.histL.length - 1];
+    if (hL && hL.s && !C.root.items.length && !C.just && CAS.view === "edit" && (hL.m || "comp") === CAS.mode) { try { loadRow(hL.s); doEq(); } catch (e) { calcClear(); } }
+  }
   toast(""); updLcd(); fitSheet(); wsSwapLbl(); draw();
 }
 function setVH() {
@@ -10766,7 +10772,7 @@ $("#cSave").addEventListener("click", function () {
   var shown = fc(Math.round(C.ans * 100) / 100);
   S.results.push({ n: n, val: C.ans, unit: unit, how: C.lastTxt });
   toast(TX("Đã ghi ") + dispName(n) + " = " + shown + (unit === "m" ? " m" : unit) + TX(" vào sổ tay."));
-  S.tgt = null; calcClear(); render(); updLcd(); draw(); SFX.pick();
+  S.tgt = null; render(); updLcd(); draw(); SFX.pick();
   if (!$("#pNote").hidden) { renderNotes(); var nl = $("#pNote .nlist li:last-child"); if (nl) { nl.classList.add("justin"); nl.scrollIntoView({ block: "nearest" }); } }
 });
 $("#cUse").addEventListener("click", function () {
@@ -11196,7 +11202,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.20";
+var APP_VER = "3.21";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
