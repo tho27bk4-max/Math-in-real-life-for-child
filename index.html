@@ -891,7 +891,7 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
   <div class="levels" id="grades">
     <button class="lvl lv1" type="button" data-g="4" aria-pressed="false"><b>Cấp 1</b><span>Lớp 4, 5</span><em>8 câu chuyện</em></button>
     <button class="lvl lv2" type="button" data-g="9" aria-pressed="true"><b>Cấp 2</b><span>Lớp 6–9</span><em>Khe Mây · Trại hè · Ôn thi 10</em></button>
-    <button class="lvl lv3" type="button" data-g="10" aria-pressed="false"><b>Cấp 3</b><span>Lớp 10, 11, 12</span><em>Khe Mây · Hình giải tích</em></button>
+    <button class="lvl lv3" type="button" data-g="10" aria-pressed="false"><b>Cấp 3</b><span>Lớp 10, 11, 12</span><em>Khe Mây · Cấp số · Hình giải tích</em></button>
   </div>
   <div class="subgrade" id="subG" role="group" aria-label="Chọn lớp" hidden><span>Em học lớp</span><button type="button" data-sg="4" aria-pressed="true">Lớp 4</button><button type="button" data-sg="5" aria-pressed="false">Lớp 5</button></div>
   <div class="card resume" id="resumeBox" hidden></div>
@@ -6386,32 +6386,32 @@ NT1.badgeAt = function (p) { var g = this.geo(p); return { a: [180, g.y + g.h + 
    vai_tro   : rut_ngau_nhien (2 chướng ngại đầu) | cuoi_cap3 (chướng ngại cuối cấp 3) | cap1_vuon (kịch bản khu vườn, lớp 4–5) | cap1_cho (kịch bản đi chợ, lớp 4–5; M4 luôn là chặng cuối) | cap2_trai (kịch bản Trại hè Rừng Xanh, cấp 2, học sinh tự chọn thứ tự)
    trang_thai: dang_dung | an (giữ code, không rút)                                   */
 var CATALOG = [
-  { id: "KM-HH-001", key: "OB1", ten: { vi: "Khe suối", en: "Stream gully" }, cap: [2, 3], lop: [8, 9, 10, 11],
+  { id: "KM-HH-001", key: "OB1", ten: { vi: "Khe suối", en: "Stream gully" }, cap: [2, 3], lop: [8, 9, 10],
     chu_de: { vi: ["tam giác đồng dạng / vẽ tỉ lệ", "tỉ số lượng giác góc nhọn", "định lý sin"], en: ["similar triangles / scale drawing", "trigonometric ratios", "sine rule"] },
     yccd: { vi: ["Giải tam giác vuông", "Giải tam giác, ứng dụng đo đạc"], en: ["Solving right triangles", "Solving triangles, surveying applications"] },
     do_kho: { cap2: 1, cap3: 2 }, goc_nhin: "tren_xuong", dap_an: { loai: "do_dai", don_vi: "m", sai_so: "dầm ≥ AT + 1 m, thừa ≤ 0,5 m" },
     dung_cu_can: ["thuoc_day", "thuoc_ngam"], vai_tro: "rut_ngau_nhien", trang_thai: "dang_dung" },
-  { id: "KM-HH-002", key: "OB2", ten: { vi: "Hồ nước", en: "Pond" }, cap: [2, 3], lop: [8, 9, 10, 11],
+  { id: "KM-HH-002", key: "OB2", ten: { vi: "Hồ nước", en: "Pond" }, cap: [2, 3], lop: [8, 9, 10],
     chu_de: { vi: ["định lý Pytago", "vẽ tỉ lệ", "định lý côsin"], en: ["Pythagoras", "scale drawing", "cosine rule"] },
     yccd: { vi: ["Định lý Pytago", "Giải tam giác, ứng dụng đo đạc"], en: ["Pythagorean theorem", "Solving triangles, surveying applications"] },
     do_kho: { cap2: 2, cap3: 2 }, goc_nhin: "tren_xuong", dap_an: { loai: "do_dai", don_vi: "m", sai_so: "±1,5 % (lớp 8: ±4 %)" },
     dung_cu_can: ["thuoc_day", "thuoc_ngam"], vai_tro: "rut_ngau_nhien", trang_thai: "dang_dung" },
-  { id: "KM-HH-003", key: "OB3", ten: { vi: "Hồ lớn", en: "Big lake" }, cap: [3], lop: [10, 11],
+  { id: "KM-HH-003", key: "OB3", ten: { vi: "Hồ lớn", en: "Big lake" }, cap: [3], lop: [10],
     chu_de: { vi: ["định lý sin", "định lý côsin", "tứ giác"], en: ["sine rule", "cosine rule", "quadrilateral"] },
     yccd: { vi: ["Giải tam giác, ứng dụng đo đạc"], en: ["Solving triangles, surveying applications"] },
     do_kho: { cap3: 4 }, goc_nhin: "tren_xuong", dap_an: { loai: "do_dai", don_vi: "m", sai_so: "±2,5 %" },
     dung_cu_can: ["thuoc_day_30", "thuoc_ngam"], vai_tro: "cuoi_cap3", trang_thai: "dang_dung" },
-  { id: "KM-HH-004", key: "OB4", ten: { vi: "Cáp treo", en: "Cable car" }, cap: [2, 3], lop: [8, 9, 10, 11],
+  { id: "KM-HH-004", key: "OB4", ten: { vi: "Cáp treo", en: "Cable car" }, cap: [2, 3], lop: [8, 9, 10],
     chu_de: { vi: ["góc nâng, tỉ số lượng giác", "định lý sin"], en: ["angle of elevation, trigonometric ratios", "sine rule"] },
     yccd: { vi: ["Giải tam giác vuông", "Giải tam giác, ứng dụng đo đạc"], en: ["Solving right triangles", "Solving triangles, surveying applications"] },
     do_kho: { cap2: 3, cap3: 2 }, goc_nhin: "nhin_ngang", dap_an: { loai: "do_dai", don_vi: "m", sai_so: "±2 % (lớp 8: ±4 %)" },
     dung_cu_can: ["thuoc_day", "thuoc_ngam"], vai_tro: "rut_ngau_nhien", trang_thai: "dang_dung" },
-  { id: "KM-HH-005", key: "OB5", ten: { vi: "Cầu ngắn nhất", en: "Shortest bridge" }, cap: [2, 3], lop: [8, 9, 10, 11],
+  { id: "KM-HH-005", key: "OB5", ten: { vi: "Cầu ngắn nhất", en: "Shortest bridge" }, cap: [2, 3], lop: [8, 9, 10],
     chu_de: { vi: ["tam giác đồng dạng, định lý Thalès", "phép tịnh tiến", "cực trị hình học"], en: ["similar triangles, Thales", "translation", "geometric optimisation"] },
     yccd: { vi: ["Định lý Thalès, tam giác đồng dạng", "Phép tịnh tiến"], en: ["Thales theorem, similar triangles", "Translation"] },
     do_kho: { cap2: 3, cap3: 3 }, goc_nhin: "tren_xuong", dap_an: { loai: "vi_tri", don_vi: "m", sai_so: "±1 m" },
     dung_cu_can: ["thuoc_day", "eke", "thuyen"], vai_tro: "rut_ngau_nhien", trang_thai: "an" },
-  { id: "KM-HS-001", key: "OB6", ten: { vi: "Hầm chui parabol", en: "Parabolic underpass" }, cap: [2, 3], lop: [9, 10, 11],
+  { id: "KM-HS-001", key: "OB6", ten: { vi: "Hầm chui parabol", en: "Parabolic underpass" }, cap: [2, 3], lop: [9, 10],
     chu_de: { vi: ["hàm số y = ax²", "hàm số bậc hai", "hệ phương trình bậc nhất ba ẩn"], en: ["function y = ax²", "quadratic function", "linear system in three unknowns"] },
     yccd: { vi: ["Hàm số y = ax² (a ≠ 0)", "Hàm số bậc hai, ứng dụng thực tiễn"], en: ["The function y = ax² (a ≠ 0)", "Quadratic functions in real-life problems"] },
     do_kho: { cap2: 2, cap3: 2 }, goc_nhin: "chinh_dien", dap_an: { loai: "chieu_cao", don_vi: "m", sai_so: "±0,12 m" },
@@ -6530,7 +6530,7 @@ var S12 = {
   }
 };
 var S12_ORDER = ["mp", "dt", "mc", "th"];
-function isS12() { return S.g === 12; }
+function isS12() { return S.g === 11 || S.g === 12; }
 
 /* ---------- định dạng số, điểm, mặt phẳng, đường thẳng ---------- */
 function c3(v) { v = Math.round(v * 100) / 100; if (Math.abs(v) < 1e-9) v = 0; return (v < 0 ? "−" : "") + fmt(Math.abs(v), 2); }
@@ -7461,6 +7461,434 @@ function S12_HERO(id, end) {
   return o + "</svg>";
 }
 
+/* ================= CẤP 3 · LỚP 11 · CHUYÊN ĐỀ CẤP SỐ CỘNG, CẤP SỐ NHÂN (bản 3.22) =================
+   Từ file "Kịch bản Toán 11 – Cấp số cộng & Cấp số nhân" (Hành trình truy tìm kho báu) của nhóm soạn bài.
+   Đáp án trong file đều đúng; chuyển bối cảnh sang đời thật: trò chơi mật thư "Truy tìm kho báu" ở ngày hội khám phá hang động.
+   Thử thách 4 (đài đá tự thu năng lượng gấp ba) đổi thành lượt chia sẻ clip giới thiệu hang; quả cầu vàng nảy đổi thành bóng cao su.
+   Mỗi trạm có một khóa số, mật mã là đáp án. Số liệu ngẫu nhiên, đáp án luôn là số đẹp. */
+S12.cs = {
+  btn: ["Truy tìm kho báu", "Treasure hunt"], code: 11,
+  title: ["Truy tìm kho báu trong hang động", "Treasure Hunt in the Cave"],
+  lead: ["Khu du lịch hang động tổ chức <b>ngày hội khám phá</b> với trò chơi mật thư <b>Truy tìm kho báu</b>. Đi qua 5 trạm trong hang, mỗi trạm có một khóa số. Mật mã là đáp án một bài toán về <b>cấp số cộng, cấp số nhân</b>. Mở đủ 5 khóa là em lấy được rương kho báu!",
+    "The cave park is holding a <b>discovery festival</b> with a code-trail game: <b>Treasure Hunt</b>. Pass 5 stations inside the cave, each with a number lock. Each code is the answer to a problem about <b>arithmetic and geometric sequences</b>. Open all 5 locks to claim the treasure chest!"],
+  first: ["Chào em! Anh là hướng dẫn viên của hang. ", "Hello! I'm the cave guide. "],
+  next: ["Khóa đã mở! Đi tiếp vào sâu trong hang nào. ", "The lock is open! Let's go deeper into the cave. "],
+  endTitle: ["Đã tìm thấy kho báu!", "Treasure found!"],
+  endText: ["Rương kho báu bật mở: bên trong là huy hiệu Nhà thám hiểm hang động và quà lưu niệm cho cả nhóm. Cảm ơn em đã giải đủ 5 mật thư!", "The treasure chest pops open: inside are Cave Explorer badges and souvenirs for the whole team. Well done on cracking all 5 codes!"],
+  lastBtn: ["Mở rương kho báu", "Open the treasure chest"]
+};
+var S11_ORDER = ["cs"];
+var CD_INFO = {
+  11: { lab: ["Chuyên đề Cấp số cộng, cấp số nhân:", "Topic: arithmetic and geometric sequences:"], lvl: ["Cấp 3 · Lớp 11 · Chuyên đề Cấp số cộng, cấp số nhân", "Upper secondary · Grade 11 · Sequences"], short: ["Lớp 11 · Cấp số", "Grade 11 · Sequences"] },
+  12: { lab: ["Chuyên đề Hình giải tích:", "Coordinate geometry topic:"], lvl: ["Cấp 3 · Lớp 12 · Chuyên đề Hình giải tích", "Upper secondary · Grade 12 · Coordinate geometry"], short: ["Lớp 12 · Hình giải tích", "Grade 12 · Coordinate geometry"] }
+};
+function cdOrder() { return S.g === 11 ? S11_ORDER : S12_ORDER; }
+function cdFix() { var o = cdOrder(); if (o.indexOf(S.scen3) < 0) S.scen3 = o[0]; return S.scen3; }
+
+/* ---------- nền hang động và đồ vật ---------- */
+var CVN = 0, CVU = "cv0";
+function caveBg(H, seed) {
+  var u = CVU = "cv" + (++CVN);
+  var o = '<defs><linearGradient id="' + u + 'g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d2f63"/><stop offset=".6" stop-color="#2a2048"/><stop offset="1" stop-color="#1a1430"/></linearGradient>' +
+    '<radialGradient id="' + u + 'l" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".85"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>' +
+    '<radialGradient id="' + u + 'c" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#9be7ff" stop-opacity=".75"/><stop offset="1" stop-color="#9be7ff" stop-opacity="0"/></radialGradient></defs>';
+  o += '<rect width="360" height="' + H + '" fill="url(#' + u + 'g)"/>';
+  var d = "M0 0 H360 V14", xs = [348, 336, 322, 306, 290, 272, 256, 238, 220, 204, 186, 168, 150, 132, 114, 96, 80, 62, 46, 30, 14, 0];
+  xs.forEach(function (x, i) { d += " L" + x + " " + (i % 2 ? 14 + ((i * 37 + (seed || 0)) % 5) * 7 : 10); });
+  o += '<path d="' + d + ' Z" fill="#54467f" stroke="#1a1430" stroke-width="1.6"/>';
+  [[34, 70], [326, 96], [180, 40]].forEach(function (l) { o += '<circle cx="' + l[0] + '" cy="' + l[1] + '" r="34" fill="url(#' + u + 'l)"/><path d="M' + l[0] + " " + (l[1] - 26) + " V" + (l[1] - 8) + '" stroke="#8d6e63" stroke-width="1.5"/><rect x="' + (l[0] - 5) + '" y="' + (l[1] - 8) + '" width="10" height="13" rx="3" fill="#ffcf3f" stroke="#5d4037" stroke-width="1.4"/>'; });
+  var cr = function (x, y, s, c) { return '<g transform="translate(' + x + " " + y + ") scale(" + s + ')"><circle r="22" fill="url(#' + u + 'c)"/><path d="M-9 0 L-5 -22 L0 -6 L4 -28 L9 0 Z" fill="' + c + '" stroke="#e1f5fe" stroke-width="1.2" stroke-linejoin="round"/><path d="M4 -28 L2 -4" stroke="#fff" stroke-width="1" opacity=".7"/></g>'; };
+  o += cr(18, H - 8, 1, "#80deea") + cr(40, H - 4, 0.7, "#ce93d8") + cr(338, H - 6, 1.1, "#ce93d8") + cr(316, H - 4, 0.6, "#80deea");
+  o += '<path d="M0 ' + (H - 14) + ' Q60 ' + (H - 26) + ' 120 ' + (H - 16) + ' T240 ' + (H - 18) + ' T360 ' + (H - 14) + ' V' + H + ' H0 Z" fill="#231b3d"/>';
+  return o;
+}
+function lockBox(x, y, code, ok, bad) {
+  var o = '<g transform="translate(' + x + " " + y + ')"><path d="M-14 -4 V-14 A14 14 0 0 1 14 -14 V-4" fill="none" stroke="#b0bec5" stroke-width="5"/><rect x="-24" y="-6" width="48" height="36" rx="6" fill="' + (ok ? "#2e7d32" : bad ? "#e53935" : "#ffb300") + '" stroke="#3e2723" stroke-width="2"/>';
+  return o + T2(0, 18, code, { a: "middle", fs: 12, fw: 800, c: "#fff" }) + "</g>";
+}
+function gearP(cx, cy, r, n, fill, rot) {
+  n = n || Math.max(8, Math.round(r / 3)); var d = "", t = r * 0.16, ri = r - t;
+  for (var i = 0; i < n * 2; i++) { var a0 = (i / (n * 2)) * Math.PI * 2 + (rot || 0), a1 = ((i + 1) / (n * 2)) * Math.PI * 2 + (rot || 0), R = i % 2 ? ri : r + t * 0.2;
+    d += (i ? " L" : "M") + (cx + R * Math.cos(a0 + 0.08)).toFixed(1) + " " + (cy + R * Math.sin(a0 + 0.08)).toFixed(1) + " L" + (cx + R * Math.cos(a1 - 0.08)).toFixed(1) + " " + (cy + R * Math.sin(a1 - 0.08)).toFixed(1); }
+  return '<path d="' + d + ' Z" fill="' + (fill || "#ffca28") + '" stroke="#5d4037" stroke-width="1.6" stroke-linejoin="round"/><circle cx="' + cx + '" cy="' + cy + '" r="' + Math.max(2.5, r * 0.28) + '" fill="#8d6e63" stroke="#3e2723" stroke-width="1.4"/>';
+}
+function tapR(x, y, w, h, it) { return '<rect data-it="' + it + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#fff" fill-opacity="0" style="cursor:pointer"/>'; }
+function cspill(x, y, t, col) { var w = 12 + String(t).replace(/<[^>]*>/g, "").length * 6.6; return '<rect x="' + (x - w / 2) + '" y="' + (y - 13) + '" width="' + w + '" height="20" rx="10" fill="' + (col || "#fff") + '" stroke="#3e2723" stroke-width="1.4"/>' + T2(x, y + 1.5, t, { a: "middle", fs: 11.5, fw: 800 }); }
+var CS_CARD = "#5e35b1";
+function supN(n) { return String(n).split("").map(function (c) { return "⁰¹²³⁴⁵⁶⁷⁸⁹"[+c] || c; }).join(""); }
+
+/* CS1 · Cầu thang nhiều nhịp (KM-DS-1101): số hạng thứ n của cấp số cộng */
+var CS1 = s12Job("cs", {
+  name: ["Cầu thang nhiều nhịp", "The multi-flight stairs"], sub: ["số bậc của nhịp thứ n (cấp số cộng)", "steps in flight n (arithmetic sequence)"],
+  endName: ["cầu thang", "staircase"], what: ["Số bậc của nhịp cuối cùng (mật mã trạm 1)", "Steps in the last flight (station 1 code)"], unit: "", dp: 0,
+  btnText: ["Nhập mật mã", "Enter the code"], H: 440,
+  lead: ["Trạm 1 ở đỉnh một cầu thang gỗ chia nhiều nhịp men theo vách hang. Mật mã của khóa là <b>số bậc của nhịp cuối cùng</b>. Đếm các nhịp đầu để tìm quy luật nhé!",
+    "Station 1 is at the top of a wooden staircase with many flights along the cave wall. The lock code is the <b>number of steps in the last flight</b>. Count the first flights to find the pattern!"],
+  taskT: function (p) { return L("<b>Nhiệm vụ:</b> cầu thang có " + p.n + " nhịp, số bậc các nhịp lập thành cấp số cộng. Tìm số bậc của nhịp thứ " + p.n + ".<br><b>Cần tìm:</b> số bậc (số tự nhiên).<br><b>Dữ kiện:</b> chạm vào từng nhịp đầu để đếm bậc, chạm biển báo để biết số nhịp.",
+    "<b>Task:</b> the staircase has " + p.n + " flights and the step counts form an arithmetic sequence. Find the number of steps in flight " + p.n + ".<br><b>Find:</b> the number of steps (a whole number).<br><b>Data:</b> tap the first flights to count their steps and tap the sign for the number of flights."); },
+  make: function () { var u1 = rnd(6, 12), d = rnd(1, 3), n = rnd(7, 13); return { u1: u1, d: d, n: n, ans: u1 + (n - 1) * d }; },
+  tol: function () { return 0.01; },
+  stair: function (k, x0, y0, w, h, dir, col, sw) {
+    var sx = w / k, sy = h / k, x = x0, y = y0, d = "M" + x0 + " " + y0;
+    for (var i = 0; i < k; i++) { y -= sy; d += " V" + y.toFixed(1); x += sx; d += " H" + x.toFixed(1); }
+    var o = '<path d="' + d + " L" + (x0 + w).toFixed(1) + " " + (y0 - h + 9).toFixed(1) + " L" + x0 + " " + (y0 + 9) + ' Z" fill="' + (col || "#8d6e63") + '" stroke="#3e2723" stroke-width="' + (sw || 1.4) + '" stroke-linejoin="round"/>';
+    x = x0; y = y0; for (i = 0; i < k; i++) { y -= sy; x += sx; o += '<path d="M' + (x - sx).toFixed(1) + " " + y.toFixed(1) + " H" + x.toFixed(1) + '" stroke="#ffe0b2" stroke-width="1.6" stroke-linecap="round"/>'; }
+    o += '<path d="M' + x0 + " " + (y0 - 22) + " L" + (x0 + w).toFixed(1) + " " + (y0 - h - 22).toFixed(1) + '" stroke="#d7ccc8" stroke-width="2.4" stroke-linecap="round"/>';
+    for (i = 0; i <= 4; i++) { var px = x0 + w * i / 4, py = y0 - h * i / 4; o += '<path d="M' + px.toFixed(1) + " " + (py - 22).toFixed(1) + " V" + (py - 2).toFixed(1) + '" stroke="#d7ccc8" stroke-width="1.6"/>'; }
+    return o;
+  },
+  base: function (p) {
+    var o = caveBg(p.bottom, 3), me = this, fl = [[78, 404, 1], [282, 352, -1], [78, 300, 1]];
+    o += '<path d="M14 412 H346" stroke="#4e342e" stroke-width="6" stroke-linecap="round"/>';
+    [[38, 404], [322, 352], [38, 300], [322, 248]].forEach(function (l) { o += '<rect x="' + (l[0] - 30) + '" y="' + l[1] + '" width="60" height="9" rx="2" fill="#6d4c41" stroke="#3e2723" stroke-width="1.4"/><path d="M' + (l[0] - 24) + " " + (l[1] + 9) + " V" + (l[1] + 52) + " M" + (l[0] + 24) + " " + (l[1] + 9) + " V" + (l[1] + 52) + '" stroke="#5d4037" stroke-width="3"/>'; });
+    fl.forEach(function (f, i) {
+      var k = p.u1 + i * p.d, it = "f" + (i + 1), w = f[2] * 204, x0 = f[2] > 0 ? f[0] - 10 : f[0] + 10;
+      o += me.stair(k, x0, f[1], w, 52, 1, p.seen[it] ? "#a1887f" : "#795548");
+      var lx = x0 + w / 2, ly = f[1] - 26;
+      o += p.seen[it] ? cspill(lx, ly + 20, L("Nhịp " + (i + 1) + ": " + k + " bậc", "Flight " + (i + 1) + ": " + k + " steps"), "#fff3e0") : qBadge(lx, ly + 12);
+      o += tapR(Math.min(x0, x0 + w), f[1] - 60, 204, 66, it);
+    });
+    o += '<g transform="translate(60 404)"><circle cy="-38" r="7" fill="#f2c28b" stroke="#3e2723" stroke-width="1.6"/><path d="M-8 -40 Q0 -52 8 -40" fill="#ff7043" stroke="#3e2723" stroke-width="1.4"/><circle cx="0" cy="-47" r="2.5" fill="#fff59d"/><rect x="-6" y="-31" width="12" height="17" rx="4" fill="#26a69a" stroke="#3e2723" stroke-width="1.6"/><path d="M-3 -14 V0 M3 -14 V0" stroke="#3e2723" stroke-width="2.4"/></g>';
+    o += '<path d="M180 240 V176" stroke="#d7ccc8" stroke-width="3" stroke-dasharray="3 7" stroke-linecap="round"/>' + T2(190, 214, L("… nhịp 4 đến nhịp " + (p.n - 1) + " …", "… flights 4 to " + (p.n - 1) + " …"), { fs: 11.5, fw: 700, c: "#d1c4e9" });
+    o += '<path d="M68 166 L282 118" stroke="#ffcf3f" stroke-width="2.4" stroke-dasharray="7 5"/>' + T2(86, 152, L("Nhịp " + p.n + ": ? bậc", "Flight " + p.n + ": ? steps"), { fs: 13, fw: 800, c: "#ffe082" });
+    o += '<rect x="282" y="118" width="70" height="9" rx="2" fill="#6d4c41" stroke="#3e2723" stroke-width="1.4"/><ellipse cx="316" cy="92" rx="38" ry="22" fill="url(#' + CVU + 'l)"/>' + lockBox(316, 84, "? ? ?", false);
+    o += '<g data-it="s" style="cursor:pointer"><rect x="14" y="40" width="160" height="40" rx="8" fill="' + (p.seen.s ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(24, 56, L("BIỂN BÁO", "SIGN"), { fs: 11, fw: 800, c: CS_CARD }) + T2(24, 73, p.seen.s ? L("Cầu thang có " + p.n + " nhịp", "The stairs have " + p.n + " flights") : L("chạm để xem", "tap to read"), { fs: 12, fw: 800, c: p.seen.s ? INK : "#90a4ae" }) + "</g>" + (p.seen.s ? "" : qBadge(164, 50));
+    return o;
+  },
+  items: function (p) {
+    var o = { s: { note: ["Cầu thang có " + p.n + " nhịp", "The staircase has " + p.n + " flights"], val: p.n, sym: "n", sfx: "pick", say: ["Biển báo: cầu thang có <b>" + p.n + " nhịp</b>.", "Sign: the staircase has <b>" + p.n + " flights</b>."] } };
+    [1, 2, 3].forEach(function (i) { var k = p.u1 + (i - 1) * p.d; o["f" + i] = { note: ["Nhịp " + i + ": " + k + " bậc", "Flight " + i + ": " + k + " steps"], val: k, sym: "u" + ["₁", "₂", "₃"][i - 1], sfx: "pick", say: ["Em đếm được nhịp " + i + " có <b>" + k + " bậc</b>.", "You count <b>" + k + " steps</b> in flight " + i + "."] }; });
+    return o;
+  },
+  special: function (p, v) {
+    if (Math.abs(v - (p.u1 + p.n * p.d)) < 0.01) return { ok: false, kind: "long", msg: L("Nhịp thứ n có u₁ + (n − 1)d bậc, không phải u₁ + n·d.", "Flight n has u₁ + (n − 1)d steps, not u₁ + n·d.") };
+    if (Math.abs(v - p.n * (2 * p.u1 + (p.n - 1) * p.d) / 2) < 0.01) return { ok: false, kind: "long", msg: L("Đó là tổng số bậc của cả cầu thang. Mật mã chỉ là số bậc của nhịp cuối.", "That's the total number of steps. The code is only the steps in the last flight.") };
+    return null;
+  },
+  fx: function (p, k, v) { var kk = Math.max(1, Math.min(80, Math.round(v))), r = kk / p.ans, w = Math.min(270, 214 * r), h = 48 * Math.min(1.25, r);
+    return this.stair(kk, 68, 166, w, h, 1, k === "ok" ? "#66bb6a" : "#ef5350", 1.6) + (k === "ok" ? lockBox(316, 84, String(p.ans), true) : lockBox(316, 84, fmt(v, 2), false, true) + T2(110, 196, k === "short" ? L("Chưa lên tới trạm!", "Not up to the station!") : L("Vượt quá trạm!", "Past the station!"), { fs: 13, fw: 800, c: "#ff8a80" })); },
+  okMsg: ["Đúng mật mã! Khóa trạm 1 bật mở.", "Right code! The station 1 lock clicks open."],
+  shortMsg: ["Chưa đủ bậc, cầu thang chưa lên tới trạm. Kiểm tra lại công sai và số nhịp.", "Not enough steps to reach the station. Check the common difference and the number of flights."],
+  longMsg: ["Thừa bậc, vượt quá chỗ trạm. Kiểm tra lại công sai và số nhịp.", "Too many steps, past the station. Check the common difference and the number of flights."],
+  passTitle: ["khóa trạm 1 đã mở!", "station 1 unlocked!"],
+  rows: function (p) { return [["u₁, d", p.u1 + "; " + p.d], ["n", p.n], ["uₙ = u₁ + (n − 1)d", p.u1 + " + " + (p.n - 1) + "·" + p.d + " = " + p.ans]]; },
+  formula: function () { return "uₙ = u₁ + (n − 1)d"; },
+  hints: function () { return [
+    L("Đếm bậc ba nhịp đầu: mỗi nhịp hơn nhịp trước cùng một số bậc, đó là <b>cấp số cộng</b> với công sai d.", "Count the first three flights: each has the same number of extra steps, so it's an <b>arithmetic sequence</b> with common difference d."),
+    L("Số hạng thứ n: uₙ = u₁ + (n − 1)d. Nhịp cuối là nhịp thứ n (đọc ở biển báo).", "The n-th term: uₙ = u₁ + (n − 1)d. The last flight is flight n (read the sign)."),
+    L("Ví dụ: u₁ = 10, d = 2, n = 10: u₁₀ = 10 + 9·2 = 28 bậc.", "Example: u₁ = 10, d = 2, n = 10: u₁₀ = 10 + 9·2 = 28 steps.")]; }
+});
+
+/* CS2 · Cổng bánh răng (KM-DS-1102): số hạng thứ n của cấp số nhân */
+var CS2 = s12Job("cs", {
+  name: ["Cổng bánh răng", "The gear gate"], sub: ["bán kính bánh răng thứ n (cấp số nhân)", "radius of gear n (geometric sequence)"],
+  endName: ["cổng bánh răng", "gear gate"], what: ["Bán kính bánh răng còn thiếu (cm)", "Radius of the missing gear (cm)"], unit: "cm", dp: 2,
+  btnText: ["Lắp bánh răng", "Fit the gear"], H: 430,
+  lead: ["Trạm 2 là mô hình <b>cổng cơ khí</b> chạy bằng một dãy bánh răng. Bánh răng cuối cùng bị tháo ra để làm mật mã: em phải tính đúng <b>bán kính của nó</b> thì mới lắp vừa.",
+    "Station 2 is a model <b>mechanical gate</b> driven by a row of gears. The last gear has been taken out as the puzzle: work out its <b>radius</b> to fit it back."],
+  taskT: function (p) { return L("<b>Nhiệm vụ:</b> bán kính các bánh răng lập thành cấp số nhân. Tính bán kính bánh răng thứ " + p.n + ".<br><b>Cần tìm:</b> bán kính (cm).<br><b>Dữ kiện:</b> chạm thước kẹp vào các bánh răng đầu, chạm bảng ghi chú để biết số bánh răng.",
+    "<b>Task:</b> the gear radii form a geometric sequence. Find the radius of gear " + p.n + ".<br><b>Find:</b> the radius (cm).<br><b>Data:</b> tap the calliper on the first gears and tap the note for the number of gears."); },
+  make: function () {
+    var c = pickOne([[2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [16, 1.5], [32, 1.5], [8, 1.5]]), u1 = c[0], q = c[1], n;
+    for (var k = 0; k < 50; k++) { n = rnd(5, 7); var un = u1 * Math.pow(q, n - 1); if (un <= 200 && Math.abs(un * 4 - Math.round(un * 4)) < 1e-9) break; }
+    var ans = u1 * Math.pow(q, n - 1); if (ans > 200) return this.make();
+    return { u1: u1, q: q, n: n, ans: ans };
+  },
+  tol: function () { return 0.01; },
+  base: function (p) {
+    var o = caveBg(p.bottom, 7), cy = 282, qv = Math.min(p.q, 1.55), rs = [17, 17 * qv, 17 * qv * qv];
+    o += '<rect x="10" y="' + (cy - 120) + '" width="340" height="240" rx="16" fill="#3e2f22" stroke="#8d6e63" stroke-width="3" opacity=".9"/>';
+    for (var bx = 10; bx < 350; bx += 34) o += '<path d="M' + bx + " " + (cy - 120) + " v240" + '" stroke="#5d4037" stroke-width="1"/>';
+    o += '<path d="M60 ' + (cy - 120) + ' V' + (cy - 60) + ' Q180 ' + (cy - 116) + ' 300 ' + (cy - 60) + ' V' + (cy - 120) + '" fill="#4e3b2f" stroke="#8d6e63" stroke-width="2"/><path d="M180 ' + (cy - 92) + ' V' + (cy - 62) + '" stroke="#8d6e63" stroke-width="2"/>' + T2(180, cy - 100, L("CỔNG CƠ KHÍ", "MECHANICAL GATE"), { a: "middle", fs: 11, fw: 800, c: "#ffcc80" });
+    [70, 290].forEach(function (x0) { o += '<circle cx="' + x0 + '" cy="' + (cy - 70) + '" r="4" fill="#bcaaa4" stroke="#3e2723"/>'; });
+    var x = 46, cx = [];
+    rs.forEach(function (r, i) { if (i) x += rs[i - 1] + r - 2; cx.push(x); });
+    rs.forEach(function (r, i) { var it = "g" + (i + 1); o += gearP(cx[i], cy, r, 0, ["#ffd54f", "#ffca28", "#ffb300"][i], i * 0.3) + '<circle data-it="' + it + '" cx="' + cx[i] + '" cy="' + cy + '" r="' + Math.max(r + 6, 18) + '" fill="#fff" fill-opacity="0" style="cursor:pointer"/>';
+      o += p.seen[it] ? cspill(cx[i], i === 1 ? cy + r + 22 : cy - r - 12, "r" + (i + 1) + " = " + fmt(p.u1 * Math.pow(p.q, i), 2) + " cm", "#fff8e1") : qBadge(cx[i], cy - r - 14); });
+    var lastX = cx[2] + rs[2] + 8; o += T2(lastX, cy + 4, "…", { fs: 22, fw: 800, c: "#ffe082" });
+    o += '<circle cx="296" cy="' + cy + '" r="56" fill="none" stroke="#ffcf3f" stroke-width="2.4" stroke-dasharray="8 6"/>' + T2(296, cy + 5, L("bánh " + p.n + ": ?", "gear " + p.n + ": ?"), { a: "middle", fs: 13, fw: 800, c: "#ffe082" });
+    o += '<g data-it="s" style="cursor:pointer"><rect x="14" y="36" width="190" height="40" rx="8" fill="' + (p.seen.s ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(24, 52, L("GHI CHÚ CỦA THỢ", "FITTER'S NOTE"), { fs: 11, fw: 800, c: CS_CARD }) + T2(24, 69, p.seen.s ? L("Dãy có " + p.n + " bánh răng", "The row has " + p.n + " gears") : L("chạm để xem", "tap to read"), { fs: 12, fw: 800, c: p.seen.s ? INK : "#90a4ae" }) + "</g>" + (p.seen.s ? "" : qBadge(194, 46));
+    o += lockBox(318, 60, "? ? ?", false);
+    return o;
+  },
+  items: function (p) {
+    var o = { s: { note: ["Dãy có " + p.n + " bánh răng", "The row has " + p.n + " gears"], val: p.n, sym: "n", sfx: "pick", say: ["Ghi chú: dãy có <b>" + p.n + " bánh răng</b>, bánh cuối đang bị tháo.", "Note: the row has <b>" + p.n + " gears</b>; the last one is missing."] } };
+    [1, 2, 3].forEach(function (i) { var r = p.u1 * Math.pow(p.q, i - 1); o["g" + i] = { note: ["Bánh răng " + i + ": bán kính " + fmt(r, 2) + " cm", "Gear " + i + ": radius " + fmt(r, 2) + " cm"], val: r, sym: "r" + ["₁", "₂", "₃"][i - 1], sfx: "tape", say: ["Thước kẹp: bánh răng " + i + " có bán kính <b>" + fmt(r, 2) + " cm</b>.", "Calliper: gear " + i + " has radius <b>" + fmt(r, 2) + " cm</b>."] }; });
+    return o;
+  },
+  special: function (p, v) {
+    if (Math.abs(v - p.u1 * Math.pow(p.q, p.n)) < 0.01) return { ok: false, kind: "long", msg: L("Bánh thứ n có bán kính u₁·qⁿ⁻¹ (số mũ là n − 1).", "Gear n has radius u₁·qⁿ⁻¹ (the exponent is n − 1).") };
+    var dd = p.u1 * (p.q - 1); if (Math.abs(v - (p.u1 + (p.n - 1) * dd)) < 0.01) return { ok: false, kind: "short", msg: L("Các bán kính không tăng đều một lượng, mà gấp lên cùng một số lần: đây là cấp số nhân, không phải cấp số cộng.", "The radii don't grow by the same amount; they are multiplied by the same number: it's a geometric sequence, not arithmetic.") };
+    return null;
+  },
+  fx: function (p, k, v) { var r = Math.max(10, Math.min(90, 56 * v / p.ans)); return gearP(296, 282, r, 0, k === "ok" ? "#ffca28" : "#ff8a65", 0.2) + (k === "ok" ? lockBox(318, 60, fmt(p.ans, 2), true) : lockBox(318, 60, fmt(v, 2), false, true) + T2(180, 412, k === "short" ? L("Nhỏ quá, không ăn khớp!", "Too small, it won't mesh!") : L("To quá, kẹt cứng!", "Too big, it jams!"), { a: "middle", fs: 13, fw: 800, c: "#ff8a80" })); },
+  okMsg: ["Vừa khít! Bánh răng ăn khớp, cổng từ từ mở.", "A perfect fit! The gears mesh and the gate slowly opens."],
+  shortMsg: ["Bánh răng nhỏ quá, không ăn khớp với bánh bên cạnh.", "Gear too small, it doesn't mesh with its neighbour."],
+  longMsg: ["Bánh răng to quá, kẹt cứng cả dãy.", "Gear too big, it jams the whole row."],
+  passTitle: ["cổng bánh răng đã mở!", "gear gate open!"],
+  rows: function (p) { return [["u₁, q", fmt(p.u1, 2) + " cm; " + fmt(p.q, 2)], ["n", p.n], ["uₙ = u₁·qⁿ⁻¹", fmt(p.u1, 2) + "·" + fmt(p.q, 2) + supN(p.n - 1) + " = " + fmt(p.ans, 2) + " cm"]]; },
+  formula: function () { return "uₙ = u₁·qⁿ⁻¹, q = u₂ : u₁"; },
+  hints: function () { return [
+    L("So bán kính hai bánh liền nhau: bánh sau gấp bánh trước cùng một số lần, đó là <b>cấp số nhân</b> với công bội q = r₂ : r₁.", "Compare neighbouring radii: each is the same multiple of the one before, so it's a <b>geometric sequence</b> with ratio q = r₂ ÷ r₁."),
+    L("Số hạng thứ n: uₙ = u₁·qⁿ⁻¹. Số bánh răng đọc ở ghi chú của thợ.", "The n-th term: uₙ = u₁·qⁿ⁻¹. Read the number of gears on the fitter's note."),
+    L("Ví dụ: r₁ = 5 cm, q = 2, bánh thứ 6: 5·2⁵ = 160 cm.", "Example: r₁ = 5 cm, q = 2, gear 6: 5·2⁵ = 160 cm.")]; }
+});
+
+/* CS3 · Bức tường đèn pha lê (KM-DS-1103): tổng n số hạng đầu của cấp số cộng */
+var CS3 = s12Job("cs", {
+  name: ["Bức tường đèn pha lê", "The crystal light wall"], sub: ["tổng số khối đèn của cả bức tường (tổng cấp số cộng)", "total blocks in the wall (arithmetic series)"],
+  endName: ["bức tường đèn", "light wall"], what: ["Tổng số khối đèn pha lê của bức tường (mật mã trạm 3)", "Total crystal blocks in the wall (station 3 code)"], unit: "", dp: 0,
+  btnText: ["Nhập mật mã", "Enter the code"], H: 430,
+  lead: ["Trạm 3 là một bức tường xếp bằng <b>khối đèn pha lê</b> phát sáng. Hàng càng xuống dưới càng nhiều khối. Mật mã là <b>tổng số khối đèn</b> của cả bức tường.",
+    "Station 3 is a wall built of glowing <b>crystal light blocks</b>. Each row going down has more blocks. The code is the <b>total number of blocks</b> in the wall."],
+  taskT: function (p) { return L("<b>Nhiệm vụ:</b> số khối mỗi hàng (từ trên xuống) lập thành cấp số cộng. Tính tổng số khối của " + p.n + " hàng.<br><b>Cần tìm:</b> tổng số khối (số tự nhiên).<br><b>Dữ kiện:</b> chạm các hàng trên cùng để đếm, chạm bảng tên để biết số hàng.",
+    "<b>Task:</b> the number of blocks per row (top to bottom) forms an arithmetic sequence. Find the total for " + p.n + " rows.<br><b>Find:</b> the total number of blocks (a whole number).<br><b>Data:</b> tap the top rows to count them and tap the name plate for the number of rows."); },
+  make: function () { var u1 = rnd(3, 7), d = rnd(2, 4), n = rnd(12, 20); return { u1: u1, d: d, n: n, un: u1 + (n - 1) * d, ans: n * (2 * u1 + (n - 1) * d) / 2 }; },
+  tol: function () { return 0.01; },
+  base: function (p) {
+    var o = caveBg(p.bottom, 11), top = 120, bot = 380, cols = ["#80deea", "#ce93d8", "#fff59d", "#a5d6a7", "#ffab91"];
+    var rowH = (bot - top) / p.n, wTop = 70, wBot = 330;
+    for (var i = 0; i < p.n; i++) {
+      var y = top + i * rowH, w = wTop + (wBot - wTop) * i / Math.max(1, p.n - 1), x0 = 180 - w / 2, k = p.u1 + i * p.d, detail = i < 3;
+      var bw = w / k, op = detail ? (p.seen["r" + (i + 1)] ? 1 : 0.6) : 0.3; for (var j = 0; j < k; j++) o += '<rect x="' + (x0 + j * bw + 0.5).toFixed(1) + '" y="' + (y + 0.6).toFixed(1) + '" width="' + Math.max(0.8, bw - 1).toFixed(1) + '" height="' + (rowH - 1.2).toFixed(1) + '" rx="1.5" fill="' + cols[(i + j) % 5] + '" opacity="' + op + '"' + (detail ? ' stroke="#fff" stroke-width=".6"' : "") + '/>';
+      if (detail) { o += tapR(x0, y, w, rowH, "r" + (i + 1)); if (p.seen["r" + (i + 1)]) o += T2(x0 + w + 8, y + rowH * 0.8, k, { fs: 12, fw: 800, c: "#fff59d" }); else o += qBadge(x0 + w + 12, y + rowH / 2); }
+    }
+    o += T2(180, top + 3.5 * rowH + 14, "⋮", { a: "middle", fs: 20, fw: 800, c: "#fff" });
+    o += '<g data-it="s" style="cursor:pointer"><rect x="14" y="40" width="168" height="40" rx="8" fill="' + (p.seen.s ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(24, 56, L("BẢNG TÊN BỨC TƯỜNG", "WALL PLATE"), { fs: 11, fw: 800, c: CS_CARD }) + T2(24, 73, p.seen.s ? L("Tường có " + p.n + " hàng", "The wall has " + p.n + " rows") : L("chạm để xem", "tap to read"), { fs: 12, fw: 800, c: p.seen.s ? INK : "#90a4ae" }) + "</g>" + (p.seen.s ? "" : qBadge(172, 50));
+    return o + lockBox(318, 58, "? ? ?", false);
+  },
+  items: function (p) {
+    var o = { s: { note: ["Bức tường có " + p.n + " hàng", "The wall has " + p.n + " rows"], val: p.n, sym: "n", sfx: "pick", say: ["Bảng tên: bức tường có <b>" + p.n + " hàng</b>.", "Plate: the wall has <b>" + p.n + " rows</b>."] } };
+    [1, 2, 3].forEach(function (i) { var k = p.u1 + (i - 1) * p.d; o["r" + i] = { note: ["Hàng " + i + ": " + k + " khối", "Row " + i + ": " + k + " blocks"], val: k, sym: "u" + ["₁", "₂", "₃"][i - 1], sfx: "pick", say: ["Hàng " + i + " có <b>" + k + " khối</b> đèn.", "Row " + i + " has <b>" + k + " blocks</b>."] }; });
+    return o;
+  },
+  special: function (p, v) {
+    if (Math.abs(v - p.un) < 0.01) return { ok: false, kind: "short", msg: L("Đó là số khối của hàng cuối. Mật mã là tổng số khối của tất cả các hàng.", "That's the bottom row only. The code is the total for all rows.") };
+    if (Math.abs(v - p.n * p.u1) < 0.01) return { ok: false, kind: "short", msg: L("Các hàng không bằng nhau: hàng sau nhiều hơn hàng trước d khối.", "The rows aren't equal: each row has d more blocks than the one above.") };
+    return null;
+  },
+  fx: function (p, k, v) { return k === "ok" ? '<rect x="14" y="110" width="332" height="280" rx="14" fill="#fff59d" opacity=".16"/>' + lockBox(318, 58, String(p.ans), true) : '<rect x="14" y="110" width="332" height="280" rx="14" fill="#ff5252" opacity=".12"/>' + lockBox(318, 58, fmt(v, 2), false, true); },
+  okMsg: ["Đúng mật mã! Cả bức tường bừng sáng, khóa trạm 3 mở.", "Right code! The whole wall lights up and the station 3 lock opens."],
+  shortMsg: ["Mật mã nhỏ hơn số khối thật. Kiểm tra lại công thức tổng cấp số cộng.", "Your code is smaller than the real total. Check the arithmetic series formula."],
+  longMsg: ["Mật mã lớn hơn số khối thật. Kiểm tra lại công thức tổng cấp số cộng.", "Your code is larger than the real total. Check the arithmetic series formula."],
+  passTitle: ["khóa trạm 3 đã mở!", "station 3 unlocked!"],
+  rows: function (p) { return [["u₁, d, n", p.u1 + "; " + p.d + "; " + p.n], [L("Hàng cuối", "Bottom row"), "uₙ = " + p.un], ["Sₙ = n(u₁ + uₙ)/2", p.n + "·(" + p.u1 + " + " + p.un + ")/2 = " + p.ans]]; },
+  formula: function () { return "Sₙ = n(u₁ + uₙ)/2 = n[2u₁ + (n − 1)d]/2"; },
+  hints: function () { return [
+    L("Số khối mỗi hàng tăng đều d khối: dãy là <b>cấp số cộng</b>. Cần <b>tổng</b> của n số hạng đầu.", "Each row grows by d blocks: an <b>arithmetic sequence</b>. You need the <b>sum</b> of the first n terms."),
+    L("Sₙ = n[2u₁ + (n − 1)d]/2, hoặc tìm hàng cuối uₙ trước rồi Sₙ = n(u₁ + uₙ)/2.", "Sₙ = n[2u₁ + (n − 1)d]/2, or find the bottom row uₙ first, then Sₙ = n(u₁ + uₙ)/2."),
+    L("Ví dụ: 20 hàng, u₁ = 5, d = 3: S₂₀ = 20·(2·5 + 19·3)/2 = 10·67 = 670 khối.", "Example: 20 rows, u₁ = 5, d = 3: S₂₀ = 20·(2·5 + 19·3)/2 = 10·67 = 670 blocks.")]; }
+});
+
+/* CS4 · Clip giới thiệu hang lan truyền (KM-DS-1104): tổng n số hạng đầu của cấp số nhân (thay cho "đài đá tự thu năng lượng") */
+var CS4 = s12Job("cs", {
+  name: ["Clip lan truyền", "The viral clip"], sub: ["tổng lượt chia sẻ sau n giờ (tổng cấp số nhân)", "total shares after n hours (geometric series)"],
+  endName: ["clip giới thiệu hang", "cave clip"], what: ["Tổng số lượt chia sẻ sau n giờ (mật mã trạm 4)", "Total shares after n hours (station 4 code)"], unit: "", dp: 0,
+  btnText: ["Nhập mật mã", "Enter the code"], H: 430,
+  lead: ["Ban tổ chức đăng một clip giới thiệu hang lên mạng. Lượt chia sẻ mỗi giờ <b>gấp lên cùng một số lần</b> so với giờ trước. Mật mã trạm 4 là <b>tổng số lượt chia sẻ</b> sau đúng n giờ.",
+    "The organisers posted a clip about the cave online. Each hour's shares are the <b>same multiple</b> of the hour before. The station 4 code is the <b>total number of shares</b> after exactly n hours."],
+  taskT: function (p) { return L("<b>Nhiệm vụ:</b> lượt chia sẻ trong từng giờ lập thành cấp số nhân. Tính tổng lượt chia sẻ trong " + p.n + " giờ đầu.<br><b>Cần tìm:</b> tổng số lượt (số tự nhiên).<br><b>Dữ kiện:</b> chạm các cột giờ đầu trên điện thoại, chạm dòng thông báo để biết số giờ.",
+    "<b>Task:</b> the shares in each hour form a geometric sequence. Find the total shares in the first " + p.n + " hours.<br><b>Find:</b> the total (a whole number).<br><b>Data:</b> tap the first hour bars on the phone and tap the notice for the number of hours."); },
+  make: function () { var q = Math.random() < 0.5 ? 2 : 3, a = q === 3 ? rnd(2, 5) : rnd(3, 9), n = q === 3 ? rnd(6, 8) : rnd(7, 11);
+    return { a: a, q: q, n: n, un: a * Math.pow(q, n - 1), ans: a * (Math.pow(q, n) - 1) / (q - 1) }; },
+  tol: function () { return 0.01; },
+  base: function (p) {
+    var o = caveBg(p.bottom, 13);
+    o += '<g transform="translate(95 92)"><rect width="170" height="312" rx="22" fill="#263238" stroke="#cfd8dc" stroke-width="3"/><rect x="10" y="26" width="150" height="270" rx="8" fill="#eceff1"/><rect x="64" y="11" width="42" height="7" rx="3.5" fill="#455a64"/>';
+    o += '<rect x="16" y="32" width="138" height="74" rx="6" fill="#3d2f63"/><path d="M16 50 L30 44 L42 52 L58 40 L74 50 L92 42 L108 52 L124 44 L140 50 L154 44 V32 H16 Z" fill="#54467f"/><path d="M40 106 h18 v-8 h18 v-8 h18 v-8 h18" fill="none" stroke="#ffcc80" stroke-width="2.4"/><circle cx="120" cy="78" r="10" fill="#ffcf3f" opacity=".5"/>';
+    o += '<circle cx="85" cy="69" r="13" fill="#fff" fill-opacity=".85"/><path d="M80 62 L92 69 L80 76 Z" fill="#c62828"/>';
+    o += T2(18, 120, L("Khám phá hang động 🦇", "Explore the cave 🦇"), { fs: 10.5, fw: 800, c: "#263238" }) + T2(18, 134, L("↗ lượt chia sẻ mỗi giờ", "↗ shares each hour"), { fs: 9.5, fw: 700, c: "#1e88e5" });
+    var nb = Math.min(p.n, 9), bw = 134 / nb, maxv = p.un, base0 = 262;
+    for (var i = 0; i < nb; i++) { var hidx = i < 3 ? i : (i === nb - 1 ? p.n - 1 : i), v = p.a * Math.pow(p.q, hidx), h = Math.max(3, 108 * Math.pow(v / maxv, 0.45)), x = 18 + i * bw, it = "h" + (i + 1);
+      o += '<rect x="' + (x + 2).toFixed(1) + '" y="' + (base0 - h).toFixed(1) + '" width="' + (bw - 4).toFixed(1) + '" height="' + h.toFixed(1) + '" rx="2" fill="' + (i < 3 ? (p.seen[it] ? "#42a5f5" : "#90caf9") : (i === nb - 1 ? "#b0bec5" : "#cfd8dc")) + '"/>';
+      o += T2(x + bw / 2, base0 + 13, i < 3 || i === nb - 1 ? String(hidx + 1) : (i === 3 ? "…" : ""), { a: "middle", fs: 9.5, fw: 800, c: "#455a64" });
+      if (i === nb - 1) o += T2(x + bw / 2, base0 - h - 4, "?", { a: "middle", fs: 11, fw: 800, c: "#455a64" });
+      if (i < 3) { o += '<rect data-it="' + it + '" x="' + x.toFixed(1) + '" y="140" width="' + bw.toFixed(1) + '" height="140" fill="#fff" fill-opacity="0" style="cursor:pointer"/>'; o += p.seen[it] ? T2(x + bw / 2, base0 - h - 4, v, { a: "middle", fs: 10, fw: 800, c: "#0d47a1" }) : ""; }
+    }
+    o += '<path d="M14 ' + base0 + ' H156" stroke="#90a4ae" stroke-width="1.2"/>' + T2(85, 290, L("giờ thứ", "hour"), { a: "middle", fs: 9, fw: 700, c: "#78909c" }) + "</g>";
+    o += '<g data-it="s" style="cursor:pointer"><rect x="14" y="36" width="200" height="40" rx="8" fill="' + (p.seen.s ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(24, 52, L("THÔNG BÁO CỦA BAN TỔ CHỨC", "ORGANISERS' NOTICE"), { fs: 10.5, fw: 800, c: CS_CARD }) + T2(24, 69, p.seen.s ? L("Tính tổng trong " + p.n + " giờ đầu", "Total for the first " + p.n + " hours") : L("chạm để xem", "tap to read"), { fs: 12, fw: 800, c: p.seen.s ? INK : "#90a4ae" }) + "</g>" + (p.seen.s ? "" : qBadge(204, 46));
+    [1, 2, 3].forEach(function (i) { if (!p.seen["h" + i]) o += qBadge(95 + 18 + (i - 0.5) * (134 / Math.min(p.n, 9)), 330); });
+    return o + lockBox(318, 58, "? ? ?", false);
+  },
+  items: function (p) {
+    var o = { s: { note: ["Tính tổng lượt chia sẻ trong " + p.n + " giờ đầu", "Total shares in the first " + p.n + " hours"], val: p.n, sym: "n", sfx: "pick", say: ["Thông báo: mật mã là tổng lượt chia sẻ trong <b>" + p.n + " giờ đầu</b>.", "Notice: the code is the total shares in the <b>first " + p.n + " hours</b>."] } };
+    [1, 2, 3].forEach(function (i) { var v = p.a * Math.pow(p.q, i - 1); o["h" + i] = { note: ["Giờ thứ " + i + ": " + v + " lượt chia sẻ", "Hour " + i + ": " + v + " shares"], val: v, sym: "u" + ["₁", "₂", "₃"][i - 1], sfx: "pick", say: ["Giờ thứ " + i + " có <b>" + v + " lượt</b> chia sẻ.", "Hour " + i + " has <b>" + v + " shares</b>."] }; });
+    return o;
+  },
+  special: function (p, v) {
+    if (Math.abs(v - p.un) < 0.01) return { ok: false, kind: "short", msg: L("Đó là lượt chia sẻ riêng giờ thứ n. Mật mã là tổng của cả n giờ.", "That's hour n on its own. The code is the total over all n hours.") };
+    if (Math.abs(v - p.a * (Math.pow(p.q, p.n + 1) - 1) / (p.q - 1)) < 0.01) return { ok: false, kind: "long", msg: L("Em cộng thừa một giờ: Sₙ = u₁(qⁿ − 1)/(q − 1) với đúng n số hạng.", "You added one hour too many: Sₙ = u₁(qⁿ − 1)/(q − 1) has exactly n terms.") };
+    return null;
+  },
+  fx: function (p, k, v) { return k === "ok" ? lockBox(318, 58, String(p.ans), true) + cspill(180, 414, L("Tổng: ", "Total: ") + p.ans + L(" lượt", " shares"), "#c8e6c9") : lockBox(318, 58, fmt(v, 2), false, true); },
+  okMsg: ["Đúng mật mã! Khóa trạm 4 mở.", "Right code! The station 4 lock opens."],
+  shortMsg: ["Chưa đủ, tổng lượt chia sẻ thật lớn hơn. Kiểm tra công bội q và số giờ n.", "Too small, the real total is bigger. Check the ratio q and the number of hours n."],
+  longMsg: ["Lớn quá. Kiểm tra công bội q và số giờ n.", "Too big. Check the ratio q and the number of hours n."],
+  passTitle: ["khóa trạm 4 đã mở!", "station 4 unlocked!"],
+  rows: function (p) { return [["u₁, q, n", p.a + "; " + p.q + "; " + p.n], ["Sₙ = u₁(qⁿ − 1)/(q − 1)", p.a + "·(" + p.q + supN(p.n) + " − 1)/" + (p.q - 1) + " = " + p.ans]]; },
+  formula: function () { return "Sₙ = u₁(qⁿ − 1)/(q − 1)"; },
+  hints: function () { return [
+    L("Giờ sau gấp giờ trước q lần: đây là <b>cấp số nhân</b>, q = u₂ : u₁. Cần tổng n số hạng đầu.", "Each hour is q times the one before: a <b>geometric sequence</b> with q = u₂ ÷ u₁. You need the sum of the first n terms."),
+    L("Sₙ = u₁(qⁿ − 1)/(q − 1) với q ≠ 1.", "Sₙ = u₁(qⁿ − 1)/(q − 1) for q ≠ 1."),
+    L("Ví dụ: u₁ = 4, q = 3, n = 8: S₈ = 4·(3⁸ − 1)/2 = 2·6560 = 13 120.", "Example: u₁ = 4, q = 3, n = 8: S₈ = 4·(3⁸ − 1)/2 = 2·6560 = 13,120.")]; }
+});
+
+/* CS5 · Hoa văn tam giác trên nắp rương (KM-DS-1105): tổng cấp số nhân lùi vô hạn (chu vi) */
+function chestLid(inner) {
+  var o = '<path d="M30 150 Q180 112 330 150 V292 H30 Z" fill="#a0522d" stroke="#3e2723" stroke-width="3"/><rect x="52" y="140" width="256" height="146" rx="8" fill="#2b1d3a" stroke="#ffca28" stroke-width="2.4"/>';
+  [[40, 160], [320, 160], [40, 280], [320, 280]].forEach(function (c) { o += '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="4" fill="#ffca28" stroke="#3e2723" stroke-width="1.2"/>'; });
+  o += '<rect x="22" y="292" width="316" height="112" rx="10" fill="#8d5524" stroke="#3e2723" stroke-width="3"/><path d="M22 330 H338 M22 372 H338" stroke="#5d4037" stroke-width="3"/><path d="M70 292 V404 M290 292 V404" stroke="#ffca28" stroke-width="6" opacity=".8"/>';
+  return o + (inner || "");
+}
+var CS5 = s12Job("cs", {
+  name: ["Hoa văn tam giác trên nắp rương", "Triangles on the chest lid"], sub: ["tổng chu vi vô số tam giác lồng nhau", "total perimeter of infinitely many nested triangles"],
+  endName: ["nắp rương", "chest lid"], what: ["Tổng chu vi tất cả các tam giác (cm), tức chiều dài dây đèn", "Total perimeter of all the triangles (cm), i.e. the LED strip length"], unit: "cm", dp: 2,
+  btnText: ["Cắt dây đèn", "Cut the LED strip"], H: 430,
+  lead: ["Nắp rương kho báu khắc hoa văn: tam giác đều ngoài cùng, nối trung điểm ba cạnh được tam giác thứ hai, cứ thế mãi. Người thợ dán <b>dây đèn LED</b> theo viền mọi tam giác. Mật mã là <b>tổng chu vi</b> của tất cả các tam giác.",
+    "The chest lid has a pattern: an equilateral triangle, joining the midpoints gives a second triangle, and so on forever. The craftsman runs an <b>LED strip</b> round every triangle. The code is the <b>total perimeter</b> of all the triangles."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> chu vi các tam giác lập thành cấp số nhân lùi vô hạn. Tính tổng chu vi của tất cả các tam giác.<br><b>Cần tìm:</b> tổng chu vi (cm).<br><b>Dữ kiện:</b> chạm thước vào cạnh tam giác ngoài cùng.",
+    "<b>Task:</b> the perimeters form an infinite decreasing geometric sequence. Find the total perimeter of all the triangles.<br><b>Find:</b> the total (cm).<br><b>Data:</b> tap the ruler on a side of the outer triangle."); },
+  make: function () { var a = 2 * rnd(5, 18); return { a: a, ans: 6 * a }; },
+  tol: function () { return 0.01; },
+  ruler: function (p, x0, y, x1, lab) {
+    var o = '<path d="M' + x0 + " " + (y - 6) + " v12 M" + x1 + " " + (y - 6) + " v12 M" + x0 + " " + y + " H" + x1 + '" stroke="#ffe082" stroke-width="1.8"/>';
+    o += '<g data-it="a" style="cursor:pointer"><rect x="110" y="' + (y + 50) + '" width="140" height="24" rx="6" fill="' + (p.seen.a ? "#fff" : "#ffe082") + '" stroke="#5d4037" stroke-width="1.6"/>';
+    for (var t = 0; t < 14; t++) o += '<path d="M' + (114 + t * 10) + " " + (y + 52) + " v" + (t % 5 ? 5 : 9) + '" stroke="#5d4037" stroke-width="1"/>';
+    o += T2(180, y + 70, p.seen.a ? lab + ": " + p.a + " cm" : L("thước: chạm để đo", "ruler: tap to measure"), { a: "middle", fs: 11.5, fw: 800, c: "#3e2723" }) + "</g>";
+    o += '<path d="M180 ' + (y + 50) + " L" + ((x0 + x1) / 2) + " " + (y + 8) + '" stroke="#ffe082" stroke-width="1.4" stroke-dasharray="3 3"/>';
+    return o + (p.seen.a ? "" : qBadge(246, y + 52));
+  },
+  tri: function (k, col) { var cx = 180, cy = 216, R = 72, o = ""; for (var i = 0; i < k; i++) { var r = R / Math.pow(2, i), up = i % 2 === 0, pts = [0, 1, 2].map(function (j) { var a = (up ? -90 : 90) + j * 120; return [cx + r * Math.cos(a * Math.PI / 180), cy + r * Math.sin(a * Math.PI / 180)]; }); o += '<path d="M' + pts.map(function (q) { return q[0].toFixed(1) + " " + q[1].toFixed(1); }).join(" L") + ' Z" fill="none" stroke="' + (col || ["#ffeb3b", "#80deea", "#f48fb1", "#a5d6a7"][i % 4]) + '" stroke-width="' + Math.max(1, 2.6 - i * 0.3) + '"/>'; } return o; },
+  base: function (p) {
+    var o = caveBg(p.bottom, 17);
+    o += chestLid(this.tri(7));
+    o += this.ruler(p, 118, 258, 242, L("cạnh ngoài", "outer side"));
+    o += T2(180, 124, L("… vô số tam giác …", "… infinitely many triangles …"), { a: "middle", fs: 11.5, fw: 700, c: "#d1c4e9" });
+    return o + lockBox(318, 58, "? ? ?", false);
+  },
+  items: function (p) { return { a: { note: ["Tam giác đều ngoài cùng cạnh " + p.a + " cm", "Outer equilateral triangle, side " + p.a + " cm"], val: p.a, sym: "a", sfx: "tape", say: ["Thước đo: cạnh tam giác ngoài cùng là <b>" + p.a + " cm</b>.", "Ruler: the outer triangle's side is <b>" + p.a + " cm</b>."] } }; },
+  special: function (p, v) {
+    if (Math.abs(v - 3 * p.a) < 0.01) return { ok: false, kind: "short", msg: L("Đó mới là chu vi tam giác ngoài cùng. Cần cộng chu vi của tất cả các tam giác.", "That's only the outer triangle. Add up the perimeters of all the triangles.") };
+    if (Math.abs(v - 4 * p.a) < 0.01) return { ok: false, kind: "short", msg: L("Công bội của chu vi là 1/2 (cạnh giảm một nửa). 1/4 là tỉ số của diện tích.", "The perimeter ratio is 1/2 (each side halves). 1/4 is the ratio of the areas.") };
+    return null;
+  },
+  fx: function (p, k, v) { var m = k === "ok" ? 10 : Math.max(1, Math.min(9, Math.round(10 * v / p.ans))); return this.tri(m, k === "ok" ? "#69f0ae" : "#ff8a80") + (k === "ok" ? lockBox(318, 58, String(p.ans), true) : lockBox(318, 58, fmt(v, 2), false, true)); },
+  okMsg: ["Đúng mật mã! Dây đèn vừa đủ, hoa văn rực sáng.", "Right code! The strip is just long enough and the pattern glows."],
+  shortMsg: ["Dây đèn thiếu, các tam giác bên trong chưa sáng. Kiểm tra lại công thức tổng lùi vô hạn.", "The strip is too short, the inner triangles stay dark. Check the infinite-sum formula."],
+  longMsg: ["Dây đèn thừa. Kiểm tra lại công bội q.", "The strip is too long. Check the ratio q."],
+  passTitle: ["nắp rương sáng rực!", "the lid lights up!"],
+  rows: function (p) { return [["P₁ = 3a", 3 * p.a + " cm"], ["q", "1/2"], ["S = P₁/(1 − q)", 3 * p.a + " : (1 − 1/2) = " + p.ans + " cm"]]; },
+  formula: function () { return "S = u₁ / (1 − q), |q| < 1"; },
+  hints: function () { return [
+    L("Nối trung điểm thì cạnh tam giác mới bằng <b>nửa</b> cạnh cũ, nên chu vi cũng giảm một nửa: cấp số nhân với q = 1/2.", "Joining midpoints halves each side, so the perimeter halves too: a geometric sequence with q = 1/2."),
+    L("Tổng cấp số nhân lùi vô hạn: S = u₁/(1 − q), với u₁ là chu vi tam giác ngoài cùng.", "Infinite geometric sum: S = u₁/(1 − q), where u₁ is the outer triangle's perimeter."),
+    L("Ví dụ: cạnh 20 cm: P₁ = 60, S = 60 : (1 − 1/2) = 120 cm.", "Example: side 20 cm: P₁ = 60, S = 60 ÷ (1 − 1/2) = 120 cm.")]; }
+});
+
+/* CS6 · Hoa văn hình vuông (KM-DS-1106, thay thế CS5): tổng diện tích vô số hình vuông */
+var CS6 = s12Job("cs", {
+  name: ["Hoa văn hình vuông", "The square pattern"], sub: ["tổng diện tích vô số hình vuông lồng nhau", "total area of infinitely many nested squares"],
+  endName: ["hoa văn hình vuông", "square pattern"], what: ["Tổng diện tích tất cả các hình vuông (cm²)", "Total area of all the squares (cm²)"], unit: "cm²", dp: 2,
+  btnText: ["Cắt giấy nhũ", "Cut the foil"], H: 430,
+  lead: ["Nắp rương có hoa văn hình vuông: nối trung điểm bốn cạnh được hình vuông thứ hai, cứ thế mãi. Mỗi hình vuông cắt từ một tấm <b>giấy nhũ</b> riêng rồi dán chồng lên. Mật mã là <b>tổng diện tích</b> giấy nhũ cần dùng.",
+    "The lid has a square pattern: joining the midpoints of the four sides gives a second square, and so on forever. Each square is cut from its own sheet of <b>foil</b> and stuck on top. The code is the <b>total area</b> of foil needed."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> diện tích các hình vuông lập thành cấp số nhân lùi vô hạn. Tính tổng diện tích.<br><b>Cần tìm:</b> tổng diện tích (cm²).<br><b>Dữ kiện:</b> chạm thước vào cạnh hình vuông ngoài cùng.",
+    "<b>Task:</b> the areas form an infinite decreasing geometric sequence. Find the total area.<br><b>Find:</b> the total (cm²).<br><b>Data:</b> tap the ruler on a side of the outer square."); },
+  make: function () { var a = rnd(6, 20); return { a: a, ans: 2 * a * a }; },
+  tol: function () { return 0.01; },
+  sq: function (k, col) { var cx = 180, cy = 212, h = 42, o = ""; for (var i = 0; i < k; i++) { var r = h / Math.pow(Math.SQRT2, i), rot = i % 2 ? 45 : 0, pts = [0, 1, 2, 3].map(function (j) { var a = (rot + 45 + j * 90) * Math.PI / 180; return [cx + r * Math.SQRT2 * Math.cos(a), cy + r * Math.SQRT2 * Math.sin(a)]; }); o += '<path d="M' + pts.map(function (q) { return q[0].toFixed(1) + " " + q[1].toFixed(1); }).join(" L") + ' Z" fill="' + (col ? "none" : ["#ffd54f", "#4dd0e1", "#f06292", "#81c784"][i % 4]) + '" fill-opacity=".85" stroke="' + (col || "#3e2723") + '" stroke-width="1.4"/>'; } return o; },
+  base: function (p) {
+    var o = caveBg(p.bottom, 19);
+    o += chestLid(this.sq(8));
+    o += CS5.ruler(p, 138, 262, 222, L("cạnh ngoài", "outer side"));
+    return o + lockBox(318, 58, "? ? ?", false);
+  },
+  items: function (p) { return { a: { note: ["Hình vuông ngoài cùng cạnh " + p.a + " cm", "Outer square, side " + p.a + " cm"], val: p.a, sym: "a", sfx: "tape", say: ["Thước đo: cạnh hình vuông ngoài cùng là <b>" + p.a + " cm</b>.", "Ruler: the outer square's side is <b>" + p.a + " cm</b>."] } }; },
+  special: function (p, v) {
+    if (Math.abs(v - p.a * p.a) < 0.01) return { ok: false, kind: "short", msg: L("Đó mới là diện tích hình vuông ngoài cùng.", "That's only the outer square.") };
+    if (Math.abs(v - p.a * p.a * 4 / 3) < 0.01) return { ok: false, kind: "short", msg: L("Cạnh hình vuông mới bằng cạnh cũ chia √2, nên diện tích chỉ giảm một nửa: q = 1/2, không phải 1/4.", "The new side is the old side ÷ √2, so the area only halves: q = 1/2, not 1/4.") };
+    return null;
+  },
+  fx: function (p, k, v) { var m = k === "ok" ? 10 : Math.max(1, Math.min(9, Math.round(10 * v / p.ans))); return this.sq(m, k === "ok" ? "#69f0ae" : "#ff8a80") + (k === "ok" ? lockBox(318, 58, String(p.ans), true) : lockBox(318, 58, fmt(v, 2), false, true)); },
+  okMsg: ["Đúng mật mã! Giấy nhũ vừa đủ cho cả hoa văn.", "Right code! Just enough foil for the whole pattern."],
+  shortMsg: ["Thiếu giấy nhũ. Kiểm tra lại công bội của diện tích.", "Not enough foil. Check the ratio of the areas."],
+  longMsg: ["Thừa giấy nhũ. Kiểm tra lại công bội của diện tích.", "Too much foil. Check the ratio of the areas."],
+  passTitle: ["hoa văn đã hoàn thành!", "pattern finished!"],
+  rows: function (p) { return [["S₁ = a²", p.a * p.a + " cm²"], ["q", "1/2"], ["S = S₁/(1 − q)", p.ans + " cm²"]]; },
+  formula: function () { return "S = u₁ / (1 − q), |q| < 1"; },
+  hints: function () { return [
+    L("Hình vuông mới có cạnh bằng a/√2 (nửa đường chéo hình vuông cũ), nên diện tích bằng <b>một nửa</b>: q = 1/2.", "The new square's side is a/√2 (half the old diagonal), so its area is <b>half</b>: q = 1/2."),
+    L("Tổng lùi vô hạn: S = u₁/(1 − q), với u₁ = a².", "Infinite sum: S = u₁/(1 − q), with u₁ = a²."),
+    L("Ví dụ: cạnh 10 cm: S = 100 : (1 − 1/2) = 200 cm².", "Example: side 10 cm: S = 100 ÷ (1 − 1/2) = 200 cm².")]; }
+});
+
+/* CS7 · Quả bóng nảy (KM-DS-1107, thay thế CS5): tổng quãng đường, cấp số nhân lùi vô hạn */
+var CS7_R = [[1, 2], [1, 3], [2, 3], [3, 4]];
+var CS7 = s12Job("cs", {
+  name: ["Quả bóng nảy", "The bouncing ball"], sub: ["tổng quãng đường quả bóng đi được cho tới khi nằm yên", "total distance until the ball stops"],
+  endName: ["quả bóng nảy", "bouncing ball"], what: ["Tổng quãng đường quả bóng đi được (m)", "Total distance travelled by the ball (m)"], unit: "m", dp: 2,
+  btnText: ["Nhập mật mã", "Enter the code"], H: 430,
+  lead: ["Ở trạm cuối, một quả <b>bóng cao su</b> được thả từ trên giá xuống nền đá. Mỗi lần chạm đất nó nảy lên bằng một phần cố định của độ cao trước đó. Mật mã là <b>tổng quãng đường</b> quả bóng đi được (cả rơi xuống và nảy lên) cho tới khi nằm yên.",
+    "At the last station a <b>rubber ball</b> is dropped from a frame onto the rock floor. Each bounce reaches a fixed fraction of the previous height. The code is the <b>total distance</b> it travels (down and up) until it comes to rest."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> các độ cao nảy lập thành cấp số nhân lùi vô hạn. Tính tổng quãng đường quả bóng đi được.<br><b>Cần tìm:</b> tổng quãng đường (m).<br><b>Dữ kiện:</b> chạm thước đo độ cao lúc thả và độ cao lần nảy thứ nhất.",
+    "<b>Task:</b> the bounce heights form an infinite decreasing geometric sequence. Find the total distance.<br><b>Find:</b> the total distance (m).<br><b>Data:</b> tap the scale for the drop height and the first bounce height."); },
+  make: function () { var r = pickOne(CS7_R), h = r[1] * rnd(2, Math.floor(20 / r[1])), q = r[0] / r[1], h1 = h * q; return { h: h, h1: h1, q: q, rn: r, ans: Math.round(h * (1 + q) / (1 - q) * 100) / 100 }; },
+  tol: function () { return 0.01; },
+  base: function (p) {
+    var o = caveBg(p.bottom, 23), gy = 396, top = 100, sc = (gy - top) / p.h, x = 70, hh = p.h, o2 = "";
+    o += '<path d="M40 ' + top + ' H92 M50 ' + top + ' V' + gy + '" stroke="#a1887f" stroke-width="4"/>';
+    o += '<rect x="20" y="' + top + '" width="16" height="' + (gy - top) + '" fill="#ffe082" stroke="#5d4037" stroke-width="1.4"/>';
+    for (var m = 0; m <= p.h; m += Math.max(1, Math.round(p.h / 10))) o += '<path d="M20 ' + (gy - m * sc).toFixed(1) + ' h8" stroke="#5d4037" stroke-width="1.2"/>';
+    var d = "M" + x + " " + top + " L" + (x + 10) + " " + gy;
+    x += 10;
+    for (var i = 0; i < 7; i++) { hh *= p.q; var w = 34 * Math.pow(p.q, i * 0.5) + 8; d += " Q" + (x + w / 2) + " " + (gy - 2 * hh * sc) + " " + (x + w) + " " + gy; x += w; }
+    o += '<path d="' + d + '" fill="none" stroke="#ffcc80" stroke-width="2.2" stroke-dasharray="6 4"/>';
+    o += '<circle cx="70" cy="' + (top + 10) + '" r="10" fill="#e53935" stroke="#fff" stroke-width="2"/><path d="M62 ' + (top + 6) + ' Q70 ' + (top + 14) + ' 78 ' + (top + 6) + '" stroke="#fff" stroke-width="1.6" fill="none"/>';
+    o += '<rect x="0" y="' + gy + '" width="360" height="' + (p.bottom - gy) + '" fill="#4e3b2f"/>';
+    o += '<g data-it="h" style="cursor:pointer"><rect x="96" y="' + (top - 12) + '" width="132" height="22" rx="6" fill="' + (p.seen.h ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(104, top + 4, p.seen.h ? L("thả từ ", "dropped from ") + fmt(p.h, 2) + " m" : L("độ cao thả: chạm", "drop height: tap"), { fs: 11.5, fw: 800, c: p.seen.h ? INK : "#90a4ae" }) + "</g>";
+    var bx = 80 + 20, by = gy - p.h1 * sc;
+    o += '<path d="M' + (bx + 6) + " " + by.toFixed(1) + " H" + (bx + 60) + '" stroke="#80deea" stroke-width="1.6" stroke-dasharray="3 3"/>';
+    o += '<g data-it="h1" style="cursor:pointer"><rect x="' + (bx + 62) + '" y="' + (by - 12).toFixed(1) + '" width="150" height="22" rx="6" fill="' + (p.seen.h1 ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(bx + 70, by + 4, p.seen.h1 ? L("nảy lần 1 cao ", "1st bounce ") + fmt(p.h1, 2) + " m" : L("lần nảy thứ nhất: chạm", "1st bounce: tap"), { fs: 11.5, fw: 800, c: p.seen.h1 ? INK : "#90a4ae" }) + "</g>";
+    return o + lockBox(318, 58, "? ? ?", false);
+  },
+  items: function (p) { return { h: { note: ["Bóng thả từ độ cao " + fmt(p.h, 2) + " m", "Dropped from " + fmt(p.h, 2) + " m"], val: p.h, sym: "h", sfx: "tape", say: ["Quả bóng được thả từ độ cao <b>" + fmt(p.h, 2) + " m</b>.", "The ball is dropped from <b>" + fmt(p.h, 2) + " m</b>."] },
+    h1: { note: ["Lần nảy thứ nhất cao " + fmt(p.h1, 2) + " m", "First bounce: " + fmt(p.h1, 2) + " m"], val: p.h1, sym: "h₁", sfx: "tape", say: ["Lần nảy thứ nhất bóng lên cao <b>" + fmt(p.h1, 2) + " m</b>.", "The first bounce reaches <b>" + fmt(p.h1, 2) + " m</b>."] } }; },
+  special: function (p, v) {
+    if (Math.abs(v - p.h / (1 - p.q)) < 0.01) return { ok: false, kind: "short", msg: L("Mỗi lần nảy, bóng đi lên rồi lại rơi xuống: phải tính quãng đường đó hai lần.", "Each bounce goes up and then down again: count that distance twice.") };
+    if (Math.abs(v - 2 * p.h / (1 - p.q)) < 0.01) return { ok: false, kind: "long", msg: L("Lần rơi đầu tiên chỉ đi xuống, không có lượt đi lên. Chỉ nhân 2 cho các lần nảy.", "The first drop only goes down. Only the bounces count twice.") };
+    return null;
+  },
+  fx: function (p, k, v) { return k === "ok" ? lockBox(318, 58, fmt(p.ans, 2), true) + cspill(240, 418, L("Tổng: ", "Total: ") + fmt(p.ans, 2) + " m", "#c8e6c9") : lockBox(318, 58, fmt(v, 2), false, true); },
+  okMsg: ["Đúng mật mã! Rương kho báu đã mở khóa.", "Right code! The treasure chest is unlocked."],
+  shortMsg: ["Chưa đủ quãng đường. Nhớ cả lượt đi lên và lượt rơi xuống của mỗi lần nảy.", "Not enough distance. Remember each bounce goes up and comes back down."],
+  longMsg: ["Quãng đường thừa. Kiểm tra lại lần rơi đầu tiên.", "Too much distance. Check the first drop."],
+  passTitle: ["rương kho báu đã mở!", "treasure chest unlocked!"],
+  rows: function (p) { return [["h, q", fmt(p.h, 2) + " m; " + p.rn[0] + "/" + p.rn[1]], [L("Tổng các lần nảy lên", "Sum of the bounce heights"), fmt(p.h1, 2) + " : (1 − " + p.rn[0] + "/" + p.rn[1] + ") = " + fmt(p.h1 / (1 - p.q), 2) + " m"], ["S = h + 2·h₁/(1 − q)", fmt(p.ans, 2) + " m"]]; },
+  formula: function () { return "S = h + 2·(h₁ + h₂ + …) = h + 2·h₁/(1 − q)"; },
+  hints: function () { return [
+    L("Công bội q = h₁ : h. Các độ cao nảy h₁, h₂, … lập thành cấp số nhân lùi vô hạn.", "The ratio is q = h₁ ÷ h. The bounce heights h₁, h₂, … form an infinite decreasing geometric sequence."),
+    L("Quãng đường = lần rơi đầu h + 2 × (tổng các độ cao nảy), vì mỗi lần nảy bóng đi lên rồi rơi xuống. Tổng các độ cao nảy = h₁/(1 − q).", "Distance = first drop h + 2 × (sum of bounce heights), because each bounce goes up and comes down. Sum of bounce heights = h₁/(1 − q)."),
+    L("Ví dụ: thả từ 16 m, nảy lên 8 m (q = 1/2): S = 16 + 2·8/(1 − 1/2) = 16 + 32 = 48 m.", "Example: dropped from 16 m, bounces to 8 m (q = 1/2): S = 16 + 2·8/(1 − 1/2) = 16 + 32 = 48 m.")]; }
+});
+
+S12_POOL.cs = [CS1, CS2, CS3, CS4, [CS5, CS6, CS7]];
+["CS1", "CS2", "CS3", "CS4", "CS5", "CS6", "CS7"].forEach(function (k, i) { S12OB[k] = [CS1, CS2, CS3, CS4, CS5, CS6, CS7][i]; });
+[
+  ["KM-DS-1101", "CS1", "Cầu thang nhiều nhịp", "The multi-flight stairs", ["số hạng tổng quát cấp số cộng"], ["n-th term of an arithmetic sequence"], "so_luong", "bậc", "đúng tuyệt đối", 1],
+  ["KM-DS-1102", "CS2", "Cổng bánh răng", "The gear gate", ["số hạng tổng quát cấp số nhân"], ["n-th term of a geometric sequence"], "do_dai", "cm", "đúng tuyệt đối", 2],
+  ["KM-DS-1103", "CS3", "Bức tường đèn pha lê", "The crystal light wall", ["tổng n số hạng đầu cấp số cộng"], ["sum of an arithmetic sequence"], "so_luong", "khối", "đúng tuyệt đối", 2],
+  ["KM-DS-1104", "CS4", "Clip lan truyền", "The viral clip", ["tổng n số hạng đầu cấp số nhân"], ["sum of a geometric sequence"], "so_luong", "lượt", "đúng tuyệt đối", 3],
+  ["KM-DS-1105", "CS5", "Hoa văn tam giác trên nắp rương", "Triangles on the chest lid", ["tổng cấp số nhân lùi vô hạn", "chu vi"], ["infinite geometric sum", "perimeter"], "do_dai", "cm", "đúng tuyệt đối", 3],
+  ["KM-DS-1106", "CS6", "Hoa văn hình vuông", "The square pattern", ["tổng cấp số nhân lùi vô hạn", "diện tích"], ["infinite geometric sum", "area"], "dien_tich", "cm²", "đúng tuyệt đối", 3],
+  ["KM-DS-1107", "CS7", "Quả bóng nảy", "The bouncing ball", ["tổng cấp số nhân lùi vô hạn", "quãng đường"], ["infinite geometric sum", "distance"], "do_dai", "m", "đúng tuyệt đối", 3]
+].forEach(function (r) { S12_CAT.push({ id: r[0], key: r[1], ten: { vi: r[2], en: r[3] }, kb: "cs", cap: [3], lop: [11], chu_de: { vi: r[4], en: r[5] }, yccd: { vi: ["Toán 11 (CT GDPT 2018) · Dãy số, cấp số cộng, cấp số nhân"], en: ["Grade 11 maths (2018 curriculum) · Sequences"] }, do_kho: { cap3: r[9] }, goc_nhin: "chinh_dien", dap_an: { loai: r[6], don_vi: r[7], sai_so: r[8] }, dung_cu_can: ["doc_so_lieu"], vai_tro: "cap3_cs", trang_thai: "dang_dung" }); });
+function CS_HERO(end) {
+  var H = end ? 150 : 170, o = '<svg viewBox="0 0 360 ' + H + '" role="img" aria-label="' + L(S12.cs.title[0], S12.cs.title[1]) + '">' + caveBg(H, 5);
+  o += '<path d="M40 ' + (H - 20) + ' h30 v-12 h30 v-12 h30 v-12 h30 v-12" fill="none" stroke="#ffcc80" stroke-width="3"/>' + gearP(250, 60, 16, 0, "#ffd54f") + gearP(278, 60, 10, 0, "#ffca28", 0.3);
+  o += '<g transform="translate(250 ' + (H - 70) + ')"><rect x="-40" y="20" width="80" height="40" rx="6" fill="#8d5524" stroke="#3e2723" stroke-width="2.4"/>' + (end ? '<path d="M-40 20 L-44 -12 Q0 -34 44 -12 L40 20" fill="#a0522d" stroke="#3e2723" stroke-width="2.4"/><circle cy="10" r="16" fill="#ffeb3b" opacity=".7"/><text text-anchor="middle" y="16" font-size="18">🏅</text>' : '<path d="M-40 20 Q0 -10 40 20" fill="#a0522d" stroke="#3e2723" stroke-width="2.4"/><rect x="-7" y="26" width="14" height="14" rx="3" fill="#ffca28" stroke="#3e2723" stroke-width="1.6"/>') + "</g>";
+  return o + "</svg>";
+}
+
 var OBK = { OB1: OB1, OB2: OB2, OB3: OB3, OB4: OB4, OB5: OB5, OB6: OB6, G1: G1, G2: G2, G3: G3, G4: G4, G5: G5, M1: M1, M2: M2, M3: M3, M4: M4, TR1: TR1, TR2: TR2, TR3: TR3 };
 Object.keys(S9OB).forEach(function (k) { OBK[k] = S9OB[k]; }); S9_CAT.forEach(function (m) { CATALOG.push(m); });
 Object.keys(C4OB).forEach(function (k) { OBK[k] = C4OB[k]; }); C4_CAT.forEach(function (m) { CATALOG.push(m); });
@@ -7520,11 +7948,11 @@ function scen() {
     get endTitle() { return TX("Tèo giỏi quá!"); },
     endText: function (obs) { var nm = obs.map(function (o) { return o.endName; }); return TX("Tuyệt vời! Nhờ Tèo đo đạc và tính toán giỏi, khu vườn của ông đã gọn đẹp: ") + nm.join(", ") + TX(" đều xong cả. Ông bà thưởng Tèo một giỏ ổi chín!"); }
   };
-  if (isS12()) { var c12 = S12[S.scen3] || S12.mp, id12 = S12[S.scen3] ? S.scen3 : "mp"; return {
-    get level() { return L("Cấp 3 · Lớp 12 · Chuyên đề Hình giải tích", "Upper secondary · Grade 12 · Coordinate geometry"); },
+  if (isS12()) { var id12 = cdFix(), c12 = S12[id12], ci12 = CD_INFO[S.g]; return {
+    get level() { return L(ci12.lvl[0], ci12.lvl[1]); },
     get title() { return L(c12.title[0], c12.title[1]); },
     get lead() { return L(c12.lead[0], c12.lead[1]); },
-    hero: function () { return S12_HERO(id12); }, endHero: function () { return S12_HERO(id12, true); },
+    hero: function () { return id12 === "cs" ? CS_HERO() : S12_HERO(id12); }, endHero: function () { return id12 === "cs" ? CS_HERO(true) : S12_HERO(id12, true); },
     get endTitle() { return L(c12.endTitle[0], c12.endTitle[1]); },
     endText: function () { return L(c12.endText[0], c12.endText[1]); }
   }; }
@@ -7557,9 +7985,13 @@ function renderStory() {
   var c = scen();
   $("#scenPick").hidden = S.g > 5; $("#scenPick2").hidden = !(S.g > 5 && S.g < 10);
   var sp3 = $("#scenPick3"); sp3.hidden = !isS12();
-  if (!sp3.querySelector("[data-scen3]")) sp3.innerHTML = '<span class="s9lab"></span>' + S12_ORDER.map(function (k) { return '<button type="button" data-scen3="' + k + '" aria-pressed="false"></button>'; }).join("");
-  sp3.querySelector(".s9lab").textContent = L("Chuyên đề Hình giải tích:", "Coordinate geometry topic:");
-  S12_ORDER.forEach(function (k) { var b3 = sp3.querySelector("[data-scen3=" + k + "]"); b3.textContent = L(S12[k].btn[0], S12[k].btn[1]); b3.setAttribute("aria-pressed", k === (S.scen3 || "mp") ? "true" : "false"); });
+  if (isS12()) {
+    var od3 = cdOrder(), ci3 = CD_INFO[S.g]; cdFix();
+    if (!sp3.querySelector(".s9lab")) sp3.insertAdjacentHTML("afterbegin", '<span class="s9lab"></span>');
+    if (sp3.dataset.g !== String(S.g)) { sp3.querySelectorAll("[data-scen3]").forEach(function (x) { x.remove(); }); sp3.querySelector(".s9lab").insertAdjacentHTML("afterend", od3.map(function (k) { return '<button type="button" data-scen3="' + k + '" aria-pressed="false"></button>'; }).join("")); sp3.dataset.g = String(S.g); }
+    sp3.querySelector(".s9lab").textContent = L(ci3.lab[0], ci3.lab[1]);
+    od3.forEach(function (k) { var b3 = sp3.querySelector("[data-scen3=" + k + "]"); b3.textContent = L(S12[k].btn[0], S12[k].btn[1]); b3.setAttribute("aria-pressed", k === S.scen3 ? "true" : "false"); });
+  }
   var sp2 = $("#scenPick2");
   if (!sp2.querySelector("[data-scen2=dothi]")) { sp2.insertAdjacentHTML("beforeend", '<span class="s9lab"></span>' + S9_ORDER.map(function (k) { return '<button type="button" data-scen2="' + k + '" aria-pressed="false"></button>'; }).join("")); }
   sp2.querySelector(".s9lab").textContent = L("Ôn thi vào 10:", "Grade 10 exam prep:");
@@ -8222,7 +8654,7 @@ function refreshNotes() {
 function shuffle(a) { return a.slice().sort(function () { return Math.random() - 0.5; }); }
 function pickRoute() {
   if (isS12()) {
-    if (!S12[S.scen3]) S.scen3 = "mp";
+    cdFix();
     var pl12 = S12_POOL[S.scen3], sl12 = function (i) { return Array.isArray(pl12[i]) ? pl12[i] : [pl12[i]]; };
     var ok12 = S.route && S.route.length === pl12.length && S.route.every(function (o, i) { return o.s12 === S.scen3 && sl12(i).indexOf(o) >= 0; });
     if (!ok12 || S.c4re) {
@@ -8273,7 +8705,7 @@ function pickRoute() {
   S.route = c;
 }
 pickRoute();
-function routeList() { return S.route.concat(S.g >= 10 && S.g < 12 ? [OB3] : []); }
+function routeList() { return S.route.concat(S.g === 10 ? [OB3] : []); }
 function setObUi(ob) { $(".ftools").classList.toggle("mkt", isTap(ob)); $("#walletPill").hidden = !ob.market; $(".ftools").classList.toggle("rv", !!ob.boat); $(".ftools").classList.toggle("sqm", !!ob.eke && !ob.boat); }
 function reroll() { if (isC4() || isS12()) S.c4re = true; pickRoute(); renderRoute(); }
 document.addEventListener("click", function (e) { if (e.target.closest("#bReroll")) { reroll(); SFX.pick(); } });
@@ -8285,7 +8717,8 @@ function renderRoute() {
   if (sgW && sgB.dataset.set !== sgW.join() + LANG) { sgB.querySelectorAll("[data-sg]").forEach(function (x) { x.remove(); }); sgW.forEach(function (g) { sgB.insertAdjacentHTML("beforeend", '<button type="button" data-sg="' + g + '" aria-pressed="false">' + L("Lớp ", "Grade ") + g + "</button>"); }); sgB.dataset.set = sgW.join() + LANG; }
   if (isS12()) {
     $("#routeInfo").className = "card route r3";
-    $("#routeInfo").innerHTML = "<p><b>" + L("Lớp 12 · Hình giải tích:</b> em làm <b>", "Grade 12 · Coordinate geometry:</b> you do <b>") + list.length + L(" thử thách</b>, từ dễ đến khó.</p><ol>", " challenges</b>, from easy to harder.</p><ol>") +
+    var ci = CD_INFO[S.g];
+    $("#routeInfo").innerHTML = "<p><b>" + L(ci.short[0], ci.short[1]) + L(":</b> em làm <b>", ":</b> you do <b>") + list.length + L(S.g === 11 ? " trạm mật thư</b>, từ dễ đến khó.</p><ol>" : " thử thách</b>, từ dễ đến khó.</p><ol>", S.g === 11 ? " code stations</b>, from easy to harder.</p><ol>" : " challenges</b>, from easy to harder.</p><ol>") +
       list.map(function (o) { return "<li>" + doneMark(o) + "<b>" + o.name + "</b>: " + o.sub + "</li>"; }).join("") + "</ol>" + '<button class="linkbtn" type="button" id="bReroll">' + L("Đổi bài khác (ngẫu nhiên)", "Other challenges (random)") + "</button>";
     document.querySelectorAll("#subG [data-sg]").forEach(function (x) { x.setAttribute("aria-pressed", +x.dataset.sg === S.g ? "true" : "false"); });
     return;
@@ -11176,7 +11609,7 @@ function tlmDev() {
 function tlmNick() { return (lsGet("khemay-nick") || "").trim(); }
 function tlmQ() { try { return JSON.parse(lsGet("khemay-tlmq") || "[]"); } catch (e) { return []; } }
 function tlmSave(q) { if (q.length > 3000) q = q.slice(q.length - 3000); lsSet("khemay-tlmq", JSON.stringify(q)); }
-function tlmScen() { return S.g <= 5 ? (S.scen || "vuon") : S.g >= 12 ? (S.scen3 || "mp") : S.g >= 10 ? "km" : (S.scen2 || "km"); }
+function tlmScen() { return S.g <= 5 ? (S.scen || "vuon") : S.g >= 11 ? (S.scen3 || "mp") : S.g >= 10 ? "km" : (S.scen2 || "km"); }
 function tlm(ev, x) {
   try {
     var ob = ev !== "phien" && ev !== "mo" && typeof OBS !== "undefined" && OBS[S.i], r = {
@@ -11202,7 +11635,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.21";
+var APP_VER = "3.22";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
@@ -11761,7 +12194,7 @@ var PROG_KEY = "tt-tien-do", STAR_KEY = "tt-kho-sao", LV_RANK = { ok: 1, good: 2
 function progGet() { try { return JSON.parse(lsGet(PROG_KEY) || "{}") || {}; } catch (e) { return {}; } }
 function progMark(key, level) { if (!key) return; var o = progGet(); o.d = o.d || {}; if (!o.d[key] || LV_RANK[level] > LV_RANK[o.d[key]]) o.d[key] = level; lsSet(PROG_KEY, JSON.stringify(o)); }
 function progScenDone(id) { var o = progGet(); o.s = o.s || {}; o.s[id] = (o.s[id] || 0) + 1; lsSet(PROG_KEY, JSON.stringify(o)); }
-function scenId() { return S.g <= 5 ? "c1:" + (S.scen || "vuon") + ":" + S.g : (S.g >= 12 ? "c3:" + (S.scen3 || "mp") : S.g >= 10 ? "c3:km" : "c2:" + (S.scen2 || "km")); }
+function scenId() { return S.g <= 5 ? "c1:" + (S.scen || "vuon") + ":" + S.g : (S.g >= 11 ? "c3:" + (S.scen3 || "mp") : S.g >= 10 ? "c3:km" : "c2:" + (S.scen2 || "km")); }
 function flat(a) { var o = []; (a || []).forEach(function (x) { o = o.concat(Array.isArray(x) ? x : [x]); }); return o; }
 function scenPoolFor(lv1, id) {
   if (lv1) { if (C4[id]) return flat(C4_POOL[id]); if (id === "cho") return MPOOL; return GPOOL.filter(function (o) { return o.meta.lop.indexOf(S.g) >= 0; }); }
@@ -12105,7 +12538,8 @@ var SCEN_TAG = {
   mp: ["Phương trình mặt phẳng · Khoảng cách · Góc", "Plane equations · Distance · Angles"],
   dt: ["Phương trình đường thẳng · Hình chiếu · Giao điểm", "Line equations · Projection · Intersection"],
   mc: ["Phương trình mặt cầu · Giao với đường thẳng", "Sphere equations · Meeting a line"],
-  th: ["Kiến thức tổng hợp", "Mixed topics"]
+  th: ["Kiến thức tổng hợp", "Mixed topics"],
+  cs: ["Số hạng tổng quát · Tổng n số hạng · Cấp số nhân lùi vô hạn", "n-th term · Sum of n terms · Infinite geometric series"]
 };
 function scenTags() {
   document.querySelectorAll("#scenPick [data-scen], #scenPick2 [data-scen2], #scenPick3 [data-scen3]").forEach(function (b) {
@@ -12209,7 +12643,7 @@ $("#cHistBox").addEventListener("click", function (e) {
   try { loadRow(h.s); SFX.pick(); histToggle(false); updLcd(); toast(L("Đã gọi lại phép tính. Sửa nếu cần rồi bấm =.", "Calculation restored. Edit if needed, then press =.")); } catch (er) { SFX.nope(); }
 });
 
-Object.assign(EN, { "Lịch sử tính": "Calculation history", "Lớp 10, 11, 12": "Grades 10, 11, 12", "Khe Mây · Hình giải tích": "Khe Mây · Coordinate geometry" });
+Object.assign(EN, { "Lịch sử tính": "Calculation history", "Lớp 10, 11, 12": "Grades 10, 11, 12", "Khe Mây · Cấp số · Hình giải tích": "Khe Mây · Sequences · Coordinate geometry" });
 applyStatic(); syncSnd(); renderRoute(); renderResume();
 window.__khemay = { S12OB: S12OB, DT: DT, dtKey: dtKey, openDt: openDt, S9OB: S9OB, setLang: setLang, MISSING: MISSING, TX: TX,  readSave: readSave, snapshot: snapshot,  OB4: OB4, OB5: OB5, OB6: OB6, ROW: ROW, setRoute: function (a) { S.route = a.map(function (n) { return OBK[n]; }); renderRoute(); }, view: function () { return VIEW; }, OB3: OB3, getOBS: function () { return OBS; }, loadOb: loadOb, SFX: SFX, SND: SND, showReport: showReport, CAS: CAS, keyPress: keyPress, calcVars: calcVars, calcC: function () { return C; }, outTxt: outTxt, OB1: OB1, OB2: OB2, S: S, findPt: findPt, P: P };
 })();
