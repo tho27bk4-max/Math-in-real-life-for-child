@@ -6530,7 +6530,7 @@ var S12 = {
   }
 };
 var S12_ORDER = ["mp", "dt", "mc", "th"];
-function isS12() { return S.g === 11 || S.g === 12; }
+function isS12() { if (S.g !== 11 && S.g !== 12) return false; cdFix(); return S.scen3 !== "km"; }
 
 /* ---------- định dạng số, điểm, mặt phẳng, đường thẳng ---------- */
 function c3(v) { v = Math.round(v * 100) / 100; if (Math.abs(v) < 1e-9) v = 0; return (v < 0 ? "−" : "") + fmt(Math.abs(v), 2); }
@@ -7477,9 +7477,9 @@ S12.cs = {
   endText: ["Rương kho báu bật mở: bên trong là huy hiệu Nhà thám hiểm hang động và quà lưu niệm cho cả nhóm. Cảm ơn em đã giải đủ 5 mật thư!", "The treasure chest pops open: inside are Cave Explorer badges and souvenirs for the whole team. Well done on cracking all 5 codes!"],
   lastBtn: ["Mở rương kho báu", "Open the treasure chest"]
 };
-var S11_ORDER = ["cs"];
+var S11_ORDER = ["km", "cs"];
 var CD_INFO = {
-  11: { lab: ["Chuyên đề Cấp số cộng, cấp số nhân:", "Topic: arithmetic and geometric sequences:"], lvl: ["Cấp 3 · Lớp 11 · Chuyên đề Cấp số cộng, cấp số nhân", "Upper secondary · Grade 11 · Sequences"], short: ["Lớp 11 · Cấp số", "Grade 11 · Sequences"] },
+  11: { lab: ["Toán lớp 11:", "Grade 11 maths:"], lvl: ["Cấp 3 · Lớp 11 · Chuyên đề Cấp số cộng, cấp số nhân", "Upper secondary · Grade 11 · Sequences"], short: ["Lớp 11 · Cấp số", "Grade 11 · Sequences"] },
   12: { lab: ["Chuyên đề Hình giải tích:", "Coordinate geometry topic:"], lvl: ["Cấp 3 · Lớp 12 · Chuyên đề Hình giải tích", "Upper secondary · Grade 12 · Coordinate geometry"], short: ["Lớp 12 · Hình giải tích", "Grade 12 · Coordinate geometry"] }
 };
 function cdOrder() { return S.g === 11 ? S11_ORDER : S12_ORDER; }
@@ -7889,6 +7889,238 @@ function CS_HERO(end) {
   return o + "</svg>";
 }
 
+/* ================= CẤP 3 · LỚP 11 · KHE MÂY (KIẾN THỨC TỔNG HỢP): CHƯỚNG NGẠI LƯỢNG GIÁC (bản 3.23) =================
+   Khe Mây lớp 11 = 2 chướng ngại cũ (định lý sin, côsin, parabol) + 1 chướng ngại lượng giác lớp 11 + Hồ lớn.
+   LG1 guồng nước (phương trình lượng giác), LG2 mực nước lũ (bất phương trình lượng giác), LG3 khúc cua sườn núi (radian, độ dài cung). */
+function isKm11() { return S.g === 11 && S.scen3 === "km"; }
+function kmBg(H, gy) {
+  var o = '<rect width="360" height="' + H + '" fill="#cfeeff"/><circle cx="318" cy="36" r="16" fill="#ffcf3f" stroke="' + INK + '" stroke-width="2"/>';
+  o += '<path d="M-10 ' + (gy - 40) + ' L50 ' + (gy - 120) + ' L110 ' + (gy - 60) + ' L170 ' + (gy - 130) + ' L240 ' + (gy - 56) + ' L300 ' + (gy - 110) + ' L370 ' + (gy - 50) + ' V' + gy + ' H-10 Z" fill="#8fcf7a" stroke="#5c9e4f" stroke-width="2" stroke-linejoin="round"/>';
+  return o + '<path d="M-10 ' + (gy - 20) + ' Q90 ' + (gy - 50) + ' 180 ' + (gy - 24) + ' T370 ' + (gy - 28) + ' V' + gy + ' H-10 Z" fill="#6fbf61"/>';
+}
+function kmCard(x, y, w, title, it, p, lines, col) {
+  var seen = p.seen[it], h = 22 + (seen ? lines.length * 17 : 17), o = '<g data-it="' + it + '" style="cursor:pointer"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8" fill="' + (seen ? "#fff" : "#fffbe6") + '" stroke="' + (col || "#1f6f9f") + '" stroke-width="2"/>' + T2(x + 9, y + 16, title, { fs: 10.5, fw: 800, c: col || "#1f6f9f" });
+  if (seen) lines.forEach(function (t, i) { o += T2(x + 9, y + 33 + i * 17, t, { fs: 12.5, fw: 800 }); }); else o += T2(x + 9, y + 33, L("chạm để xem", "tap to read"), { fs: 11.5, fw: 700, c: "#90a4ae" });
+  return o + "</g>" + (seen ? "" : qBadge(x + w - 10, y + 10));
+}
+function piFrac(k, m, v) { v = v || ""; var n = (k === 1 ? "" : k) + "π" + v; return m === 1 ? n : n + "/" + m; }
+function lgJob(o) {
+  var j = s12Job("lg", o); j.kmlg = true;
+  ["numLabel", "nextBtn", "lastBtn", "failAll", "failBtn", "renewSay"].forEach(function (k) { Object.defineProperty(j, k, { get: { numLabel: function () { return TX("Chướng ngại "); }, nextBtn: function () { return TX("Nhiệm vụ tiếp theo"); }, lastBtn: function () { return TX("Về bản"); },
+    failAll: function () { return L("Hết 3 lần thử rồi! Đội cứu trợ đo lại và gửi <b>số liệu mới</b>, cháu tính lại thật kỹ nhé.", "That's 3 tries! The team measured again and sent <b>new figures</b>. Work it out again carefully."); },
+    failBtn: function () { return L("Nhận số liệu mới", "Get new figures"); }, renewSay: function () { return L("Số liệu mới đã có. Cháu chạm vào hình để đọc lại nhé.", "New figures are ready. Tap the picture to read them again."); } }[k], configurable: true }); });
+  j.intro = function () { return (S.i === 0 ? TX("Alô, kỹ sư nghe rõ không? ") : TX("Giỏi lắm! ")) + L(this.lead[0], this.lead[1]); };
+  return j;
+}
+
+/* LG1 · Guồng nước (KM-HS-1101): h(t) = a − R·cos(πt/k), tìm thời điểm đầu tiên gàu lên tới máng */
+var LG1 = lgJob({
+  name: ["Guồng nước của bản", "The village water wheel"], sub: ["lúc nào gàu lên tới máng (phương trình lượng giác)", "when the bucket reaches the trough (trig equation)"],
+  endName: ["guồng nước", "the water wheel"], what: ["Thời điểm đầu tiên gàu chạm máng (giây)", "First time the bucket reaches the trough (seconds)"], unit: "s", dp: 2,
+  btnText: ["Buộc gói thuốc", "Tie on the medicine"], H: 430,
+  lead: ["Phía trước là <b>guồng nước</b> của bản, quay đều đưa nước lên <b>máng tre</b> dẫn vào làng. Đội cứu trợ buộc gói thuốc vào một ống gàu ở <b>vị trí thấp nhất</b>, rồi người trên máng phải chộp lấy đúng lúc gàu lên tới máng. Cháu tính xem sau bao nhiêu giây thì gàu chạm máng lần đầu tiên.",
+    "Ahead is the village <b>water wheel</b>, turning steadily to lift water into a <b>bamboo trough</b> that runs into the village. The team ties a medicine pack to a bucket at its <b>lowest point</b>, and someone on the trough must grab it when the bucket reaches the trough. Work out after how many seconds the bucket first reaches the trough."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> độ cao của gàu so với mặt suối là h(t) (mét), t là số giây tính từ lúc gàu ở thấp nhất. Tìm thời điểm <b>đầu tiên</b> gàu lên tới độ cao của máng.<br><b>Cần tìm:</b> t (giây).<br><b>Dữ kiện:</b> chạm bảng thông số guồng và cây sào đo độ cao máng.",
+    "<b>Task:</b> the bucket's height above the stream is h(t) (metres), with t seconds counted from the moment the bucket is lowest. Find the <b>first</b> time the bucket reaches the trough's height.<br><b>Find:</b> t (seconds).<br><b>Data:</b> tap the wheel's spec board and the pole that measures the trough height."); },
+  make: function () {
+    var R = pickOne([1.5, 2, 2.5, 3]), a = Math.round((R - 0.2) * 10) / 10, P = pickOne([12, 24, 36, 48, 60]), c = pickOne([[-0.5, 6], [0, 4], [0.5, 3], [0.5, 3]]);
+    var H = Math.round((a + c[0] * R) * 100) / 100;
+    return { R: R, a: a, P: P, k: P / 2, c: c[0], H: H, ans: P / c[1], th: 2 * Math.PI / c[1] };
+  },
+  tol: function () { return 0.05; },
+  fml: function (p) { return "h(t) = " + fmt(p.a, 2) + " − " + fmt(p.R, 2) + "cos(πt/" + p.k + ")"; },
+  geo: function (p) { var yw = 330, Rp = 96, sc = Rp / p.R; return { yw: yw, Rp: Rp, sc: sc, cx: 140, cy: yw - p.a * sc }; },
+  wheel: function (p, g, rot, hl) {
+    var o = '<circle cx="' + g.cx + '" cy="' + g.cy.toFixed(1) + '" r="' + g.Rp + '" fill="none" stroke="#a1783f" stroke-width="5"/><circle cx="' + g.cx + '" cy="' + g.cy.toFixed(1) + '" r="' + (g.Rp - 12) + '" fill="none" stroke="#c8a165" stroke-width="2"/>';
+    for (var i = 0; i < 16; i++) { var t = rot + i * Math.PI / 8; o += '<path d="M' + g.cx + " " + g.cy.toFixed(1) + " L" + (g.cx + g.Rp * Math.sin(t)).toFixed(1) + " " + (g.cy + g.Rp * Math.cos(t)).toFixed(1) + '" stroke="#c8a165" stroke-width="2"/>'; }
+    for (i = 0; i < 12; i++) { var u = rot + i * Math.PI / 6, bx = g.cx + g.Rp * Math.sin(u), by = g.cy + g.Rp * Math.cos(u); o += '<rect x="' + (bx - 5).toFixed(1) + '" y="' + (by - 9).toFixed(1) + '" width="10" height="18" rx="4" fill="' + (i === 0 && hl ? hl : "#d9b779") + '" stroke="#6d4c41" stroke-width="1.4" transform="rotate(' + (-u * 180 / Math.PI + 70).toFixed(1) + " " + bx.toFixed(1) + " " + by.toFixed(1) + ')"/>'; }
+    return o + '<circle cx="' + g.cx + '" cy="' + g.cy.toFixed(1) + '" r="9" fill="#795548" stroke="' + INK + '" stroke-width="2"/>';
+  },
+  base: function (p) {
+    var g = this.geo(p), o = kmBg(p.bottom, g.yw - 10), yH = g.yw - p.H * g.sc, bx = g.cx + g.Rp * Math.sin(p.th);
+    o += '<path d="M' + (g.cx - 50) + " " + g.yw + " L" + g.cx + " " + g.cy.toFixed(1) + " L" + (g.cx + 50) + " " + g.yw + '" fill="none" stroke="#6d4c41" stroke-width="7" stroke-linejoin="round"/>';
+    o += this.wheel(p, g, 0, "#e53935");
+    o += '<rect x="0" y="' + g.yw + '" width="360" height="' + (p.bottom - g.yw) + '" fill="#62c5f0" fill-opacity=".72"/><path d="M0 ' + g.yw + ' H360" stroke="#1e88e5" stroke-width="2"/><path class="wave" d="M30 ' + (g.yw + 22) + ' q8 -6 16 0 t16 0 M250 ' + (g.yw + 34) + ' q8 -6 16 0 t16 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>';
+    o += '<path d="M' + (bx + 10).toFixed(1) + " " + yH.toFixed(1) + " L352 " + (yH + 10).toFixed(1) + '" stroke="#8d6e3c" stroke-width="12" stroke-linecap="round"/><path d="M' + (bx + 10).toFixed(1) + " " + (yH - 4).toFixed(1) + " L352 " + (yH + 6).toFixed(1) + '" stroke="#c8a165" stroke-width="4" stroke-linecap="round"/>';
+    [bx + 40, 320].forEach(function (x) { o += '<path d="M' + x.toFixed(1) + " " + (yH + 6).toFixed(1) + " V" + g.yw + '" stroke="#6d4c41" stroke-width="4"/>'; });
+    o += '<g transform="translate(' + (bx + 70).toFixed(1) + " " + (yH - 2).toFixed(1) + ')"><circle cy="-30" r="7" fill="#f2c28b" stroke="' + INK + '" stroke-width="1.6"/><path d="M-12 -32 L0 -42 L12 -32 Z" fill="#f3dc8a" stroke="' + INK + '" stroke-width="1.4"/><rect x="-6" y="-23" width="12" height="17" rx="4" fill="#ff7a3d" stroke="' + INK + '" stroke-width="1.6"/><path d="M-6 -18 L-16 -26" stroke="' + INK + '" stroke-width="2.4"/></g>';
+    var px = 300; o += '<g data-it="m" style="cursor:pointer"><rect x="' + (px - 4) + '" y="' + yH.toFixed(1) + '" width="8" height="' + (g.yw - yH).toFixed(1) + '" fill="#ffe082" stroke="#5d4037" stroke-width="1.4"/>';
+    for (var m = 0; m <= p.H + 0.01; m += 0.5) o += '<path d="M' + (px - 4) + " " + (g.yw - m * g.sc).toFixed(1) + " h" + (m % 1 ? 4 : 8) + '" stroke="#5d4037" stroke-width="1.2"/>';
+    o += '<rect x="' + (px - 22) + '" y="' + (yH - 6).toFixed(1) + '" width="44" height="' + (g.yw - yH + 12).toFixed(1) + '" fill="#fff" fill-opacity="0"/></g>';
+    o += p.seen.m ? cspill(px - 12, (yH + g.yw) / 2, L("máng cao ", "trough ") + fmt(p.H, 2) + " m", "#fff8e1") : qBadge(px + 14, (yH + g.yw) / 2);
+    o += '<path d="M' + (g.cx - 4) + " " + (p.bottom - 34) + " L" + (g.cx - 6) + " " + (g.cy + g.Rp + 10).toFixed(1) + '" stroke="#e53935" stroke-width="2"/>' + cspill(g.cx - 4, p.bottom - 22, L("gói thuốc ở gàu thấp nhất (t = 0)", "medicine pack, lowest bucket (t = 0)"), "#ffebee");
+    o += kmCard(12, 12, 236, L("BẢNG THÔNG SỐ GUỒNG", "WATER WHEEL SPECS"), "b", p, [this.fml(p) + " (m)", L("t: giây, tính từ lúc gàu thấp nhất", "t: seconds from the lowest point")]);
+    return o;
+  },
+  items: function (p) { var f = this.fml(p); return {
+    b: { note: ["Guồng: " + f + " (m, t giây)", "Wheel: " + f + " (m, t in s)"], sfx: "pick", say: ["Độ cao của gàu so với mặt suối: <b>" + f + "</b> (mét), t tính bằng giây từ lúc gàu ở thấp nhất.", "Bucket height above the stream: <b>" + f + "</b> (metres), t in seconds from the lowest point."] },
+    m: { note: ["Máng cao " + fmt(p.H, 2) + " m so với mặt suối", "Trough " + fmt(p.H, 2) + " m above the stream"], val: p.H, sym: "H", sfx: "tape", say: ["Sào đo: máng tre cao <b>" + fmt(p.H, 2) + " m</b> so với mặt suối.", "Pole: the trough is <b>" + fmt(p.H, 2) + " m</b> above the stream."] } }; },
+  special: function (p, v) {
+    if (Math.abs(v - (p.P - p.ans)) < 0.05) return { ok: false, kind: "long", msg: L("Đó là lần thứ hai gàu đi qua độ cao máng (lúc đang đi xuống). Cần nghiệm dương nhỏ nhất.", "That's the second time the bucket passes the trough height (on the way down). You need the smallest positive solution.") };
+    if (Math.abs(v - p.P / 2) < 0.05 && Math.abs(p.ans - p.P / 2) > 0.05) return { ok: false, kind: "long", msg: L("Lúc đó gàu ở cao nhất, đã quá máng rồi.", "At that moment the bucket is at the top, past the trough.") };
+    return null;
+  },
+  fx: function (p, k, v) {
+    var g = this.geo(p), th = 2 * Math.PI * v / p.P, bx = g.cx + g.Rp * Math.sin(th), by = g.cy + g.Rp * Math.cos(th), col = k === "ok" ? "#1f8a4c" : "#e53935";
+    var o = '<path d="M' + g.cx + " " + (g.cy + g.Rp + 14).toFixed(1) + " A" + (g.Rp + 14) + " " + (g.Rp + 14) + " 0 " + ((th % (2 * Math.PI)) > Math.PI ? 1 : 0) + " 0 " + (g.cx + (g.Rp + 14) * Math.sin(th)).toFixed(1) + " " + (g.cy + (g.Rp + 14) * Math.cos(th)).toFixed(1) + '" fill="none" stroke="' + col + '" stroke-width="2.4" stroke-dasharray="6 4"/>';
+    o += '<circle cx="' + bx.toFixed(1) + '" cy="' + by.toFixed(1) + '" r="11" fill="' + col + '" stroke="#fff" stroke-width="2.4"/>' + T2(bx, by + 4, "✚", { a: "middle", fs: 11, fw: 800, c: "#fff" });
+    if (k === "ok") o += '<path d="M' + (bx + 8).toFixed(1) + " " + (by + 2).toFixed(1) + " q 14 4 30 10" + '" stroke="#29b6f6" stroke-width="5" fill="none" stroke-linecap="round"/>';
+    else o += T2(Math.min(250, Math.max(70, bx)), Math.max(130, by - 20), k === "short" ? L("gàu chưa tới máng", "not up to the trough yet") : L("gàu đã qua máng", "already past the trough"), { a: "middle", fs: 12.5, fw: 800, c: "#c0392b" });
+    return o;
+  },
+  okMsg: ["Chính xác! Gói thuốc vừa lên tới máng, người trên máng chộp được ngay.", "Correct! The pack reaches the trough and is caught right away."],
+  shortMsg: ["Sớm quá, gàu chưa lên tới máng.", "Too early, the bucket hasn't reached the trough."],
+  longMsg: ["Muộn quá, gàu đã đi qua máng rồi.", "Too late, the bucket has already passed the trough."],
+  passTitle: ["gói thuốc đã lên máng!", "the pack is on the trough!"],
+  rows: function (p) { return [["h(t) = H", fmt(p.a, 2) + " − " + fmt(p.R, 2) + "cos(πt/" + p.k + ") = " + fmt(p.H, 2)], ["cos(πt/" + p.k + ")", fmt(-p.c, 2)], ["πt/" + p.k, p.c === 0 ? "π/2" : p.c > 0 ? "2π/3" : "π/3"], ["t", fmt(p.ans, 2) + " s"]]; },
+  formula: function () { return L("cos x = m ⇔ x = ± arccos m + k2π; lấy nghiệm dương nhỏ nhất", "cos x = m ⇔ x = ± arccos m + k2π; take the smallest positive solution"); },
+  hints: function (p) { return [
+    L("Gàu chạm máng khi h(t) = H (độ cao máng). Thay vào được một phương trình cos(πt/k) = m.", "The bucket reaches the trough when h(t) = H. Substitute to get cos(πt/k) = m."),
+    L("Giải cos x = m với x = πt/k > 0, lấy nghiệm dương <b>nhỏ nhất</b> (lần đầu đi lên), rồi suy ra t = k·x/π.", "Solve cos x = m with x = πt/k > 0, take the <b>smallest</b> positive solution (first time going up), then t = k·x/π."),
+    L("Ví dụ: h(t) = 1,8 − 2cos(πt/12), máng cao 2,8 m: cos(πt/12) = −1/2 ⇒ πt/12 = 2π/3 ⇒ t = 8 giây.", "Example: h(t) = 1.8 − 2cos(πt/12), trough 2.8 m: cos(πt/12) = −1/2 ⇒ πt/12 = 2π/3 ⇒ t = 8 seconds.")]; }
+});
+
+/* LG2 · Mực nước lũ (KM-HS-1102): d(t) = a + b·cos(π(t − t0)/12) ≤ D, khoảng giờ xe qua được */
+var LG2 = lgJob({
+  name: ["Chờ nước lũ rút", "Waiting for the flood to drop"], sub: ["khoảng giờ xe lội qua suối được (bất phương trình lượng giác)", "the hours the truck can ford the stream (trig inequality)"],
+  endName: ["khúc suối lũ", "the flooded ford"], what: ["Khoảng giờ xe qua được (từ … giờ đến … giờ)", "Hours the truck can cross (from … to …)"], unit: "", dp: 2,
+  btnText: ["Chốt giờ cho xe", "Set the crossing time"], H: 430,
+  mf: null,
+  lead: ["Xe tải chở hàng phải <b>lội qua khúc suối</b> chưa có cầu. Mực nước lũ lên xuống theo giờ trong ngày, trạm đo đã lập được công thức. Xe chỉ qua an toàn khi nước <b>không sâu quá mức cho phép</b>. Cháu tính xem trong ngày, xe qua được <b>từ mấy giờ đến mấy giờ</b>.",
+    "The supply truck must <b>ford the stream</b>, which has no bridge yet. The flood level rises and falls during the day, and the gauge station has a formula for it. The truck can only cross safely when the water is <b>no deeper than its limit</b>. Work out <b>from what time to what time</b> the truck can cross today."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> độ sâu nước ở chỗ lội là d(t) (mét), t là giờ trong ngày (0 ≤ t ≤ 24). Tìm khoảng thời gian trong ngày mà d(t) không vượt quá độ sâu xe lội được.<br><b>Cần tìm:</b> giờ bắt đầu và giờ kết thúc (giờ).<br><b>Dữ kiện:</b> chạm trạm đo mực nước và biển ghi trên xe tải.",
+    "<b>Task:</b> the water depth at the ford is d(t) (metres), t is the hour of the day (0 ≤ t ≤ 24). Find the part of the day when d(t) is at most the depth the truck can wade.<br><b>Find:</b> start and end time (hours).<br><b>Data:</b> tap the water gauge station and the sign on the truck."); },
+  make: function () {
+    var t0 = rnd(0, 3), b = pickOne([0.4, 0.5, 0.6]), a = pickOne([0.7, 0.8, 0.9]), c = pickOne([[0.5, 4], [0, 6], [-0.5, 8]]);
+    return { t0: t0, a: a, b: b, c: c[0], D: Math.round((a + c[0] * b) * 100) / 100, t1: t0 + c[1], t2: t0 + 24 - c[1], u: c[1], ans: 1 };
+  },
+  fml: function (p) { return "d(t) = " + fmt(p.a, 2) + " + " + fmt(p.b, 2) + "cos(π" + (p.t0 ? "(t − " + p.t0 + ")" : "t") + "/12)"; },
+  dep: function (p, t) { return p.a + p.b * Math.cos(Math.PI * (t - p.t0) / 12); },
+  truck: function (x, y, s) { return '<g transform="translate(' + x + " " + y + ") scale(" + (s || 1) + ')"><rect x="-38" y="-30" width="48" height="26" rx="3" fill="#2e7d32" stroke="' + INK + '" stroke-width="2"/><path d="M10 -24 h16 l10 10 v10 h-26 Z" fill="#ff7a3d" stroke="' + INK + '" stroke-width="2"/><rect x="14" y="-21" width="10" height="7" fill="#bbdefb"/><circle cx="-24" cy="-2" r="7" fill="#37474f" stroke="' + INK + '" stroke-width="1.6"/><circle cx="22" cy="-2" r="7" fill="#37474f" stroke="' + INK + '" stroke-width="1.6"/><text x="-14" y="-12" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">✚</text></g>'; },
+  base: function (p) {
+    var gy = 300, o = kmBg(p.bottom, gy), wl = gy + 8;
+    o += '<path d="M0 ' + gy + ' H110 L150 ' + (gy + 70) + ' H230 L270 ' + gy + ' H360 V' + p.bottom + ' H0 Z" fill="#a1887f"/>';
+    o += '<path d="M118 ' + wl + ' H262 L238 ' + (gy + 70) + ' H142 Z" fill="#62c5f0" stroke="#1e88e5" stroke-width="1.6"/><path class="wave" d="M150 ' + (wl + 14) + ' q8 -6 16 0 t16 0 t16 0 t16 0" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>';
+    o += '<rect x="0" y="' + gy + '" width="110" height="6" fill="#8d6e63"/><rect x="270" y="' + gy + '" width="90" height="6" fill="#8d6e63"/>';
+    o += this.truck(58, gy, 1.05);
+    var px = 196; o += '<rect x="' + (px - 5) + '" y="' + (gy - 44) + '" width="10" height="114" fill="#fff" stroke="' + INK + '" stroke-width="1.6"/>';
+    for (var i = 0; i < 7; i++) o += '<rect x="' + (px - 5) + '" y="' + (gy - 44 + i * 16) + '" width="10" height="8" fill="#e53935"/>';
+    o += '<g transform="translate(316 ' + (gy - 18) + ')"><path d="M0 18 V-30" stroke="' + INK + '" stroke-width="2"/><rect x="-20" y="-66" width="40" height="40" rx="6" fill="#fff" stroke="' + INK + '" stroke-width="2"/><path d="M-12 -38 q6 -6 12 0 t12 0" stroke="#1e88e5" stroke-width="2" fill="none"/><path d="M0 -60 L0 -42" stroke="' + INK + '" stroke-width="2"/><path d="M-6 -48 L0 -42 L6 -48" stroke="' + INK + '" stroke-width="2" fill="none"/></g>';
+    o += kmCard(12, 12, 250, L("TRẠM ĐO MỰC NƯỚC", "WATER GAUGE STATION"), "g", p, [this.fml(p) + " (m)", L("t: giờ trong ngày, 0 ≤ t ≤ 24", "t: hour of the day, 0 ≤ t ≤ 24")]);
+    o += '<g data-it="x" style="cursor:pointer"><rect x="10" y="' + (gy - 96) + '" width="118" height="44" rx="8" fill="' + (p.seen.x ? "#fff" : "#fffbe6") + '" stroke="#2e7d32" stroke-width="2"/>' + T2(18, gy - 80, L("XE TẢI CỨU TRỢ", "SUPPLY TRUCK"), { fs: 10.5, fw: 800, c: "#2e7d32" }) + T2(18, gy - 62, p.seen.x ? L("lội nước sâu ≤ ", "wades ≤ ") + fmt(p.D, 2) + " m" : L("chạm để xem", "tap to read"), { fs: 12, fw: 800, c: p.seen.x ? INK : "#90a4ae" }) + '<rect x="10" y="' + (gy - 52) + '" width="100" height="56" fill="#fff" fill-opacity="0"/></g>' + (p.seen.x ? "" : qBadge(118, gy - 86));
+    return o;
+  },
+  items: function (p) { var f = this.fml(p); return {
+    g: { note: ["Độ sâu chỗ lội: " + f + " (m, t giờ)", "Ford depth: " + f + " (m, t in hours)"], sfx: "pick", say: ["Trạm đo: độ sâu nước chỗ lội là <b>" + f + "</b> (mét), t là giờ trong ngày.", "Gauge: the depth at the ford is <b>" + f + "</b> (metres), t is the hour of the day."] },
+    x: { note: ["Xe lội được nước sâu tối đa " + fmt(p.D, 2) + " m", "Truck wades at most " + fmt(p.D, 2) + " m"], val: p.D, sym: "D", sfx: "pick", say: ["Biển trên xe: lội nước sâu tối đa <b>" + fmt(p.D, 2) + " m</b>.", "Truck sign: wades water up to <b>" + fmt(p.D, 2) + " m</b> deep."] } }; },
+  cmp: function (p, a) {
+    var x = a[0], y = a[1], t = 0.05;
+    if (Math.abs(x - p.t1) <= t && Math.abs(y - p.t2) <= t) return { ok: true, kind: "ok", msg: L(this.okMsg[0], this.okMsg[1]) };
+    if (x > y) return { ok: false, kind: "bad", msg: L("Giờ bắt đầu phải trước giờ kết thúc.", "The start time must come before the end time.") };
+    if (p.t0 && Math.abs(x - p.u) <= t && Math.abs(y - (24 - p.u)) <= t) return { ok: false, kind: "bad", msg: L("Gần đúng rồi, nhưng góc là π(t − " + p.t0 + ")/12: nhớ cộng thêm " + p.t0 + " giờ.", "Nearly: the angle is π(t − " + p.t0 + ")/12, so add " + p.t0 + " hours.") };
+    if (Math.abs(x - (p.t2 - 24)) <= t || (Math.abs(x - p.t0) <= t && Math.abs(y - p.t1) <= t) || (Math.abs(x - p.t2) <= t)) return { ok: false, kind: "bad", msg: L("Đó là lúc nước sâu hơn mức cho phép. Cần d(t) ≤ D, tức cos(...) nhỏ hơn hoặc bằng một số.", "That's when the water is too deep. You need d(t) ≤ D, so cos(...) is at most some number.") };
+    var ins = Math.abs(x - p.t1) <= t || Math.abs(y - p.t2) <= t;
+    return { ok: false, kind: "bad", msg: ins ? L("Mới đúng một đầu mút. Kiểm tra lại đầu còn lại.", "Only one end is right. Check the other one.") : L("Chưa đúng. Giải d(t) ≤ D đưa về cos(...) ≤ m, rồi tìm t trong đoạn [0; 24].", "Not right. Turn d(t) ≤ D into cos(...) ≤ m, then find t in [0; 24].") };
+  },
+  showA: function (a) { return L("từ ", "from ") + fmt(a[0], 2) + L(" giờ đến ", " h to ") + fmt(a[1], 2) + L(" giờ", " h"); },
+  fx: function (p, k, v) {
+    var a = v.a, me = this, X = function (t) { return 40 + t * 12.5; }, Y = function (d) { return 400 - (d - p.a + p.b) / (2 * p.b) * 62; };
+    var o = '<rect x="12" y="304" width="336" height="114" rx="10" fill="#fff" stroke="' + INK + '" stroke-width="1.6" opacity=".96"/>';
+    o += '<rect x="' + X(p.t1) + '" y="334" width="' + (X(p.t2) - X(p.t1)) + '" height="66" fill="#c8e6c9"/>';
+    var d = ""; for (var t = 0; t <= 24.01; t += 0.5) d += (t ? " L" : "M") + X(t).toFixed(1) + " " + Y(me.dep(p, t)).toFixed(1);
+    o += '<path d="' + d + '" fill="none" stroke="#1e88e5" stroke-width="2.4"/><path d="M40 ' + Y(p.D).toFixed(1) + ' H340" stroke="#e53935" stroke-width="1.6" stroke-dasharray="5 4"/>' + T2(44, Y(p.D) - 4, "D = " + fmt(p.D, 2) + " m", { fs: 10, fw: 800, c: "#e53935" });
+    [0, 6, 12, 18, 24].forEach(function (t) { o += '<path d="M' + X(t) + ' 400 v3" stroke="' + INK + '"/>' + T2(X(t), 413, t + "h", { a: "middle", fs: 9, fw: 700, c: "#546e7a" }); });
+    o += T2(24, 320, L("độ sâu nước trong ngày", "depth over the day"), { fs: 10.5, fw: 800, c: "#1e88e5" });
+    var x0 = X(Math.max(0, Math.min(24, a[0]))), x1 = X(Math.max(0, Math.min(24, a[1])));
+    o += '<path d="M' + x0 + " 328 H" + x1 + '" stroke="' + (k === "ok" ? "#1f8a4c" : "#c0392b") + '" stroke-width="5" stroke-linecap="round"/>';
+    if (k === "ok") o += this.truck(318, 300, 1.05);
+    return o;
+  },
+  okMsg: ["Chính xác! Xe tải chờ đúng giờ nước rút và qua suối an toàn.", "Correct! The truck waits for the water to drop and crosses safely."],
+  badMsg: ["Chưa đúng.", "Not right."],
+  passTitle: ["xe đã qua suối!", "the truck is across!"],
+  rows: function (p) { var m = p.c; return [["d(t) ≤ D", "cos(π" + (p.t0 ? "(t − " + p.t0 + ")" : "t") + "/12) ≤ " + fmt(m, 2)], [L("Góc", "Angle"), (m === 0.5 ? "π/3" : m === 0 ? "π/2" : "2π/3") + " ≤ x ≤ " + (m === 0.5 ? "5π/3" : m === 0 ? "3π/2" : "4π/3")], [L("Khoảng giờ", "Hours"), L("từ ", "from ") + p.t1 + L(" giờ đến ", " h to ") + p.t2 + L(" giờ", " h")]]; },
+  formula: function () { return L("cos x ≤ m (−1 < m < 1) ⇔ arccos m + k2π ≤ x ≤ 2π − arccos m + k2π", "cos x ≤ m (−1 < m < 1) ⇔ arccos m + k2π ≤ x ≤ 2π − arccos m + k2π"); },
+  hints: function () { return [
+    L("Xe qua được khi d(t) ≤ D. Chuyển vế, chia cho b > 0 được cos(x) ≤ m với x = π(t − t₀)/12.", "The truck can cross when d(t) ≤ D. Rearrange and divide by b > 0: cos(x) ≤ m with x = π(t − t₀)/12."),
+    L("Trong một chu kỳ, cos x ≤ m khi arccos m ≤ x ≤ 2π − arccos m. Đổi x về t, nhớ t₀ và điều kiện 0 ≤ t ≤ 24.", "Over one period, cos x ≤ m when arccos m ≤ x ≤ 2π − arccos m. Convert x back to t, remembering t₀ and 0 ≤ t ≤ 24."),
+    L("Ví dụ: d(t) = 0,8 + 0,5cos(πt/12), D = 1,05 m: cos(πt/12) ≤ 1/2 ⇒ π/3 ≤ πt/12 ≤ 5π/3 ⇒ từ 4 giờ đến 20 giờ.", "Example: d(t) = 0.8 + 0.5cos(πt/12), D = 1.05 m: cos(πt/12) ≤ 1/2 ⇒ π/3 ≤ πt/12 ≤ 5π/3 ⇒ from 4 h to 20 h.")]; }
+});
+Object.defineProperty(LG2, "mf", { get: function () { return [L("Từ", "From"), 0, L("giờ đến", "h to"), 1, L("giờ", "h")]; }, configurable: true });
+
+/* LG3 · Khúc cua sườn núi (KM-HH-1101): độ dài cung l = R·α (α radian) */
+var LG3_A = [[30, 1, 6], [45, 1, 4], [60, 1, 3], [75, 5, 12], [90, 1, 2], [120, 2, 3], [135, 3, 4], [150, 5, 6]];
+var LG3 = lgJob({
+  name: ["Khúc cua sườn núi", "The mountain bend"], sub: ["quãng đường trên khúc cua (radian, độ dài cung)", "distance round the bend (radians, arc length)"],
+  endName: ["khúc cua sườn núi", "the mountain bend"], what: ["Quãng đường xe đi trên khúc cua (m, làm tròn đến m)", "Distance round the bend (m, to the nearest metre)"], unit: "m", dp: 0,
+  btnText: ["Báo cho tài xế", "Tell the driver"], H: 430,
+  lead: ["Đường vào bản vòng quanh <b>sườn núi</b> thành một khúc cua hình cung tròn. Trời mưa, tài xế phải đi chậm cả khúc cua, nên cần biết trước <b>quãng đường trên khúc cua</b>. Cháu đọc bản đồ địa hình rồi tính giúp nhé.",
+    "The road into the village wraps round the <b>mountainside</b> in a circular bend. It's raining, so the driver must go slowly the whole way round and needs to know the <b>distance round the bend</b>. Read the topographic map and work it out."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> khúc cua là một cung tròn tâm O. Tính độ dài cung đường.<br><b>Cần tìm:</b> quãng đường (m, làm tròn đến hàng đơn vị).<br><b>Dữ kiện:</b> chạm chú giải bản đồ (bán kính) và góc ở tâm.",
+    "<b>Task:</b> the bend is a circular arc with centre O. Find the length of the arc.<br><b>Find:</b> the distance (m, to the nearest metre).<br><b>Data:</b> tap the map key (radius) and the angle at the centre."); },
+  make: function () {
+    var A = pickOne(LG3_A), R = pickOne([60, 80, 90, 100, 120, 150, 180, 200]), rad = Math.random() < 0.5, l = R * A[0] * Math.PI / 180;
+    if (roundAmb(l, 0)) return this.make();
+    return { R: R, deg: A[0], k: A[1], m: A[2], rad: rad, l: l, ans: Math.round(l) };
+  },
+  tol: function () { return 0.5; },
+  angS: function (p) { return p.rad ? piFrac(p.k, p.m) + " rad" : p.deg + "°"; },
+  geo: function () { return { cx: 180, cy: 300, Rp: 140 }; },
+  pt: function (g, ang, r) { return [g.cx + (r || g.Rp) * Math.cos(ang), g.cy + (r || g.Rp) * Math.sin(ang)]; },
+  base: function (p) {
+    var g = this.geo(), o = '<rect width="360" height="' + p.bottom + '" fill="#f3ecd2"/>', me = this;
+    [[170, 300, 46, 34], [180, 300, 80, 62], [186, 302, 112, 92], [190, 304, 150, 124]].forEach(function (e, i) { o += '<ellipse cx="' + e[0] + '" cy="' + e[1] + '" rx="' + e[2] + '" ry="' + e[3] + '" fill="' + ["#a5d6a7", "#c5e1a5", "#dcedc8", "none"][i] + '" stroke="#8d6e63" stroke-width="1.2" opacity=".9"/>'; });
+    o += T2(170, 304, "▲", { a: "middle", fs: 16, fw: 800, c: "#6d4c41" }) + T2(170, 322, L("đỉnh núi", "summit"), { a: "middle", fs: 10, fw: 700, c: "#6d4c41" });
+    var a = p.deg * Math.PI / 180, s = -Math.PI / 2 - a / 2, e = -Math.PI / 2 + a / 2, A = this.pt(g, s), B = this.pt(g, e);
+    var tA = [A[0] + 50 * Math.cos(s - Math.PI / 2), A[1] + 50 * Math.sin(s - Math.PI / 2)], tB = [B[0] + 50 * Math.cos(e + Math.PI / 2), B[1] + 50 * Math.sin(e + Math.PI / 2)];
+    var road = "M" + tA[0].toFixed(1) + " " + tA[1].toFixed(1) + " L" + A[0].toFixed(1) + " " + A[1].toFixed(1) + " A" + g.Rp + " " + g.Rp + " 0 0 1 " + B[0].toFixed(1) + " " + B[1].toFixed(1) + " L" + tB[0].toFixed(1) + " " + tB[1].toFixed(1);
+    o += '<path d="' + road + '" fill="none" stroke="#8d6e63" stroke-width="18" stroke-linecap="round"/><path d="' + road + '" fill="none" stroke="#fff8e1" stroke-width="1.6" stroke-dasharray="7 6"/>';
+    o += '<path d="M' + A[0].toFixed(1) + " " + A[1].toFixed(1) + " L" + g.cx + " " + g.cy + " L" + B[0].toFixed(1) + " " + B[1].toFixed(1) + '" fill="none" stroke="#1f6f9f" stroke-width="1.6" stroke-dasharray="5 4"/>';
+    var aa = this.pt(g, s, 34), ab = this.pt(g, e, 34);
+    o += '<path d="M' + aa[0].toFixed(1) + " " + aa[1].toFixed(1) + " A34 34 0 0 1 " + ab[0].toFixed(1) + " " + ab[1].toFixed(1) + '" fill="none" stroke="#1f6f9f" stroke-width="2"/>';
+    o += '<circle cx="' + g.cx + '" cy="' + g.cy + '" r="4" fill="#1f6f9f"/>' + T2(g.cx + 8, g.cy + 16, "O", { fs: 13, fw: 800, c: "#1f6f9f" });
+    o += '<g data-it="a" style="cursor:pointer"><circle cx="' + g.cx + '" cy="' + (g.cy - 50) + '" r="26" fill="#fff" fill-opacity="0"/>' + (p.seen.a ? cspill(g.cx, g.cy - 44, "α = " + this.angS(p), "#e3f2fd") : "") + "</g>" + (p.seen.a ? "" : qBadge(g.cx, g.cy - 52));
+    o += '<g transform="translate(' + A[0].toFixed(1) + " " + A[1].toFixed(1) + ") rotate(" + ((s + Math.PI / 2) * 180 / Math.PI).toFixed(1) + ')"><rect x="-8" y="-14" width="16" height="28" rx="3" fill="#2e7d32" stroke="' + INK + '" stroke-width="1.6"/><rect x="-6" y="-14" width="12" height="8" rx="2" fill="#ff7a3d"/></g>';
+    o += T2(A[0] - 14, A[1] + 30, L("đầu cua", "start"), { a: "middle", fs: 10.5, fw: 800, c: "#5d4037" }) + T2(B[0] + 14, B[1] + 30, L("cuối cua", "end"), { a: "middle", fs: 10.5, fw: 800, c: "#5d4037" });
+    o += '<path d="M330 20 l6 16 h-12 Z" fill="' + INK + '"/>' + T2(330, 50, L("B", "N"), { a: "middle", fs: 11, fw: 800 });
+    o += kmCard(12, 12, 210, L("CHÚ GIẢI BẢN ĐỒ", "MAP KEY"), "r", p, [L("Bán kính khúc cua: R = ", "Bend radius: R = ") + p.R + " m"]);
+    return o;
+  },
+  items: function (p) { return {
+    r: { note: ["Bán kính khúc cua R = " + p.R + " m", "Bend radius R = " + p.R + " m"], val: p.R, sym: "R", sfx: "pick", say: ["Chú giải: khúc cua là cung tròn bán kính <b>" + p.R + " m</b>.", "Key: the bend is an arc of radius <b>" + p.R + " m</b>."] },
+    a: { note: ["Góc ở tâm α = " + this.angS(p), "Centre angle α = " + this.angS(p)], val: p.rad ? p.k * Math.PI / p.m : p.deg, sym: "α", sfx: "pick", say: ["Trên bản đồ, góc ở tâm của khúc cua là <b>α = " + this.angS(p) + "</b>.", "On the map, the bend's centre angle is <b>α = " + this.angS(p) + "</b>."] } }; },
+  special: function (p, v) {
+    if (Math.abs(v - p.R * p.deg) < 1) return { ok: false, kind: "long", msg: L("Công thức l = R·α chỉ dùng khi α đo bằng <b>radian</b>. Đổi " + p.deg + "° sang radian trước.", "l = R·α only works with α in <b>radians</b>. Convert " + p.deg + "° to radians first.") };
+    if (Math.abs(v - 2 * p.R * Math.sin(p.deg * Math.PI / 360)) < 0.6 && Math.abs(p.ans - v) > 0.5) return { ok: false, kind: "short", msg: L("Đó là đoạn thẳng nối hai đầu khúc cua (dây cung). Xe đi theo cung tròn, dài hơn.", "That's the straight line between the ends (the chord). The truck follows the arc, which is longer.") };
+    if (p.rad && Math.abs(v - p.R * p.k / p.m) < 0.6) return { ok: false, kind: "short", msg: L("Em quên nhân với π trong góc " + piFrac(p.k, p.m) + ".", "You forgot the π in the angle " + piFrac(p.k, p.m) + ".") };
+    return null;
+  },
+  fx: function (p, k, v) {
+    var g = this.geo(), a = p.deg * Math.PI / 180, s = -Math.PI / 2 - a / 2, f = Math.max(0, Math.min(1.45, v / p.l)), e = s + a * Math.min(f, 1), col = k === "ok" ? "#1f8a4c" : "#e53935", E = this.pt(g, e), A = this.pt(g, s);
+    var o = '<path d="M' + A[0].toFixed(1) + " " + A[1].toFixed(1) + " A" + g.Rp + " " + g.Rp + " 0 " + (a * Math.min(f, 1) > Math.PI ? 1 : 0) + " 1 " + E[0].toFixed(1) + " " + E[1].toFixed(1) + '" fill="none" stroke="' + col + '" stroke-width="6" stroke-linecap="round" opacity=".85"/>';
+    if (f > 1.0001) { var ex = (f - 1) * g.Rp * a, E2 = [E[0] + ex * Math.cos(e + Math.PI / 2 - 0.5), E[1] + ex * Math.sin(e + Math.PI / 2 - 0.5)]; o += '<path d="M' + E[0].toFixed(1) + " " + E[1].toFixed(1) + " L" + E2[0].toFixed(1) + " " + E2[1].toFixed(1) + '" stroke="' + col + '" stroke-width="6" stroke-linecap="round" stroke-dasharray="4 6"/>'; E = E2; }
+    o += '<circle cx="' + E[0].toFixed(1) + '" cy="' + E[1].toFixed(1) + '" r="9" fill="' + col + '" stroke="#fff" stroke-width="2.4"/>';
+    if (k !== "ok") o += T2(180, 396, k === "short" ? L("Tài xế tăng tốc khi chưa hết khúc cua!", "The driver speeds up before the bend ends!") : L("Tài xế vẫn đi chậm dù đã hết cua", "The driver is still crawling after the bend"), { a: "middle", fs: 12.5, fw: 800, c: "#c0392b" });
+    return o;
+  },
+  okMsg: ["Chính xác! Tài xế đi chậm đúng hết khúc cua rồi mới tăng tốc.", "Correct! The driver slows down for exactly the whole bend."],
+  shortMsg: ["Ngắn quá, tài xế sẽ tăng tốc khi vẫn còn trong khúc cua.", "Too short, the driver would speed up while still in the bend."],
+  longMsg: ["Dài quá. Kiểm tra lại cách đổi góc sang radian.", "Too long. Check how you converted the angle to radians."],
+  passTitle: ["xe đã qua khúc cua!", "round the bend!"],
+  rows: function (p) { return [["R", p.R + " m"], ["α", (p.rad ? piFrac(p.k, p.m) : p.deg + "° = " + piFrac(p.k, p.m)) + " rad"], ["l = R·α", p.R + "·" + piFrac(p.k, p.m) + " ≈ " + fmt(p.l, 2) + " ≈ " + p.ans + " m"]]; },
+  formula: function () { return L("l = R·α (α tính bằng radian); α(rad) = α(độ)·π/180", "l = R·α (α in radians); α(rad) = α(degrees)·π/180"); },
+  hints: function () { return [
+    L("Quãng đường trên khúc cua là <b>độ dài cung tròn</b> bán kính R, góc ở tâm α.", "The distance round the bend is the <b>arc length</b> for radius R and centre angle α."),
+    L("l = R·α khi α đo bằng radian. Nếu α cho bằng độ thì đổi: α(rad) = α°·π/180.", "l = R·α with α in radians. If α is in degrees, convert: α(rad) = α°·π/180."),
+    L("Ví dụ: R = 150 m, α = 120° = 2π/3: l = 150·2π/3 = 100π ≈ 314 m.", "Example: R = 150 m, α = 120° = 2π/3: l = 150·2π/3 = 100π ≈ 314 m.")]; }
+});
+var LG_POOL = [LG1, LG2, LG3];
+S12OB.LG1 = LG1; S12OB.LG2 = LG2; S12OB.LG3 = LG3;
+[["KM-HS-1101", "LG1", "Guồng nước của bản", "The village water wheel", ["phương trình lượng giác cơ bản", "hàm số y = a + b·cos"], ["basic trig equations", "y = a + b·cos"], "thoi_gian", "s", "±0,05", 2],
+ ["KM-HS-1102", "LG2", "Chờ nước lũ rút", "Waiting for the flood to drop", ["bất phương trình lượng giác", "hàm số y = a + b·cos"], ["trig inequalities", "y = a + b·cos"], "thoi_gian", "giờ", "đúng hai đầu mút", 3],
+ ["KM-HH-1101", "LG3", "Khúc cua sườn núi", "The mountain bend", ["góc lượng giác, radian", "độ dài cung tròn"], ["angles, radians", "arc length"], "do_dai", "m", "làm tròn đến m", 1]
+].forEach(function (r) { S12_CAT.push({ id: r[0], key: r[1], ten: { vi: r[2], en: r[3] }, kb: "km", cap: [3], lop: [11], chu_de: { vi: r[4], en: r[5] }, yccd: { vi: ["Toán 11 (CT GDPT 2018) · Hàm số lượng giác và phương trình lượng giác"], en: ["Grade 11 maths (2018 curriculum) · Trigonometric functions and equations"] }, do_kho: { cap3: r[9] }, goc_nhin: "chinh_dien", dap_an: { loai: r[6], don_vi: r[7], sai_so: r[8] }, dung_cu_can: ["doc_so_lieu"], vai_tro: "cap3_km_lg", trang_thai: "dang_dung" }); });
+
 var OBK = { OB1: OB1, OB2: OB2, OB3: OB3, OB4: OB4, OB5: OB5, OB6: OB6, G1: G1, G2: G2, G3: G3, G4: G4, G5: G5, M1: M1, M2: M2, M3: M3, M4: M4, TR1: TR1, TR2: TR2, TR3: TR3 };
 Object.keys(S9OB).forEach(function (k) { OBK[k] = S9OB[k]; }); S9_CAT.forEach(function (m) { CATALOG.push(m); });
 Object.keys(C4OB).forEach(function (k) { OBK[k] = C4OB[k]; }); C4_CAT.forEach(function (m) { CATALOG.push(m); });
@@ -7973,9 +8205,9 @@ function scen() {
     endText: function () { return TX("Tiếng trống hội đã điểm! Trại hè Rừng Xanh chính thức khai mạc trong sự hò reo của tất cả các bạn. Cảm ơn Đội trưởng Hậu cần đã xuất sắc hoàn thành mọi nhiệm vụ!"); }
   };
   return {
-    get level() { return S.g >= 10 ? TX("Cấp 3") : TX("Cấp 2"); },
+    get level() { return S.g === 11 ? L("Cấp 3 · Lớp 11 · Kiến thức tổng hợp", "Upper secondary · Grade 11 · Mixed topics") : S.g >= 10 ? TX("Cấp 3") : TX("Cấp 2"); },
     get title() { return TX("Giải cứu bản Khe Mây"); },
-    get lead() { return TX("Lũ cuốn mất cầu, bản Khe Mây bị cô lập. Em là <b>kỹ sư trẻ</b> của đội cứu trợ: hãy đo đạc, tính toán và dựng công trình để đưa thuốc men, lương thực vào bản."); },
+    get lead() { return TX("Lũ cuốn mất cầu, bản Khe Mây bị cô lập. Em là <b>kỹ sư trẻ</b> của đội cứu trợ: hãy đo đạc, tính toán và dựng công trình để đưa thuốc men, lương thực vào bản.") + (S.g === 11 ? L(" Trên đường còn guồng nước, khúc suối lũ và đèo núi phải tính bằng <b>lượng giác</b>.", " On the way there's also a water wheel, a flooded ford and a mountain bend to work out with <b>trigonometry</b>.") : ""); },
     hero: function () { return KM_HERO(); }, endHero: function () { return KM_END_HERO; },
     get endTitle() { return TX("Hàng cứu trợ đã qua!"); },
     endText: function (obs) { var nm = obs.map(function (o) { return o.endName; }), ls = nm.pop(); return TX("Thuốc men và lương thực đã vượt qua ") + nm.join(", ") + TX(" và ") + ls + TX(", về tới bản Khe Mây. Cả bản ra đón đoàn cứu trợ!") + TX(" Chúc mừng kỹ sư trẻ đã hoàn thành nhiệm vụ!"); }
@@ -7984,13 +8216,13 @@ function scen() {
 function renderStory() {
   var c = scen();
   $("#scenPick").hidden = S.g > 5; $("#scenPick2").hidden = !(S.g > 5 && S.g < 10);
-  var sp3 = $("#scenPick3"); sp3.hidden = !isS12();
-  if (isS12()) {
+  var sp3 = $("#scenPick3"), cd3 = S.g === 11 || S.g === 12; sp3.hidden = !cd3;
+  if (cd3) {
     var od3 = cdOrder(), ci3 = CD_INFO[S.g]; cdFix();
     if (!sp3.querySelector(".s9lab")) sp3.insertAdjacentHTML("afterbegin", '<span class="s9lab"></span>');
     if (sp3.dataset.g !== String(S.g)) { sp3.querySelectorAll("[data-scen3]").forEach(function (x) { x.remove(); }); sp3.querySelector(".s9lab").insertAdjacentHTML("afterend", od3.map(function (k) { return '<button type="button" data-scen3="' + k + '" aria-pressed="false"></button>'; }).join("")); sp3.dataset.g = String(S.g); }
     sp3.querySelector(".s9lab").textContent = L(ci3.lab[0], ci3.lab[1]);
-    od3.forEach(function (k) { var b3 = sp3.querySelector("[data-scen3=" + k + "]"); b3.textContent = L(S12[k].btn[0], S12[k].btn[1]); b3.setAttribute("aria-pressed", k === S.scen3 ? "true" : "false"); });
+    od3.forEach(function (k) { var b3 = sp3.querySelector("[data-scen3=" + k + "]"); b3.textContent = k === "km" ? L("Bản Khe Mây", "Khe Mây village") : L(S12[k].btn[0], S12[k].btn[1]); b3.setAttribute("aria-pressed", k === S.scen3 ? "true" : "false"); });
   }
   var sp2 = $("#scenPick2");
   if (!sp2.querySelector("[data-scen2=dothi]")) { sp2.insertAdjacentHTML("beforeend", '<span class="s9lab"></span>' + S9_ORDER.map(function (k) { return '<button type="button" data-scen2="' + k + '" aria-pressed="false"></button>'; }).join("")); }
@@ -8702,10 +8934,11 @@ function pickRoute() {
     c = POOL.slice().sort(function () { return Math.random() - 0.5; }).slice(0, 2);
     var both = c.indexOf(OB1) >= 0 && c.indexOf(OB4) >= 0;
   } while ((both || c.map(function (o) { return o.name; }).sort().join() === old) && ++k < 50);
+  if (S.g === 11) { var oldL = (S.route || []).filter(function (o) { return o.kmlg; })[0], lg, kl = 0; do { lg = pickOne(LG_POOL); } while (lg === oldL && ++kl < 20); c = c.concat([lg]); }
   S.route = c;
 }
 pickRoute();
-function routeList() { return S.route.concat(S.g === 10 ? [OB3] : []); }
+function routeList() { return S.route.concat(S.g === 10 || isKm11() ? [OB3] : []); }
 function setObUi(ob) { $(".ftools").classList.toggle("mkt", isTap(ob)); $("#walletPill").hidden = !ob.market; $(".ftools").classList.toggle("rv", !!ob.boat); $(".ftools").classList.toggle("sqm", !!ob.eke && !ob.boat); }
 function reroll() { if (isC4() || isS12()) S.c4re = true; pickRoute(); renderRoute(); }
 document.addEventListener("click", function (e) { if (e.target.closest("#bReroll")) { reroll(); SFX.pick(); } });
@@ -8766,7 +8999,7 @@ $("#grades").addEventListener("click", function (e) {
   if (S.g <= 5 && was <= 5) S.g = was;
   if (S.g >= 10 && was >= 10) S.g = was;
   document.querySelectorAll("#grades [data-g]").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-  if ((was <= 5) !== (S.g <= 5) || S.g <= 5 || (S.route || []).some(function (o) { return o.camp; }) !== isCamp() || isS9() !== (S.route || []).some(function (o) { return o.s9job && !o.s12job; }) || isS12() !== (S.route || []).some(function (o) { return o.s12job; })) pickRoute();
+  if ((was <= 5) !== (S.g <= 5) || S.g <= 5 || (S.route || []).some(function (o) { return o.camp; }) !== isCamp() || isS9() !== (S.route || []).some(function (o) { return o.s9job && !o.s12job; }) || isS12() !== (S.route || []).some(function (o) { return o.s12job && !o.kmlg; }) || isKm11() !== (S.route || []).some(function (o) { return o.kmlg; })) pickRoute();
   renderRoute();
 });
 $("#subG").addEventListener("click", function (e) { var sg = e.target.closest("[data-sg]"); if (!sg) return; S.g = +sg.dataset.sg; pickRoute(); renderRoute(); SFX.click(); });
@@ -11635,7 +11868,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.22";
+var APP_VER = "3.23";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
@@ -12199,6 +12432,7 @@ function flat(a) { var o = []; (a || []).forEach(function (x) { o = o.concat(Arr
 function scenPoolFor(lv1, id) {
   if (lv1) { if (C4[id]) return flat(C4_POOL[id]); if (id === "cho") return MPOOL; return GPOOL.filter(function (o) { return o.meta.lop.indexOf(S.g) >= 0; }); }
   if (S12[id]) return flat(S12_POOL[id]);
+  if (id === "km" && S.g === 11) return POOL.concat(LG_POOL);
   if (S9[id]) { var pl = S9_POOL[id]; return Array.isArray(pl) ? pl : [].concat(pl.ds, pl.hh, pl.tt); }
   return id === "trai" ? CPOOL : POOL;
 }
@@ -12539,7 +12773,7 @@ var SCEN_TAG = {
   dt: ["Phương trình đường thẳng · Hình chiếu · Giao điểm", "Line equations · Projection · Intersection"],
   mc: ["Phương trình mặt cầu · Giao với đường thẳng", "Sphere equations · Meeting a line"],
   th: ["Kiến thức tổng hợp", "Mixed topics"],
-  cs: ["Số hạng tổng quát · Tổng n số hạng · Cấp số nhân lùi vô hạn", "n-th term · Sum of n terms · Infinite geometric series"]
+  cs: ["Chuyên đề Cấp số cộng, cấp số nhân", "Topic: arithmetic and geometric sequences"]
 };
 function scenTags() {
   document.querySelectorAll("#scenPick [data-scen], #scenPick2 [data-scen2], #scenPick3 [data-scen3]").forEach(function (b) {
