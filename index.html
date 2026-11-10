@@ -548,6 +548,16 @@ body.nbws #pNote .note { padding: 8px 10px; }
 .scenpick button .ktag { display: block; font: 600 .72rem var(--font); opacity: .82; margin-top: 2px; line-height: 1.2; }
 .scenpick button[data-prog] { padding-right: 20px; }
 .scenpick button[data-prog]::after { position: absolute; top: 4px; right: 7px; margin: 0; }
+.subgrade button { white-space: nowrap; padding: 6px 12px; }
+.mfbox { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 5px; margin: 2px 0 6px; font-weight: 800; }
+.mfbox[hidden] { display: none !important; }
+.mft { font: 800 1.02rem var(--font); white-space: nowrap; }
+.mfin { width: 58px; min-width: 0; padding: 7px 4px; font: 800 1.05rem var(--font); text-align: center; border: 2.5px solid var(--ink); border-radius: 9px; background: #fff; color: var(--ink); }
+.mfin:focus { outline: 3px solid #ffcf3f; }
+.mfpm { width: 38px; height: 36px; border: 2.5px solid var(--ink); border-radius: 9px; background: #fff3d6; font: 800 1.1rem var(--font); color: var(--ink); cursor: pointer; box-shadow: 0 2px 0 var(--ink); }
+.mfyn { display: flex; gap: 5px; flex-basis: 100%; margin-top: 2px; }
+.mfyn button { flex: 1; padding: 7px 6px; border: 2.5px solid var(--ink); border-radius: 10px; background: #fff; font: 800 .92rem var(--font); color: var(--ink); cursor: pointer; }
+.mfyn button[aria-pressed="true"] { background: var(--accent); color: #fff; }
 .dtbtn { display: none; }
 body.lv1 .boardbtns .dtbtn { display: inline-flex; align-items: center; gap: 4px; height: 34px; min-height: 34px; padding: 0 9px; background: #fff3d6; font-size: .88rem; }
 .dtbtn svg { width: 22px; height: 22px; flex: none; }
@@ -870,7 +880,7 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
   <div class="levels" id="grades">
     <button class="lvl lv1" type="button" data-g="4" aria-pressed="false"><b>Cấp 1</b><span>Lớp 4, 5</span><em>8 câu chuyện</em></button>
     <button class="lvl lv2" type="button" data-g="9" aria-pressed="true"><b>Cấp 2</b><span>Lớp 6–9</span><em>Khe Mây · Trại hè · Ôn thi 10</em></button>
-    <button class="lvl lv3" type="button" data-g="10" aria-pressed="false"><b>Cấp 3</b><span>Lớp 10, 11</span><em>Bản Khe Mây</em></button>
+    <button class="lvl lv3" type="button" data-g="10" aria-pressed="false"><b>Cấp 3</b><span>Lớp 10, 11, 12</span><em>Khe Mây · Hình giải tích</em></button>
   </div>
   <div class="subgrade" id="subG" role="group" aria-label="Chọn lớp" hidden><span>Em học lớp</span><button type="button" data-sg="4" aria-pressed="true">Lớp 4</button><button type="button" data-sg="5" aria-pressed="false">Lớp 5</button></div>
   <div class="card resume" id="resumeBox" hidden></div>
@@ -886,6 +896,7 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
   <button class="linkbtn backlink" type="button" id="bStoryBack">← Chọn lại cấp học</button>
   <div class="scenpick" id="scenPick" role="group" aria-label="Chọn câu chuyện" hidden><button type="button" data-scen="vuon" aria-pressed="true">Khu vườn của ông</button><button type="button" data-scen="cho" aria-pressed="false">Đi chợ giúp mẹ</button></div>
   <div class="scenpick" id="scenPick2" role="group" aria-label="Chọn câu chuyện" hidden><button type="button" data-scen2="km" aria-pressed="true">Bản Khe Mây</button><button type="button" data-scen2="trai" aria-pressed="false">Trại hè Rừng Xanh</button></div>
+  <div class="scenpick" id="scenPick3" role="group" aria-label="Chọn chuyên đề" hidden></div>
   <div class="card hero" id="storyHero"></div>
   <div class="label" id="storyLevel"></div>
   <h1 class="title" id="storyTitle"></h1>
@@ -936,6 +947,7 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
   <div class="gamelinks"><button class="linkbtn" type="button" id="bHist" hidden>Xem lại bài đã làm</button><button class="linkbtn" type="button" data-fb="game">Góp ý</button><button class="linkbtn" type="button" id="bQuit">Thoát về màn hình đầu</button></div>
   <div class="card build">
     <label for="inVal" id="buildLabel">Chiều dài dầm</label>
+    <div class="mfbox" id="mfG" hidden></div>
     <div class="row"><input id="inVal" inputmode="decimal" autocomplete="off" placeholder="Nhập số"><span class="unit">m</span><button class="btn orange" id="bBuild">Lắp đặt</button></div>
     <p id="buildMsg" aria-live="polite"></p>
   </div>
@@ -985,6 +997,7 @@ body.ws .calcsheet { max-height: calc(var(--vh, 100vh) - 150px); }
   </div>
   <div class="card build ransw" id="rAns">
     <label for="rVal" id="rLabel"></label>
+    <div class="mfbox" id="mfR" hidden></div>
     <div class="row"><input id="rVal" inputmode="decimal" autocomplete="off" placeholder="Nhập số"><span class="unit" id="rUnit"></span><button class="btn orange" id="rBuild" type="button"></button></div>
     <p class="small rmsg" id="rMsg" aria-live="polite"></p>
   </div>
@@ -6453,9 +6466,993 @@ var CATALOG = [
     do_kho: { cap2: 2 }, goc_nhin: "chinh_dien", dap_an: { loai: "so_o", don_vi: "ô", sai_so: "đúng tuyệt đối" },
     dung_cu_can: ["bang_mau"], vai_tro: "cap2_trai", trang_thai: "dang_dung" }
 ];
+/* ================= CẤP 3 · LỚP 12 · CHUYÊN ĐỀ HÌNH GIẢI TÍCH (Oxyz), bản 3.19 =================
+   4 kịch bản: Mặt phẳng (mp), Đường thẳng (dt), Mặt cầu (mc), Kiến thức tổng hợp (th).
+   Dựa trên kịch bản của nhóm soạn bài (file "Kịch bản Game Toán 12 Oxyz"), đã sửa theo rà soát 10/11/2026
+   (tài liệu dự án claude/kich_ban_lop12_hinh_giai_tich.md). Mọi bài đều sinh số ngẫu nhiên, dựng ngược từ đáp án đẹp.
+   Ô nhập nhiều ô (tọa độ, véc-tơ, phương trình mặt cầu) khai báo bằng trường mf. */
+var S12 = {
+  mp: {
+    btn: ["Mặt phẳng", "Planes"], code: 12,
+    title: ["Biệt thự năng lượng mặt trời", "The Solar Villa"],
+    lead: ["Công trường đang xây một <b>biệt thự dùng pin mặt trời</b>. Mọi bề mặt đều đã có phương trình trong hệ trục Oxyz (đơn vị: mét). Em là <b>kỹ sư thiết kế</b>: hãy kiểm tra độ cao, góc mái và bóng đổ để lắp pin thật chuẩn!",
+      "A <b>solar-powered villa</b> is going up. Every surface already has an equation in the Oxyz system (units: metres). You are the <b>design engineer</b>: check the heights, roof angles and shadows so the solar panels fit perfectly!"],
+    first: ["Chào kỹ sư! Chú là Kỹ sư trưởng của công trường. ", "Hello, engineer! I'm the chief engineer on site. "],
+    next: ["Số liệu rất chuẩn! Việc tiếp theo nhé. ", "Spot-on figures! Next job. "],
+    endTitle: ["Biệt thự đã lắp xong pin!", "The villa's panels are up!"],
+    endText: ["Các tấm pin nằm khít trên mái, không bị bóng ăng-ten che. Biệt thự tự sản xuất điện từ hôm nay. Cảm ơn kỹ sư thiết kế!", "The panels sit snugly on the roof with no antenna shadow on them. From today the villa makes its own electricity. Thank you, design engineer!"],
+    lastBtn: ["Bàn giao công trình", "Hand over the villa"]
+  },
+  dt: {
+    btn: ["Đường thẳng", "Lines"], code: 13,
+    title: ["Đài kiểm soát không lưu", "Air Traffic Control"],
+    lead: ["Đài kiểm soát không lưu đặt ở gốc tọa độ O. Mỗi máy bay bay thẳng nên đường bay là một <b>đường thẳng</b> trong không gian. Em là <b>kiểm soát viên</b>: hãy cài hướng bay, tính điểm gần đài nhất và cảnh báo nguy cơ va chạm!",
+      "The control tower stands at the origin O. Each aircraft flies straight, so its path is a <b>line</b> in space. You are the <b>air traffic controller</b>: set flight directions, find the closest point to the tower and warn of collisions!"],
+    first: ["Chào em! Cô là Trưởng ca kiểm soát không lưu. ", "Hello! I'm the duty supervisor at air traffic control. "],
+    next: ["Bầu trời an toàn hơn rồi! ", "The sky is safer already! "],
+    endTitle: ["Bầu trời an toàn!", "Safe skies!"],
+    endText: ["Mọi chuyến bay đều đúng đường, không có va chạm. Cả đài kiểm soát vỗ tay cảm ơn kiểm soát viên!", "Every flight is on track with no collisions. The whole tower applauds the controller!"],
+    lastBtn: ["Kết thúc ca trực", "End the shift"]
+  },
+  mc: {
+    btn: ["Mặt cầu", "Spheres"], code: 14,
+    title: ["Trạm radar trên đỉnh núi", "The Mountain Radar Station"],
+    lead: ["Trạm radar trên đỉnh núi quét bầu trời trong một vùng hình cầu. Em là <b>kỹ thuật viên trạm</b>: hãy thiết lập vùng phủ sóng, phát hiện vật thể bay vào và tìm khinh khí cầu thời tiết bị mất liên lạc (đơn vị: km).",
+      "The mountain radar station scans the sky inside a sphere. You are the <b>station technician</b>: set up the coverage zone, catch objects flying in and find a weather balloon that lost contact (units: km)."],
+    first: ["Chào em! Anh là Trưởng trạm radar. ", "Hello! I'm the head of the radar station. "],
+    next: ["Radar hoạt động tốt! ", "The radar is working well! "],
+    endTitle: ["Radar trực chiến!", "Radar on duty!"],
+    endText: ["Vùng phủ sóng đã bật, mọi vật thể bay vào đều bị phát hiện và khinh khí cầu đã được tìm thấy. Trạm trao cho em huy hiệu Kỹ thuật viên giỏi!", "The coverage zone is on, every object flying in is detected and the balloon has been found. The station awards you the Top Technician badge!"],
+    lastBtn: ["Báo cáo Trưởng trạm", "Report to the station head"]
+  },
+  th: {
+    btn: ["Tổng hợp", "Mixed"], code: 15,
+    title: ["Sân bay và vùng trời", "The Airport and Its Sky"],
+    lead: ["Một ngày làm việc ở <b>trung tâm điều hành sân bay</b>: dự đoán vị trí máy bay, tính thời gian máy bay nằm trong tầm radar, tìm điểm chạm đường băng. Mỗi việc cần kết hợp đường thẳng, mặt phẳng và mặt cầu.",
+      "A day at the <b>airport operations centre</b>: predict where aircraft will be, work out how long a plane stays in radar range, find where it touches down. Each job combines lines, planes and spheres."],
+    first: ["Chào em! Chị là Điều phối viên trưởng của sân bay. ", "Hello! I'm the airport's chief coordinator. "],
+    next: ["Tuyệt vời, sân bay vận hành trơn tru! ", "Great, the airport runs smoothly! "],
+    endTitle: ["Sân bay vận hành an toàn!", "A safe day at the airport!"],
+    endText: ["Mọi chuyến bay cất cánh, hạ cánh đúng kế hoạch. Em xứng đáng là Điều phối viên giỏi nhất ngày hôm nay!", "Every flight took off and landed as planned. You are today's best coordinator!"],
+    lastBtn: ["Kết thúc ngày làm việc", "End the working day"]
+  }
+};
+var S12_ORDER = ["mp", "dt", "mc", "th"];
+function isS12() { return S.g === 12; }
+
+/* ---------- định dạng số, điểm, mặt phẳng, đường thẳng ---------- */
+function c3(v) { v = Math.round(v * 100) / 100; if (Math.abs(v) < 1e-9) v = 0; return (v < 0 ? "−" : "") + fmt(Math.abs(v), 2); }
+function ptS(n, P) { return n + "(" + c3(P[0]) + "; " + c3(P[1]) + "; " + c3(P[2]) + ")"; }
+function vecS(u) { return "(" + c3(u[0]) + "; " + c3(u[1]) + "; " + c3(u[2]) + ")"; }
+function termS(c, v, first) { if (!c) return ""; var a = Math.abs(c), s = c < 0 ? (first ? "−" : " − ") : (first ? "" : " + "); return s + (v && a === 1 ? "" : fmt(a, 2)) + v; }
+function linS(cs, vs) { var o = ""; cs.forEach(function (c, i) { var t = termS(c, vs[i], !o); o += t; }); return o || "0"; }
+function planeS(a, b, c, d) { return linS([a, b, c, d], ["x", "y", "z", ""]) + " = 0"; }
+function parS(P, u, t) { t = t || "t"; return ["x", "y", "z"].map(function (n, i) { return n + " = " + (u[i] ? (P[i] ? c3(P[i]) + (u[i] < 0 ? " − " : " + ") + (Math.abs(u[i]) === 1 ? "" : fmt(Math.abs(u[i]), 2)) + t : (u[i] < 0 ? "−" : "") + (Math.abs(u[i]) === 1 ? "" : fmt(Math.abs(u[i]), 2)) + t) : c3(P[i])); }).join("; "); }
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a; }
+function sgnR() { return Math.random() < 0.5 ? -1 : 1; }
+function vsub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+function vadd(a, b) { return [a[0] + b[0], a[1] + b[1], a[2] + b[2]]; }
+function vmul(a, k) { return [a[0] * k, a[1] * k, a[2] * k]; }
+function vdot(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+function vcross(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
+function vlen(a) { return Math.sqrt(vdot(a, a)); }
+function near(a, b, t) { return a.length === b.length && a.every(function (x, i) { return Math.abs(x - b[i]) <= (t == null ? 0.01 : t); }); }
+function roundAmb(x, dp) { var s = x * Math.pow(10, dp); return Math.abs(s - Math.floor(s) - 0.5) < 0.08; }
+
+/* ---------- vẽ phối cảnh Oxyz (Ox chéo xuống trái, Oy sang phải, Oz lên trên) ---------- */
+function prFit(pts, box, kz) {
+  kz = kz || 1;
+  var f = function (k, ox, oy) { var g = function (x, y, z) { return [ox + k * (y - 0.42 * x), oy - k * z * kz + k * 0.32 * x]; }; g.k = k; return g; };
+  var b = f(1, 0, 0), X = [], Y = [];
+  pts.forEach(function (p) { var q = b(p[0], p[1], p[2]); X.push(q[0]); Y.push(q[1]); });
+  var x0 = Math.min.apply(null, X), x1 = Math.max.apply(null, X), y0 = Math.min.apply(null, Y), y1 = Math.max.apply(null, Y);
+  var W = box[2] - box[0], H = box[3] - box[1], k = Math.min(W / Math.max(1e-6, x1 - x0), H / Math.max(1e-6, y1 - y0));
+  return f(k, box[0] - k * x0 + (W - k * (x1 - x0)) / 2, box[1] - k * y0 + (H - k * (y1 - y0)) / 2);
+}
+function P2(pr, P) { return pr(P[0], P[1], P[2]); }
+function sv(q) { return q[0].toFixed(1) + " " + q[1].toFixed(1); }
+function seg3(pr, A, B, col, w, dash) { var a = P2(pr, A), b = P2(pr, B); return '<path d="M' + sv(a) + " L" + sv(b) + '" stroke="' + (col || INK) + '" stroke-width="' + (w || 2) + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : "") + ' fill="none" stroke-linecap="round"/>'; }
+function poly3(pr, Ps, fill, stroke, op, w) { return '<path d="M' + Ps.map(function (P) { return sv(P2(pr, P)); }).join(" L") + ' Z" fill="' + (fill || "none") + '"' + (op != null ? ' fill-opacity="' + op + '"' : "") + ' stroke="' + (stroke || INK) + '" stroke-width="' + (w || 2) + '" stroke-linejoin="round"/>'; }
+function dot3(pr, P, col, r) { var q = P2(pr, P); return '<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="' + (r || 4.5) + '" fill="' + (col || "#e53935") + '" stroke="' + INK + '" stroke-width="1.6"/>'; }
+function lab3(pr, P, t, dx, dy, col, fs) { var q = P2(pr, P); return T2(q[0] + (dx || 6), q[1] + (dy || -6), t, { fs: fs || 13, fw: 800, c: col || INK }); }
+function axes3(pr, lx, ly, lz) {
+  var o = "", O = [0, 0, 0];
+  [[[lx, 0, 0], "x"], [[0, ly, 0], "y"], [[0, 0, lz], "z"]].forEach(function (a) {
+    var q0 = P2(pr, O), q = P2(pr, a[0]), ang = Math.atan2(q[1] - q0[1], q[0] - q0[0]), h = 7;
+    o += '<path d="M' + sv(q0) + " L" + sv(q) + '" stroke="#546e7a" stroke-width="1.6"/>';
+    o += '<path d="M' + sv(q) + " L" + (q[0] - h * Math.cos(ang - 0.4)).toFixed(1) + " " + (q[1] - h * Math.sin(ang - 0.4)).toFixed(1) + " L" + (q[0] - h * Math.cos(ang + 0.4)).toFixed(1) + " " + (q[1] - h * Math.sin(ang + 0.4)).toFixed(1) + ' Z" fill="#546e7a"/>';
+    o += T2(q[0] + 6 * Math.cos(ang) - 3, q[1] + 6 * Math.sin(ang) + 4, a[1], { fs: 13, fw: 800, c: "#455a64" });
+  });
+  var q0 = P2(pr, O); return o + T2(q0[0] - 14, q0[1] + 14, "O", { fs: 12, fw: 800, c: "#455a64" });
+}
+/* bảng số liệu chạm để xem */
+function card12(x, y, w, h, title, it, p, val, col) {
+  var seen = p.seen[it], o = '<g data-it="' + it + '" style="cursor:pointer"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8" fill="' + (seen ? "#fff" : "#fffbe6") + '" stroke="' + (col || INK) + '" stroke-width="2"/>';
+  o += T2(x + 8, y + 16, title, { fs: 11, fw: 800, c: col || "#1f6f9f" });
+  if (seen) { var ls = [].concat(val); ls.forEach(function (t, i) { o += T2(x + 8, y + 33 + i * 16, t, { fs: 12.5, fw: 800 }); }); }
+  else o += T2(x + 8, y + 34, L("chạm để xem", "tap to read"), { fs: 11, fw: 700, c: "#90a4ae" });
+  return o + "</g>" + (seen ? "" : qBadge(x + w - 10, y + 10));
+}
+function sky12(H, gy, col) { return '<rect width="360" height="' + H + '" fill="' + (col || "#d9f0ff") + '"/>' + (gy != null ? '<rect y="' + gy + '" width="360" height="' + (H - gy) + '" fill="#a5d98c"/>' : ""); }
+function plane12(x, y, ang, s, col) { return '<g transform="translate(' + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + (ang || 0).toFixed(1) + ") scale(" + (s || 1) + ')"><path d="M-14 0 L12 -2 Q16 0 12 2 Z" fill="' + (col || "#fff") + '" stroke="' + INK + '" stroke-width="1.5"/><path d="M-2 -1 L-7 -10 L-3 -10 L4 -1 M-2 1 L-7 10 L-3 10 L4 1 M-12 -1 L-15 -6 L-12 -6 L-9 -1" fill="#90caf9" stroke="' + INK + '" stroke-width="1.2"/></g>'; }
+function heli12(x, y, s) { return '<g transform="translate(' + x.toFixed(1) + " " + y.toFixed(1) + ") scale(" + (s || 1) + ')"><ellipse rx="11" ry="7" fill="#ff7a3d" stroke="' + INK + '" stroke-width="1.6"/><path d="M8 -2 H24 M-16 -11 H16 M0 -7 V-11 M22 -6 V2" stroke="' + INK + '" stroke-width="2"/><circle cx="-4" cy="-1" r="3" fill="#bbdefb" stroke="' + INK + '" stroke-width="1"/></g>'; }
+
+function radarAx(x, y) { return '<g transform="translate(' + x + " " + y + ')" stroke="#a5d6a7" stroke-width="1.6" fill="#a5d6a7"><path d="M0 0 V-22 M0 0 H22" fill="none"/><path d="M0 -26 l-3.5 6 h7 Z M26 0 l-6 -3.5 v7 Z" stroke="none"/></g>' + T2(x - 4, y - 30, "x", { fs: 11, fw: 800, c: "#a5d6a7" }) + T2(x + 30, y + 4, "y", { fs: 11, fw: 800, c: "#a5d6a7" }); }
+/* ---------- ô nhập nhiều ô ---------- */
+var MF_TRI = function (n) { return [n + "(", 0, ";", 1, ";", 2, ")"]; };
+var MF_VEC = ["u = (", 0, ";", 1, ";", 2, ")"];
+var MF_SPH = ["(x −", 0, ")² + (y −", 1, ")² + (z −", 2, ")² =", 3];
+
+/* ---------- khuôn chung ---------- */
+var S12_BASE = Object.create(S9_BASE);
+(function (b) {
+  var g = function (k, f) { Object.defineProperty(b, k, { get: f, configurable: true }); };
+  g("lastBtn", function () { var c = S12[this.s12].lastBtn; return L(c[0], c[1]); });
+  g("badIn", function () { return this.mf ? ["Hãy điền đủ các ô. Số âm thì bấm nút ± (hoặc gõ dấu −).", "Fill in every box. For a negative number press ± (or type −)."] : null; });
+})(S12_BASE);
+S12_BASE.s12job = true;
+S12_BASE.intro = function () { var c = S12[this.s12]; return L((S.i === 0 ? c.first[0] : c.next[0]), (S.i === 0 ? c.first[1] : c.next[1])) + L(this.lead[0], this.lead[1]); };
+S12_BASE.tap = function (p, evt) { S9_BASE.tap.call(this, p, evt); drawScene(); };
+S12_BASE.mfN = function () { var n = 0; this.mf.forEach(function (x) { if (typeof x === "number") n++; else if (x && x.yn != null) n++; }); return n; };
+S12_BASE.parseIn = function (s) {
+  if (!this.mf) return num(String(s).replace(/−/g, "-"));
+  var n = this.mfN(), a = String(s || "").split("|");
+  if (a.length < n) return NaN;
+  var out = [];
+  for (var i = 0; i < n; i++) { var x = num(String(a[i]).replace(/−/g, "-")); if (!isFinite(x)) return NaN; out.push(x); }
+  var v = new Number(1); v.a = out; v.toJSON = function () { return out.join(";"); }; return v;
+};
+S12_BASE.show = function (v) {
+  if (v && v.a) return this.showA ? this.showA(v.a) : "(" + v.a.map(c3).join("; ") + ")";
+  return fmt(v, this.dp == null ? 2 : this.dp) + (this.unit ? (this.unit === "°" ? "" : " ") + this.unit : "");
+};
+S12_BASE.check = function (p, g, v) {
+  if (this.mf) return c4Strip(this.cmp(p, v.a));
+  return c4Strip(S9_BASE.check.call(this, p, g, v));
+};
+S12_BASE.ptCheck = function (p, a, P) {
+  if (near(a.slice(0, 3), P, this.ptol || 0.01)) return { ok: true, kind: "ok", msg: L(this.okMsg[0], this.okMsg[1]) };
+  var sp = this.special ? this.special(p, a) : null; if (sp) return sp;
+  return { ok: false, kind: "bad", msg: L(this.badMsg[0], this.badMsg[1]) };
+};
+S12_BASE.report = function (p, g, v) {
+  if (!this.mf) return S9_BASE.report.call(this, p, g, v);
+  return { level: ["great", "good", "ok"][Math.min(2, Math.max(0, S.att - 1))], rows: this.rows(p, v).concat([[L("Em trả lời", "Your answer"), this.show(v), true]]) };
+};
+S12_BASE.build = function (p, k, v) {
+  var ok = k === "ok", lab = ok ? L("Chính xác!", "Correct!") : k === "short" ? L("Chưa đủ!", "Too small!") : k === "long" ? L("Quá nhiều!", "Too big!") : L("Chưa đúng!", "Not right yet!");
+  return '<g class="pop">' + (this.fx ? this.fx(p, k, v) : "") + tag(180, 24, lab, ok ? "#1f8a4c" : "#c0392b") + "</g>";
+};
+function s12Job(sc, o) { var j = s9Copy(Object.create(S12_BASE), o, sc); j.s12 = sc; return j; }
+function sayV(v) { return v && v.a ? v.a : v; }
+
+/* =============== KỊCH BẢN A · MẶT PHẲNG: BIỆT THỰ NĂNG LƯỢNG MẶT TRỜI =============== */
+/* MP1 · Độ cao nóc nhà (KM-HH-1201): khoảng cách từ nóc S đến mặt sàn nghiêng nhẹ (α) qua O */
+var MP1 = s12Job("mp", {
+  name: ["Độ cao nóc nhà", "Roof height"], sub: ["khoảng cách từ nóc nhà đến mặt sàn nghiêng", "distance from the roof peak to the sloping floor"],
+  endName: ["độ cao nóc nhà", "roof height"], what: ["Khoảng cách từ nóc S đến mặt sàn (m, làm tròn 0,1)", "Distance from peak S to the floor (m, to 0.1)"], unit: "m", dp: 1,
+  btnText: ["Bắn tia laser", "Fire the laser"], H: 420,
+  lead: ["Nền đất hơi dốc nên <b>mặt sàn</b> là một mặt phẳng nghiêng nhẹ. Để đặt mua cột thu lôi, chú cần biết <b>khoảng cách từ nóc nhà S đến mặt sàn</b>.",
+    "The ground slopes a little, so the <b>floor</b> is a slightly tilted plane. To order the lightning rod I need the <b>distance from the roof peak S to the floor</b>."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tính khoảng cách từ nóc nhà S đến mặt phẳng sàn (α).<br><b>Cần tìm:</b> khoảng cách (m, làm tròn đến hàng phần mười).<br><b>Dữ kiện:</b> chạm vào bản vẽ mặt sàn và vào nóc nhà để đọc tọa độ.",
+    "<b>Task:</b> find the distance from the roof peak S to the floor plane (α).<br><b>Find:</b> the distance (m, to one decimal place).<br><b>Data:</b> tap the floor drawing and the roof peak to read the coordinates."); },
+  make: function () {
+    var a, b; do { a = pickOne([0, 1, 2, -1, -2]); b = pickOne([0, 1, 2, -1, -2]); } while (!a && !b);
+    var c = rnd(10, 20), xs = rnd(3, 8), ys = rnd(3, 8), zs = rnd(6, 9), n = Math.sqrt(a * a + b * b + c * c), num0 = a * xs + b * ys - c * zs, d = Math.abs(num0) / n;
+    if (roundAmb(d, 1) || gcd(gcd(a, b), c) > 1) return this.make();
+    return { a: a, b: b, c: c, S: [xs, ys, zs], d: d, raw: Math.abs(num0), ans: Math.round(d * 10) / 10 };
+  },
+  tol: function () { return 0.051; },
+  base: function (p) {
+    var a = p.a, b = p.b, c = p.c, Sx = p.S[0], Sy = p.S[1], Sz = p.S[2], fz = function (x, y) { return (a * x + b * y) / c; };
+    var pr = prFit([[0, 0, 0], [11, 0, 0], [0, 12, 0], [0, 0, 11], [Sx + 3, Sy + 4, 0], [Sx, Sy, Sz + 1.5]], [30, 92, 322, 400]);
+    var o = sky12(p.bottom, null, "#e6f4ff");
+    o += poly3(pr, [[0, 0, 0], [11, 0, fz(11, 0)], [11, 12, fz(11, 12)], [0, 12, fz(0, 12)]], "#c8e6a8", "#7cb36a", 0.85, 1.6) + axes3(pr, 11, 12, 11);
+    var x0 = Sx - 3, x1 = Sx + 3, y0 = Sy - 4, y1 = Sy + 4, eh = Sz - 2.5, F = [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
+    o += poly3(pr, [[x1, y0, fz(x1, y0)], [x1, y1, fz(x1, y1)], [x1, y1, eh], [x1, y0, eh]], "#fff3d6");
+    o += poly3(pr, [[x0, y1, fz(x0, y1)], [x1, y1, fz(x1, y1)], [x1, y1, eh], [Sx, y1, Sz], [x0, y1, eh]], "#ffe8b0");
+    o += poly3(pr, [[x1, y0, eh], [x1, y1, eh], [Sx, y1, Sz], [Sx, y0, Sz]], "#e57373");
+    o += seg3(pr, [Sx, Sy, Sz], [Sx, Sy, Sz + 1.4], INK, 2.4) + dot3(pr, [Sx, Sy, Sz], "#ffcf3f", 6);
+    var q = P2(pr, [Sx, Sy, Sz]); o += '<circle data-it="S" cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="22" fill="#fff" fill-opacity="0" style="cursor:pointer"/>';
+    o += p.seen.S ? lab3(pr, [Sx, Sy, Sz], ptS("S", p.S), 10, -10, "#c2410c") : lab3(pr, [Sx, Sy, Sz], "S", 10, -8, "#c2410c");
+    o += card12(16, 12, 210, 60, L("BẢN VẼ MẶT SÀN (α)", "FLOOR DRAWING (α)"), "a", p, ["(α): " + planeS(a, b, -c, 0)]);
+    return o;
+  },
+  items: function (p) {
+    return {
+      a: { note: ["Mặt sàn (α): " + planeS(p.a, p.b, -p.c, 0), "Floor (α): " + planeS(p.a, p.b, -p.c, 0)], sfx: "pick", say: ["Mặt sàn nằm trên (α): <b>" + planeS(p.a, p.b, -p.c, 0) + "</b>.", "The floor lies on (α): <b>" + planeS(p.a, p.b, -p.c, 0) + "</b>."] },
+      S: { note: ["Nóc nhà " + ptS("S", p.S), "Roof peak " + ptS("S", p.S)], sfx: "pick", say: ["Nóc nhà ở điểm <b>" + ptS("S", p.S) + "</b>.", "The roof peak is at <b>" + ptS("S", p.S) + "</b>."] }
+    };
+  },
+  special: function (p, v) {
+    if (Math.abs(v - p.S[2]) < 0.06 && Math.abs(p.S[2] - p.ans) > 0.06) return { ok: false, kind: "long", msg: L("Đó là cao độ z của S. Mặt sàn nghiêng, nên phải tính khoảng cách từ S đến mặt phẳng (α).", "That's the z-coordinate of S. The floor is tilted, so you need the distance from S to the plane (α).") };
+    if (Math.abs(v - p.raw) < 0.06) return { ok: false, kind: "long", msg: L("Em quên chia cho độ dài véc-tơ pháp tuyến √(a² + b² + c²) rồi.", "You forgot to divide by the length of the normal vector √(a² + b² + c²).") };
+    return null;
+  },
+  fx: function (p, k, v) {
+    var a = p.a, b = p.b, c = -p.c, n = [a, b, c], S0 = p.S, t = vdot(n, S0) / vdot(n, n), H = vsub(S0, vmul(n, t)), r = Math.min(1.4, v / p.d), E = vadd(S0, vmul(vsub(H, S0), r));
+    var pr = prFit([[0, 0, 0], [11, 0, 0], [0, 12, 0], [0, 0, 11], [S0[0] + 3, S0[1] + 4, 0], [S0[0], S0[1], S0[2] + 1.5]], [30, 92, 322, 400]);
+    return seg3(pr, S0, E, k === "ok" ? "#1f8a4c" : "#e53935", 3.4) + dot3(pr, E, k === "ok" ? "#1f8a4c" : "#e53935", 5) + (k === "ok" ? "" : lab3(pr, E, k === "short" ? L("chưa chạm sàn", "not reaching the floor") : L("xuyên qua sàn", "through the floor"), 8, 4, "#c0392b", 12));
+  },
+  okMsg: ["Chính xác! Tia laser chạm đúng mặt sàn.", "Correct! The laser hits the floor exactly."],
+  shortMsg: ["Ngắn quá, tia laser chưa chạm mặt sàn. Kiểm tra lại công thức khoảng cách.", "Too short, the laser doesn't reach the floor. Check the distance formula."],
+  longMsg: ["Dài quá, tia laser xuyên qua sàn. Kiểm tra lại công thức khoảng cách.", "Too long, the laser goes through the floor. Check the distance formula."],
+  passTitle: ["đã đo xong độ cao!", "height measured!"],
+  rows: function (p) { return [[L("Mặt sàn (α)", "Floor (α)"), planeS(p.a, p.b, -p.c, 0)], [L("Nóc nhà", "Roof peak"), ptS("S", p.S)], ["d(S, (α))", p.raw + " / √" + (p.a * p.a + p.b * p.b + p.c * p.c) + " ≈ " + fmt(p.d, 3) + " m"]]; },
+  formula: function () { return "d(M, (α)) = |a·x₀ + b·y₀ + c·z₀ + d| / √(a² + b² + c²)"; },
+  hints: function () { return [
+    L("Độ cao cần tìm là <b>khoảng cách từ điểm S đến mặt phẳng (α)</b>, không phải cao độ z của S (vì sàn nghiêng).", "The height you need is the <b>distance from S to the plane (α)</b>, not the z-coordinate of S (the floor is tilted)."),
+    L("Với (α): ax + by + cz + d = 0 và S(x₀; y₀; z₀): d = |a·x₀ + b·y₀ + c·z₀ + d| / √(a² + b² + c²).", "For (α): ax + by + cz + d = 0 and S(x₀; y₀; z₀): d = |a·x₀ + b·y₀ + c·z₀ + d| / √(a² + b² + c²)."),
+    L("Ví dụ: (α): x + 2y − 15z = 0, S(4; 6; 7): |4 + 12 − 105| / √(1 + 4 + 225) = 89 / √230 ≈ 5,87 ≈ 5,9 m.", "Example: (α): x + 2y − 15z = 0, S(4; 6; 7): |4 + 12 − 105| / √(1 + 4 + 225) = 89 / √230 ≈ 5.87 ≈ 5.9 m.")]; }
+});
+
+/* MP2 · Góc giá đỡ pin (KM-HH-1202): góc giữa mái (ABC) và nền (Oxy) */
+var MP2_SL = [[2, 1], [3, 1], [3, 2], [4, 3], [5, 2], [5, 3], [4, 1], [5, 4], [7, 4], [8, 3], [6, 5], [7, 3]];
+var MP2 = s12Job("mp", {
+  name: ["Góc nghiêng của mái", "Roof pitch"], sub: ["góc giữa mái nhà và mặt nền", "angle between the roof and the ground"],
+  endName: ["góc mái", "roof pitch"], what: ["Góc giữa mái và nền (độ, làm tròn đến độ)", "Angle between roof and ground (degrees, to the nearest degree)"], unit: "°", dp: 0,
+  btnText: ["Chỉnh giá đỡ pin", "Set the panel frame"], H: 420,
+  lead: ["Tấm pin phải nằm sát mặt mái. Thợ cần biết <b>góc nghiêng của mái so với mặt nền (Oxy)</b> để chỉnh giá đỡ.",
+    "The panel must lie flat on the roof. The fitters need the <b>angle between the roof and the ground (Oxy)</b> to set the frame."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tính góc giữa mặt phẳng mái (ABC) và mặt nền (Oxy).<br><b>Cần tìm:</b> góc (độ, làm tròn đến hàng đơn vị).<br><b>Dữ kiện:</b> chạm vào ba điểm A, B, C trên mái để đọc tọa độ.",
+    "<b>Task:</b> find the angle between the roof plane (ABC) and the ground (Oxy).<br><b>Find:</b> the angle (degrees, to the nearest degree).<br><b>Data:</b> tap the three points A, B, C on the roof to read their coordinates."); },
+  make: function () {
+    var sl = pickOne(MP2_SL), dx = sl[0], dz = sl[1], phi = Math.atan(dz / dx) * 180 / Math.PI;
+    if (roundAmb(phi, 0)) return this.make();
+    var x0 = rnd(1, 3), y0 = rnd(0, 2), z0 = dz + rnd(4, 6), w = rnd(6, 10), sw = Math.random() < 0.5;
+    var A = [x0, y0, z0], B = [x0 + dx, y0, z0 - dz], C = [x0 + dx, y0 + w, z0 - dz];
+    if (sw) { A = [A[1], A[0], A[2]]; B = [B[1], B[0], B[2]]; C = [C[1], C[0], C[2]]; }
+    var n = vcross(vsub(B, A), vsub(C, A));
+    return { A: A, B: B, C: C, n: n, phi: phi, ans: Math.round(phi), sw: sw };
+  },
+  tol: function () { return 0.5; },
+  sc: function (p) { return prFit([[0, 0, 0], p.A, p.B, p.C, [p.A[0], p.A[1], 0], [p.C[0], p.C[1], 0], [13, 0, 0], [0, 13, 0], [0, 0, 10]], [30, 90, 320, 398]); },
+  base: function (p) {
+    var pr = this.sc(p), o = sky12(p.bottom, null, "#e6f4ff"), A = p.A, B = p.B, C = p.C, D = vadd(A, vsub(C, B));
+    o += poly3(pr, [[-1, -1, 0], [13, -1, 0], [13, 13, 0], [-1, 13, 0]], "#c8e6a8", "#7cb36a", 0.8, 1.4) + axes3(pr, 13, 13, 10);
+    var g = function (P) { return [P[0], P[1], 0]; };
+    o += poly3(pr, [g(A), g(B), B, A], "#fff3d6") + poly3(pr, [g(B), g(C), C, B], "#ffe8b0") + poly3(pr, [g(C), g(D), D, C], "#fff3d6");
+    o += poly3(pr, [A, B, C, D], "#5c8fd6", INK, 0.85);
+    var pts = { A: A, B: B, C: C };
+    Object.keys(pts).forEach(function (k) { var q = P2(pr, pts[k]); o += dot3(pr, pts[k], "#ffcf3f", 6) + '<circle data-it="' + k + '" cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="22" fill="#fff" fill-opacity="0" style="cursor:pointer"/>' + lab3(pr, pts[k], p.seen[k] ? ptS(k, pts[k]) : k, 9, k === "A" ? -9 : 16, "#c2410c", 12.5); });
+    o += '<rect x="16" y="14" width="232" height="40" rx="8" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(26, 32, L("Mái (ABC) màu xanh · nền là mặt (Oxy)", "Blue roof (ABC) · ground is the (Oxy) plane"), { fs: 11.5, fw: 800, c: "#1f6f9f" }) + T2(26, 48, L("Chạm A, B, C để đọc tọa độ", "Tap A, B, C to read the coordinates"), { fs: 11, fw: 700, c: "#607d8b" });
+    return o;
+  },
+  items: function (p) {
+    var it = function (k, P) { return { note: ["Điểm trên mái " + ptS(k, P), "Roof point " + ptS(k, P)], sfx: "pick", say: ["Điểm <b>" + ptS(k, P) + "</b>.", "Point <b>" + ptS(k, P) + "</b>."] }; };
+    return { A: it("A", p.A), B: it("B", p.B), C: it("C", p.C) };
+  },
+  special: function (p, v) { if (Math.abs(v - (90 - p.phi)) <= 0.6) return { ok: false, kind: "long", msg: L("Đó là góc phụ (90° − góc cần tìm). Góc giữa hai mặt phẳng tính bằng cos φ = |n₁·n₂| / (|n₁|·|n₂|).", "That's the complementary angle (90° − the answer). The angle between two planes uses cos φ = |n₁·n₂| / (|n₁|·|n₂|).") }; return null; },
+  fx: function (p, k, v) {
+    var cx = 250, cy = 380, Lr = 90, r1 = p.phi * Math.PI / 180, r2 = Math.max(0, Math.min(80, v)) * Math.PI / 180;
+    var o = '<rect x="150" y="300" width="196" height="100" rx="10" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(160, 318, L("Mặt cắt mái (nhìn ngang)", "Roof cross-section"), { fs: 11, fw: 800, c: "#1f6f9f" });
+    o += '<path d="M' + (cx - Lr / 2) + " " + cy + " h" + Lr + '" stroke="#7cb36a" stroke-width="3"/>';
+    o += '<path d="M' + (cx - Lr / 2) + " " + cy + " l" + (Lr * Math.cos(r1)).toFixed(1) + " " + (-Lr * Math.sin(r1)).toFixed(1) + '" stroke="#5c8fd6" stroke-width="5"/>';
+    o += '<path d="M' + (cx - Lr / 2) + " " + (cy - 4) + " l" + (Lr * 0.85 * Math.cos(r2)).toFixed(1) + " " + (-Lr * 0.85 * Math.sin(r2)).toFixed(1) + '" stroke="' + (k === "ok" ? "#1f8a4c" : "#e53935") + '" stroke-width="6" stroke-linecap="round"/>';
+    return o + T2(160, 394, k === "ok" ? L("Pin nằm khít mái", "Panel flush with roof") : (v < p.phi ? L("Pin bị cấn vào mái", "Panel digs into roof") : L("Pin bị hở khỏi mái", "Panel sticks out")), { fs: 11.5, fw: 800, c: k === "ok" ? "#1f8a4c" : "#c0392b" });
+  },
+  okMsg: ["Chính xác! Giá đỡ vừa khít, tấm pin nằm sát mặt mái.", "Correct! The frame fits and the panel lies flush on the roof."],
+  shortMsg: ["Góc nhỏ quá, tấm pin bị cấn vào mái.", "Angle too small, the panel digs into the roof."],
+  longMsg: ["Góc lớn quá, tấm pin bị hở khỏi mái, gió dễ lật.", "Angle too big, the panel sticks out and could be lifted by the wind."],
+  passTitle: ["giá đỡ pin đã chỉnh!", "panel frame set!"],
+  rows: function (p) { return [["A, B, C", ptS("A", p.A) + ", " + ptS("B", p.B) + ", " + ptS("C", p.C)], [L("Pháp tuyến mái n = [AB, AC]", "Roof normal n = [AB, AC]"), vecS(p.n)], [L("Pháp tuyến nền", "Ground normal"), "k = (0; 0; 1)"], [L("Góc", "Angle"), fmt(p.phi, 2) + "° ≈ " + p.ans + "°"]]; },
+  formula: function () { return "cos φ = |n₁·n₂| / (|n₁|·|n₂|); n = [AB, AC]"; },
+  hints: function () { return [
+    L("Góc giữa hai mặt phẳng tính qua hai <b>véc-tơ pháp tuyến</b>. Nền (Oxy) có pháp tuyến k = (0; 0; 1).", "The angle between two planes comes from their <b>normal vectors</b>. The ground (Oxy) has normal k = (0; 0; 1)."),
+    L("Pháp tuyến của mái: n = [AB, AC] (tích có hướng). Sau đó cos φ = |n·k| / (|n|·|k|). Máy tính Casio có chế độ Vector để tính tích có hướng.", "Roof normal: n = [AB, AC] (cross product). Then cos φ = |n·k| / (|n|·|k|). The Casio calculator has a Vector mode for cross products."),
+    L("Ví dụ: A(2; 0; 4), B(4; 0; 3), C(4; 9; 3): AB = (2; 0; −1), AC = (2; 9; −1), n = (9; 0; 18). cos φ = 18 / √405 ≈ 0,894, φ ≈ 26,57° ≈ 27°.", "Example: A(2; 0; 4), B(4; 0; 3), C(4; 9; 3): AB = (2; 0; −1), AC = (2; 9; −1), n = (9; 0; 18). cos φ = 18 / √405 ≈ 0.894, φ ≈ 26.57° ≈ 27°.")]; }
+});
+
+/* MP3 · Bóng ăng-ten (KM-HH-1203): giao điểm đường thẳng (tia nắng qua B) với mặt mái */
+var MP3 = s12Job("mp", {
+  name: ["Bóng của ăng-ten", "The antenna's shadow"], sub: ["độ dài bóng ăng-ten in trên mái", "length of the antenna's shadow on the roof"],
+  endName: ["bóng ăng-ten", "antenna shadow"], what: ["Độ dài bóng AB′ (m, làm tròn 0,01)", "Shadow length AB′ (m, to 0.01)"], unit: "m", dp: 2,
+  btnText: ["Đánh dấu bóng", "Mark the shadow"], H: 430,
+  lead: ["Mặt trời chiếu xiên, cột ăng-ten AB dựng thẳng đứng trên mái đổ bóng xuống mái. Cần biết <b>bóng dài bao nhiêu</b> để đặt tấm pin tránh vùng bóng.",
+    "The sun shines at a slant and the upright antenna AB on the roof casts a shadow on it. We need the <b>shadow's length</b> to keep the panels out of it."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tìm bóng B′ của đỉnh ăng-ten B trên mái (giao của tia nắng qua B với mặt mái), rồi tính AB′.<br><b>Cần tìm:</b> độ dài AB′ (m, làm tròn đến hàng phần trăm).<br><b>Dữ kiện:</b> chạm vào bản vẽ mái, chân A, đỉnh B và hướng nắng.",
+    "<b>Task:</b> find the shadow B′ of the antenna top B on the roof (where the sun ray through B meets the roof), then compute AB′.<br><b>Find:</b> the length AB′ (m, to two decimal places).<br><b>Data:</b> tap the roof drawing, foot A, top B and the sun direction."); },
+  make: function () {
+    var bc = pickOne([[1, -2], [1, -3], [2, -3], [2, -5], [1, -1]]), b = bc[0], c = bc[1];
+    var xa = rnd(-3, 3), ya = rnd(1, 6), za = rnd(4, 7), d = -(b * ya + c * za), h = pickOne([1, 1, 2]);
+    var v = [rnd(-3, 3), rnd(2, 9), -rnd(2, 4)], den = b * v[1] + c * v[2];
+    if (den <= 0) return this.make();
+    var t = -(c * h) / den, A = [xa, ya, za], B = [xa, ya, za + h], Bp = vadd(B, vmul(v, t)), len = vlen(vsub(Bp, A));
+    if (len < 0.6 || len > 4 || roundAmb(len, 2)) return this.make();
+    return { b: b, c: c, d: d, A: A, B: B, h: h, v: v, t: t, Bp: Bp, len: len, BB: t * vlen(v), ans: Math.round(len * 100) / 100 };
+  },
+  tol: function () { return 0.006; },
+  sc: function (p) { var A = p.A; return prFit([[A[0] - 3, A[1] - 3, A[2] - 3 * p.b / -p.c], [A[0] + 3, A[1] + 4, A[2] + 4 * p.b / -p.c], [A[0], A[1], A[2] + p.h + 0.5], p.Bp, [A[0] - 3, A[1] - 3, A[2] - 4]], [30, 96, 330, 396]); },
+  base: function (p) {
+    var pr = this.sc(p), A = p.A, sl = p.b / -p.c, z = function (y) { return A[2] + (y - A[1]) * sl; }, o = sky12(p.bottom, null, "#fff6dd");
+    o += '<circle cx="320" cy="34" r="20" fill="#ffcf3f" stroke="' + INK + '" stroke-width="2.4"/>';
+    var R = [[A[0] - 3, A[1] - 3, z(A[1] - 3)], [A[0] + 3, A[1] - 3, z(A[1] - 3)], [A[0] + 3, A[1] + 4, z(A[1] + 4)], [A[0] - 3, A[1] + 4, z(A[1] + 4)]];
+    o += poly3(pr, R, "#e57373", INK, 0.9);
+    for (var y = A[1] - 2; y <= A[1] + 3; y++) o += seg3(pr, [A[0] - 3, y, z(y)], [A[0] + 3, y, z(y)], "#c62828", 1.1);
+    o += seg3(pr, A, p.B, INK, 3.4) + dot3(pr, A, "#ffcf3f", 5) + dot3(pr, p.B, "#ffcf3f", 5);
+    [["A", A, 8, 16], ["B", p.B, 8, -6]].forEach(function (x) { var q = P2(pr, x[1]); o += '<circle data-it="' + x[0] + '" cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="20" fill="#fff" fill-opacity="0" style="cursor:pointer"/>' + lab3(pr, x[1], p.seen[x[0]] ? ptS(x[0], x[1]) : x[0], x[2], x[3], "#1f2d3a", 12.5); });
+    o += card12(14, 10, 196, 44, L("BẢN VẼ MÁI (P)", "ROOF DRAWING (P)"), "P", p, ["(P): " + planeS(0, p.b, p.c, p.d)]);
+    o += card12(14, 58, 196, 44, L("HƯỚNG NẮNG (VÉC-TƠ)", "SUN DIRECTION (VECTOR)"), "v", p, ["v = " + vecS(p.v)], "#c77700");
+    return o;
+  },
+  items: function (p) {
+    return {
+      P: { note: ["Mái (P): " + planeS(0, p.b, p.c, p.d), "Roof (P): " + planeS(0, p.b, p.c, p.d)], sfx: "pick", say: ["Mặt mái nằm trên <b>(P): " + planeS(0, p.b, p.c, p.d) + "</b>.", "The roof lies on <b>(P): " + planeS(0, p.b, p.c, p.d) + "</b>."] },
+      v: { note: ["Tia nắng theo véc-tơ v = " + vecS(p.v), "Sun rays along v = " + vecS(p.v)], sfx: "pick", say: ["Tia nắng chiếu theo véc-tơ <b>v = " + vecS(p.v) + "</b>.", "Sun rays travel along <b>v = " + vecS(p.v) + "</b>."] },
+      A: { note: ["Chân ăng-ten " + ptS("A", p.A) + " (nằm trên mái)", "Antenna foot " + ptS("A", p.A) + " (on the roof)"], sfx: "pick", say: ["Chân ăng-ten <b>" + ptS("A", p.A) + "</b>, nằm trên mái.", "Antenna foot <b>" + ptS("A", p.A) + "</b>, on the roof."] },
+      B: { note: ["Đỉnh ăng-ten " + ptS("B", p.B), "Antenna top " + ptS("B", p.B)], sfx: "pick", say: ["Đỉnh ăng-ten <b>" + ptS("B", p.B) + "</b>.", "Antenna top <b>" + ptS("B", p.B) + "</b>."] }
+    };
+  },
+  special: function (p, v) {
+    if (Math.abs(v - p.h) < 0.006 && Math.abs(p.h - p.ans) > 0.01) return { ok: false, kind: v < p.ans ? "short" : "long", msg: L("Đó là chiều cao ăng-ten AB. Cần độ dài bóng AB′ trên mái.", "That's the antenna height AB. You need the shadow length AB′ on the roof.") };
+    if (Math.abs(v - p.BB) < 0.006) return { ok: false, kind: v < p.ans ? "short" : "long", msg: L("Đó là độ dài tia nắng BB′. Bóng là đoạn AB′ (từ chân ăng-ten đến B′).", "That's the length of the ray BB′. The shadow is AB′ (from the antenna foot to B′).") };
+    return null;
+  },
+  fx: function (p, k, v) {
+    var pr = this.sc(p), dir = vsub(p.Bp, p.A), E = vadd(p.A, vmul(dir, Math.min(1.6, v / p.len)));
+    return seg3(pr, p.B, p.Bp, "#ffb300", 2, "5 4") + seg3(pr, p.A, E, k === "ok" ? "#263238" : "#e53935", 6) + dot3(pr, p.Bp, "#1f8a4c", 4.5) + lab3(pr, p.Bp, "B′", 8, 14, "#1f8a4c");
+  },
+  okMsg: ["Chính xác! Vạch sơn trùng khít bóng ăng-ten.", "Correct! The painted mark matches the shadow exactly."],
+  shortMsg: ["Ngắn hơn bóng thật. Kiểm tra lại tham số t của giao điểm.", "Shorter than the real shadow. Check the parameter t of the intersection."],
+  longMsg: ["Dài hơn bóng thật. Kiểm tra lại tham số t của giao điểm.", "Longer than the real shadow. Check the parameter t of the intersection."],
+  passTitle: ["đã đánh dấu vùng bóng!", "shadow marked!"],
+  rows: function (p) { return [[L("Tia nắng qua B", "Ray through B"), parS(p.B, p.v)], [L("Thay vào (P) được", "Substitute into (P)"), "t = " + fracS(p.t)], ["B′", ptS("B′", p.Bp)], ["AB′", fmt(p.len, 3) + " m"]]; },
+  formula: function () { return L("Đường thẳng qua B, chỉ phương v: x = x_B + v₁t, … Thay vào (P) tìm t ⇒ B′; AB′ = |AB′|", "Line through B along v: x = x_B + v₁t, … Substitute into (P) for t ⇒ B′; AB′ = |AB′|"); },
+  hints: function () { return [
+    L("Bóng B′ của đỉnh B là <b>giao điểm của tia nắng qua B</b> (đường thẳng qua B, chỉ phương v) với mặt mái (P).", "The shadow B′ of B is where the <b>sun ray through B</b> (the line through B along v) meets the roof (P)."),
+    L("Viết phương trình tham số của tia nắng qua B, thay x, y, z vào phương trình (P) để tìm t, suy ra B′. Rồi AB′ = √((x′ − x_A)² + (y′ − y_A)² + (z′ − z_A)²).", "Write the parametric equation of the ray through B, substitute x, y, z into (P) to get t, then B′. Finally AB′ = √((x′ − x_A)² + (y′ − y_A)² + (z′ − z_A)²)."),
+    L("Ví dụ: (P): y − 2z + 8 = 0, B(−2; 2; 6), v = (2; 8; −3): (2 + 8t) − 2(6 − 3t) + 8 = 0 ⇒ t = 1/7, B′(−12/7; 22/7; 39/7), A(−2; 2; 5): AB′ = √84 / 7 ≈ 1,31 m.", "Example: (P): y − 2z + 8 = 0, B(−2; 2; 6), v = (2; 8; −3): (2 + 8t) − 2(6 − 3t) + 8 = 0 ⇒ t = 1/7, B′(−12/7; 22/7; 39/7), A(−2; 2; 5): AB′ = √84 / 7 ≈ 1.31 m.")]; }
+});
+
+/* MP4 · Hai mái che song song (KM-HH-1204, thay thế MP1): khoảng cách giữa hai mặt phẳng song song */
+var MP4 = s12Job("mp", {
+  name: ["Hai mái che song song", "Two parallel canopies"], sub: ["khoảng cách giữa hai mái che song song", "distance between two parallel canopies"],
+  endName: ["khoảng cách hai mái che", "canopy gap"], what: ["Khoảng cách giữa hai mái (m, làm tròn 0,1)", "Distance between the canopies (m, to 0.1)"], unit: "m", dp: 1,
+  btnText: ["Cắt cột chống", "Cut the strut"], H: 420,
+  lead: ["Hiên nhà có <b>hai tầng mái che bằng kính</b> lắp song song. Thợ cần cắt các thanh chống vuông góc nối hai tầng mái, nên phải biết <b>khoảng cách giữa hai mái</b>.",
+    "The porch has <b>two parallel glass canopies</b>. The fitters must cut struts at right angles between them, so they need the <b>distance between the canopies</b>."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tính khoảng cách giữa hai mặt phẳng song song (P) và (Q).<br><b>Cần tìm:</b> khoảng cách (m, làm tròn đến hàng phần mười).<br><b>Dữ kiện:</b> chạm vào hai bản vẽ mái che.",
+    "<b>Task:</b> find the distance between the parallel planes (P) and (Q).<br><b>Find:</b> the distance (m, to one decimal place).<br><b>Data:</b> tap the two canopy drawings."); },
+  make: function () {
+    var a, b; do { a = pickOne([0, 1, 2, -1, -2]); b = pickOne([0, 1, 2, -1, -2]); } while (!a && !b);
+    var c = -rnd(3, 6), n = Math.sqrt(a * a + b * b + c * c), d2 = rnd(-3, 3), k = pickOne([2, 3]), e = sgnR() * rnd(5, 40);
+    var dist = Math.abs(e / k - d2) / n;
+    if (dist < 1.5 || dist > 4.5 || roundAmb(dist, 1) || e % k === 0) return this.make();
+    return { a: a, b: b, c: c, d2: d2, k: k, e: e, n: n, dist: dist, wrong: Math.abs(e - d2) / n, ans: Math.round(dist * 10) / 10 };
+  },
+  tol: function () { return 0.051; },
+  base: function (p) {
+    var o = sky12(p.bottom, 360, "#e6f4ff"), pr = prFit([[0, 0, 0], [8, 0, 0], [0, 10, 0], [0, 0, 7]], [40, 110, 330, 380]);
+    o += poly3(pr, [[0, 0, 0], [8, 0, 0], [8, 10, 0], [0, 10, 0]], "#d7ccc8", "#8d6e63", 0.6, 1.4);
+    [[2, 3.2, "#90caf9"], [4.6, 5.6, "#64b5f6"]].forEach(function (r, i) { o += poly3(pr, [[0, 1, r[0]], [7, 1, r[0] + 0.8], [7, 9, r[0] + 0.8], [0, 9, r[0]]], r[2], "#1565c0", 0.55); });
+    [[1, 1], [1, 9], [6, 1], [6, 9]].forEach(function (c) { o += seg3(pr, [c[0], c[1], 0], [c[0], c[1], 2 + c[0] * 0.8 / 7], "#8d6e63", 3); });
+    o += card12(14, 10, 216, 44, L("MÁI DƯỚI (P)", "LOWER CANOPY (P)"), "P", p, ["(P): " + planeS(p.k * p.a, p.k * p.b, p.k * p.c, p.e)]);
+    o += card12(14, 58, 216, 44, L("MÁI TRÊN (Q)", "UPPER CANOPY (Q)"), "Q", p, ["(Q): " + planeS(p.a, p.b, p.c, p.d2)]);
+    return o;
+  },
+  items: function (p) {
+    var P = planeS(p.k * p.a, p.k * p.b, p.k * p.c, p.e), Q = planeS(p.a, p.b, p.c, p.d2);
+    return { P: { note: ["Mái dưới (P): " + P, "Lower canopy (P): " + P], sfx: "pick", say: ["Mái dưới nằm trên <b>(P): " + P + "</b>.", "The lower canopy lies on <b>(P): " + P + "</b>."] },
+      Q: { note: ["Mái trên (Q): " + Q, "Upper canopy (Q): " + Q], sfx: "pick", say: ["Mái trên nằm trên <b>(Q): " + Q + "</b>.", "The upper canopy lies on <b>(Q): " + Q + "</b>."] } };
+  },
+  special: function (p, v) { if (Math.abs(v - p.wrong) < 0.06) return { ok: false, kind: "long", msg: L("Hai phương trình chưa cùng véc-tơ pháp tuyến. Chia (P) cho " + p.k + " trước rồi mới so hệ số tự do.", "The two equations don't have the same normal yet. Divide (P) by " + p.k + " first, then compare the constants.") }; return null; },
+  fx: function (p, k, v) { var pr = prFit([[0, 0, 0], [8, 0, 0], [0, 10, 0], [0, 0, 7]], [40, 110, 330, 380]), top = 2.4 + 2.6 * Math.min(1.5, v / p.dist); return seg3(pr, [3.5, 5, 2.4], [3.5, 5, top], k === "ok" ? "#1f8a4c" : "#e53935", 5); },
+  okMsg: ["Chính xác! Thanh chống vừa khít giữa hai mái.", "Correct! The strut fits exactly between the canopies."],
+  shortMsg: ["Thanh chống ngắn quá, không chạm mái trên.", "The strut is too short to reach the upper canopy."],
+  longMsg: ["Thanh chống dài quá, đội mái trên lên.", "The strut is too long and pushes up the upper canopy."],
+  passTitle: ["thanh chống đã cắt!", "struts cut!"],
+  rows: function (p) { return [["(P)", planeS(p.k * p.a, p.k * p.b, p.k * p.c, p.e) + " ⇔ " + planeS(p.a, p.b, p.c, p.e / p.k)], ["(Q)", planeS(p.a, p.b, p.c, p.d2)], [L("Khoảng cách", "Distance"), "|" + fmt(p.e / p.k, 3) + " − (" + c3(p.d2) + ")| / √" + (p.a * p.a + p.b * p.b + p.c * p.c) + " ≈ " + fmt(p.dist, 3) + " m"]]; },
+  formula: function () { return L("(P): ax + by + cz + d₁ = 0, (Q): ax + by + cz + d₂ = 0 ⇒ d = |d₁ − d₂| / √(a² + b² + c²)", "(P): ax + by + cz + d₁ = 0, (Q): ax + by + cz + d₂ = 0 ⇒ d = |d₁ − d₂| / √(a² + b² + c²)"); },
+  hints: function () { return [
+    L("Hai mặt phẳng song song: khoảng cách bằng khoảng cách từ <b>một điểm bất kỳ</b> của mặt này đến mặt kia.", "For parallel planes, the distance equals the distance from <b>any point</b> of one plane to the other."),
+    L("Cách nhanh: viết hai phương trình với <b>cùng hệ số a, b, c</b> (chia (P) cho " + "hệ số chung" + "), rồi d = |d₁ − d₂| / √(a² + b² + c²).", "Quick way: write both equations with the <b>same a, b, c</b> (divide (P) by the common factor), then d = |d₁ − d₂| / √(a² + b² + c²)."),
+    L("Ví dụ: (P): 2x + 2y − 4z + 15 = 0 ⇔ x + y − 2z + 7,5 = 0; (Q): x + y − 2z = 0. d = 7,5 / √6 ≈ 3,1 m.", "Example: (P): 2x + 2y − 4z + 15 = 0 ⇔ x + y − 2z + 7.5 = 0; (Q): x + y − 2z = 0. d = 7.5 / √6 ≈ 3.1 m.")]; }
+});
+
+/* =============== KỊCH BẢN B · ĐƯỜNG THẲNG: ĐÀI KIỂM SOÁT KHÔNG LƯU =============== */
+function towerAt(q) { return '<g transform="translate(' + q[0].toFixed(1) + " " + q[1].toFixed(1) + ')" stroke="' + INK + '" stroke-width="1.8"><path d="M-6 0 L-4 -36 H4 L6 0 Z" fill="#eceff1"/><path d="M-11 -36 H11 L8 -46 H-8 Z" fill="#4fc3f7"/><path d="M-9 -46 H9 V-50 H-9 Z" fill="#37474f"/></g>'; }
+/* ĐT1 · Cài hướng bay (KM-HH-1211): véc-tơ chỉ phương */
+var DT1 = s12Job("dt", {
+  name: ["Cài hướng bay", "Set the heading"], sub: ["véc-tơ chỉ phương của đường bay", "direction vector of the flight path"],
+  endName: ["hướng bay", "heading"], what: ["Một véc-tơ chỉ phương của đường bay AB", "A direction vector of the flight path AB"], unit: "",
+  btnText: ["Cài hướng bay", "Set heading"], H: 420, mf: MF_VEC,
+  lead: ["Một chuyến bay chuẩn bị hạ cánh, bay thẳng từ A đến điểm chờ B. Máy tính lái tự động cần một <b>véc-tơ chỉ phương</b> của đường bay (đơn vị: mét).",
+    "A flight is coming in to land, flying straight from A to holding point B. The autopilot needs a <b>direction vector</b> of the path (units: metres)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> cài cho máy bay một véc-tơ chỉ phương u của đường thẳng AB (có thể rút gọn).<br><b>Cần tìm:</b> u = (a; b; c), mọi véc-tơ cùng phương đều đúng.<br><b>Dữ kiện:</b> chạm vào máy bay A và điểm chờ B.",
+    "<b>Task:</b> give the plane a direction vector u of the line AB (you may simplify it).<br><b>Find:</b> u = (a; b; c); any parallel vector is correct.<br><b>Data:</b> tap the plane A and the holding point B."); },
+  make: function () {
+    var u0 = [rnd(3, 8), sgnR() * rnd(0, 3), -1]; if (gcd(gcd(u0[0], u0[1]), 1) !== 1) return this.make();
+    var m = pickOne([20, 25, 40, 50]), A = [-10 * rnd(30, 60), -10 * rnd(10, 40), 10 * rnd(40, 70)], B = vadd(A, vmul(u0, m));
+    if (B[2] < 200) return this.make();
+    return { A: A, B: B, u0: u0, m: m, AB: vmul(u0, m) };
+  },
+  sc: function (p) { return prFit([[0, 0, 0], p.A, p.B, [p.A[0], p.A[1], 0], [p.B[0], p.B[1], 0], vadd(p.B, vmul(p.u0, p.m * 0.5))], [26, 120, 334, 396], 1.6); },
+  base: function (p) {
+    var pr = this.sc(p), o = sky12(p.bottom, null, "#d6efff"), O = [0, 0, 0];
+    var span = Math.max(Math.abs(p.A[0]), Math.abs(p.A[1]), 300);
+    o += poly3(pr, [[-span * 0.2, p.A[1] * 1.2 - 50, 0], [p.A[0] * 1.2, p.A[1] * 1.2 - 50, 0], [p.A[0] * 1.2, Math.max(p.B[1], 100) + 150, 0], [-span * 0.2, Math.max(p.B[1], 100) + 150, 0]], "#a5d98c", "#6aa75a", 0.9, 1.4);
+    o += towerAt(P2(pr, O)) + lab3(pr, O, L("Đài O", "Tower O"), 10, 10, "#37474f", 11);
+    [[p.A, "A"], [p.B, "B"]].forEach(function (x) { o += seg3(pr, x[0], [x[0][0], x[0][1], 0], "#90a4ae", 1.2, "3 4"); });
+    var qa = P2(pr, p.A), qb = P2(pr, p.B), ang = Math.atan2(qb[1] - qa[1], qb[0] - qa[0]) * 180 / Math.PI;
+    o += plane12(qa[0], qa[1], ang, 1.3) + '<circle cx="' + qb[0].toFixed(1) + '" cy="' + qb[1].toFixed(1) + '" r="9" fill="none" stroke="#e53935" stroke-width="2.4" stroke-dasharray="4 3"/>';
+    [["A", p.A, qa, -26], ["B", p.B, qb, 26]].forEach(function (x) { var lx = Math.max(8, Math.min(x[2][0] - 40, 230)); o += '<circle data-it="' + x[0] + '" cx="' + x[2][0].toFixed(1) + '" cy="' + x[2][1].toFixed(1) + '" r="22" fill="#fff" fill-opacity="0" style="cursor:pointer"/>' + T2(lx, x[2][1] + x[3], p.seen[x[0]] ? ptS(x[0], x[1]) : x[0], { fs: 12.5, fw: 800, c: "#c2410c" }); });
+    o += '<rect x="14" y="12" width="250" height="40" rx="8" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(24, 30, L("Radar: máy bay ở A, điểm chờ B", "Radar: plane at A, holding point B"), { fs: 11.5, fw: 800, c: "#1f6f9f" }) + T2(24, 46, L("Chạm A, B để đọc tọa độ (m)", "Tap A, B to read coordinates (m)"), { fs: 11, fw: 700, c: "#607d8b" });
+    return o;
+  },
+  items: function (p) {
+    return { A: { note: ["Máy bay " + ptS("A", p.A), "Plane " + ptS("A", p.A)], sfx: "pick", say: ["Máy bay đang ở <b>" + ptS("A", p.A) + "</b>.", "The plane is at <b>" + ptS("A", p.A) + "</b>."] },
+      B: { note: ["Điểm chờ " + ptS("B", p.B), "Holding point " + ptS("B", p.B)], sfx: "pick", say: ["Điểm chờ <b>" + ptS("B", p.B) + "</b>.", "Holding point <b>" + ptS("B", p.B) + "</b>."] } };
+  },
+  cmp: function (p, a) {
+    var u = a.slice(0, 3);
+    if (!vlen(u)) return { ok: false, kind: "bad", msg: L("Véc-tơ chỉ phương phải khác véc-tơ 0.", "A direction vector can't be the zero vector.") };
+    if (vlen(vcross(u, p.u0)) < 1e-6 * vlen(u)) return { ok: true, kind: "ok", msg: vdot(u, p.u0) > 0 ? L("Chính xác! Máy bay bay thẳng tới điểm chờ B.", "Correct! The plane flies straight to B.") : L("Đúng là một véc-tơ chỉ phương (ngược chiều AB, vẫn cùng phương). Máy bay đi đúng đường AB.", "Yes, that's a direction vector (opposite to AB but parallel). The plane stays on line AB.") };
+    if (near(u, p.A, 0.01) || near(u, p.B, 0.01)) return { ok: false, kind: "bad", msg: L("Đó là tọa độ một điểm, không phải véc-tơ chỉ phương. Thử tính AB = B − A.", "That's a point's coordinates, not a direction vector. Try AB = B − A.") };
+    if (near(u, vadd(p.A, p.B), 0.01)) return { ok: false, kind: "bad", msg: L("Véc-tơ AB = B − A (lấy tọa độ B trừ tọa độ A), không phải A + B.", "Vector AB = B − A (B's coordinates minus A's), not A + B.") };
+    return { ok: false, kind: "bad", msg: L("Véc-tơ này không cùng phương với AB, máy bay sẽ bay lệch khỏi điểm chờ B.", "This vector isn't parallel to AB, so the plane would miss B.") };
+  },
+  fx: function (p, k, v) {
+    var pr = this.sc(p), u = v.a, s = vlen(u) ? vlen(p.AB) / vlen(u) : 0, E = vadd(p.A, vmul(u, s * (vdot(u, p.u0) < 0 ? -1 : 1)));
+    return seg3(pr, p.A, E, k === "ok" ? "#1f8a4c" : "#e53935", 3, "8 5") + dot3(pr, E, k === "ok" ? "#1f8a4c" : "#e53935", 4.5);
+  },
+  okMsg: ["Chính xác!", "Correct!"], badMsg: ["Chưa đúng.", "Not right."],
+  passTitle: ["hướng bay đã cài!", "heading set!"],
+  showA: function (a) { return "u = " + vecS(a); },
+  rows: function (p) { return [["AB = B − A", vecS(p.AB)], [L("Rút gọn", "Simplified"), "u = " + vecS(p.u0) + " (AB = " + p.m + "u)"], [L("Đường bay", "Flight path"), parS(p.A, p.u0)]]; },
+  formula: function () { return L("AB = (x_B − x_A; y_B − y_A; z_B − z_A); mọi véc-tơ k·AB (k ≠ 0) đều là véc-tơ chỉ phương", "AB = (x_B − x_A; y_B − y_A; z_B − z_A); every k·AB (k ≠ 0) is a direction vector"); },
+  hints: function () { return [
+    L("Đường thẳng đi qua A và B có véc-tơ chỉ phương là <b>AB</b> (hoặc bất kỳ véc-tơ nào cùng phương với AB).", "The line through A and B has direction vector <b>AB</b> (or any vector parallel to it)."),
+    L("AB = (x_B − x_A; y_B − y_A; z_B − z_A). Có thể chia cả ba tọa độ cho cùng một số để được véc-tơ gọn hơn.", "AB = (x_B − x_A; y_B − y_A; z_B − z_A). You may divide all three coordinates by the same number to simplify."),
+    L("Ví dụ: A(−500; −300; 500), B(−200; −200; 450): AB = (300; 100; −50) = 50·(6; 2; −1). Nhập u = (6; 2; −1) hoặc (300; 100; −50).", "Example: A(−500; −300; 500), B(−200; −200; 450): AB = (300; 100; −50) = 50·(6; 2; −1). Enter u = (6; 2; −1) or (300; 100; −50).")]; }
+});
+
+/* ĐT2 · Chụp ảnh khi máy bay gần đài nhất (KM-HH-1212): hình chiếu của O lên đường thẳng */
+var DT2 = s12Job("dt", {
+  name: ["Chụp ảnh lúc gần đài nhất", "Photo at closest approach"], sub: ["điểm trên đường bay gần đài kiểm soát nhất", "the point of the path closest to the tower"],
+  endName: ["điểm gần đài nhất", "closest point"], what: ["Tọa độ điểm H gần đài O nhất", "Coordinates of H, closest to tower O"], unit: "",
+  btnText: ["Hẹn giờ chụp", "Set the camera"], H: 420, mf: MF_TRI("H"), ptol: 0.5,
+  lead: ["Đài muốn chụp ảnh rõ nhất khi máy bay đi qua điểm <b>gần đài O nhất</b>. Hãy tìm điểm đó để hẹn giờ cho camera (đơn vị: mét).",
+    "The tower wants the sharpest photo when the plane passes the point <b>closest to tower O</b>. Find that point to set the camera (units: metres)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tìm điểm H trên đường bay sao cho OH ngắn nhất (H là hình chiếu vuông góc của O lên đường bay).<br><b>Cần tìm:</b> tọa độ H.<br><b>Dữ kiện:</b> chạm vào màn hình radar để đọc phương trình đường bay.",
+    "<b>Task:</b> find the point H on the flight path with OH as short as possible (H is the foot of the perpendicular from O).<br><b>Find:</b> the coordinates of H.<br><b>Data:</b> tap the radar screen to read the flight path equation."); },
+  make: function () {
+    for (var k = 0; k < 400; k++) {
+      var u = [sgnR() * rnd(2, 8), sgnR() * rnd(1, 4), -rnd(1, 2)], h1 = 10 * rnd(-30, 30), h2 = 10 * rnd(-30, 30), nu = u[0] * h1 + u[1] * h2;
+      if (nu % (-u[2]) !== 0) continue; var h3 = nu / (-u[2]); if (h3 < 250 || h3 > 650) continue;
+      var H = [h1, h2, h3], t0 = rnd(40, 100), P0 = vsub(H, vmul(u, t0)); if (P0[2] > 950) continue;
+      return { u: u, H: H, t0: t0, P0: P0, OH: vlen(H) };
+    }
+    return this.make();
+  },
+  sc: function (p) { return prFit([[0, 0, 0], p.P0, vadd(p.H, vmul(p.u, p.t0 * 0.6)), [p.P0[0], p.P0[1], 0], [p.H[0], p.H[1], 0]], [26, 130, 334, 396], 1.4); },
+  base: function (p) {
+    var pr = this.sc(p), o = sky12(p.bottom, null, "#d6efff"), E = vadd(p.H, vmul(p.u, p.t0 * 0.6));
+    o += towerAt(P2(pr, [0, 0, 0])) + lab3(pr, [0, 0, 0], L("Đài O", "Tower O"), 10, 10, "#37474f", 11);
+    o += seg3(pr, p.P0, E, "#90caf9", 2.2, "7 5");
+    var q = P2(pr, p.P0), q2 = P2(pr, E); o += plane12(q[0], q[1], Math.atan2(q2[1] - q[1], q2[0] - q[0]) * 180 / Math.PI, 1.3);
+    o += card12(14, 10, 250, 82, L("MÀN HÌNH RADAR · ĐƯỜNG BAY", "RADAR SCREEN · FLIGHT PATH"), "d", p, parS(p.P0, p.u).split("; ").map(function (s) { return s; }), "#0d47a1");
+    return o;
+  },
+  items: function (p) { var e = parS(p.P0, p.u); return { d: { note: ["Đường bay: " + e, "Flight path: " + e], sfx: "pick", say: ["Đường bay: <b>" + e + "</b> (t tính bằng giây).", "Flight path: <b>" + e + "</b> (t in seconds)."] } }; },
+  cmp: function (p, a) { return this.ptCheck(p, a, p.H); },
+  special: function (p, a) {
+    if (near(a.slice(0, 3), p.P0, 0.5)) return { ok: false, kind: "bad", msg: L("Đó là vị trí lúc t = 0. Điểm gần đài nhất thỏa OH ⊥ u, tức OH·u = 0.", "That's the position at t = 0. The closest point satisfies OH ⊥ u, i.e. OH·u = 0.") };
+    if (Math.abs(vdot(a.slice(0, 3), p.u) - 0) < 1 && !near(a.slice(0, 3), p.H, 0.5)) return { ok: false, kind: "bad", msg: L("OH đã vuông góc với u, nhưng điểm đó không nằm trên đường bay. Hãy tìm t rồi thay vào phương trình.", "OH is perpendicular to u, but that point isn't on the path. Find t, then substitute.") };
+    return null;
+  },
+  fx: function (p, k, v) {
+    var pr = this.sc(p), P = v.a.slice(0, 3), o = seg3(pr, [0, 0, 0], P, k === "ok" ? "#1f8a4c" : "#e53935", 2, "4 3") + dot3(pr, P, k === "ok" ? "#ffeb3b" : "#e53935", k === "ok" ? 9 : 5);
+    if (k === "ok") { var q = P2(pr, P); o += '<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="18" fill="#fff" opacity=".6"/>' + T2(q[0] + 14, q[1] - 14, L("Ảnh nét!", "Sharp shot!"), { fs: 13, fw: 800, c: "#1f8a4c" }); }
+    return o;
+  },
+  okMsg: ["Chính xác! Camera chớp đúng lúc máy bay gần đài nhất.", "Correct! The camera fires as the plane is closest."], badMsg: ["Camera chụp hụt rồi. Kiểm tra điều kiện OH ⊥ u và giá trị t.", "The camera missed. Check OH ⊥ u and the value of t."],
+  passTitle: ["ảnh đã chụp!", "photo taken!"],
+  rows: function (p) { return [[L("Đường bay", "Path"), parS(p.P0, p.u)], ["OH·u = 0", "t = " + p.t0], ["H", ptS("H", p.H)], ["OH", fmt(p.OH, 1) + " m"]]; },
+  formula: function () { return L("H thuộc đường bay: H = M₀ + t·u; OH ⊥ u ⇔ OH·u = 0 ⇒ t", "H on the path: H = M₀ + t·u; OH ⊥ u ⇔ OH·u = 0 ⇒ t"); },
+  hints: function () { return [
+    L("Điểm H gần O nhất là <b>hình chiếu vuông góc</b> của O lên đường bay: OH ⊥ véc-tơ chỉ phương u.", "The closest point H is the <b>foot of the perpendicular</b> from O to the path: OH ⊥ the direction vector u."),
+    L("Gọi H = (x₀ + u₁t; y₀ + u₂t; z₀ + u₃t). Điều kiện OH·u = 0 cho phương trình bậc nhất ẩn t. Giải t rồi thay vào để có H.", "Let H = (x₀ + u₁t; y₀ + u₂t; z₀ + u₃t). The condition OH·u = 0 gives a linear equation in t. Solve for t, then substitute."),
+    L("Ví dụ: x = −500 + 6t, y = −300 + 2t, z = 500 − t: 6(−500 + 6t) + 2(−300 + 2t) − (500 − t) = 0 ⇒ 41t = 4100 ⇒ t = 100, H(100; −100; 400).", "Example: x = −500 + 6t, y = −300 + 2t, z = 500 − t: 6(−500 + 6t) + 2(−300 + 2t) − (500 − t) = 0 ⇒ 41t = 4100 ⇒ t = 100, H(100; −100; 400).")]; }
+});
+
+/* ĐT3 · Hai đường bay cắt nhau (KM-HH-1213): giao điểm hai đường thẳng + so sánh thời điểm */
+var DT3 = s12Job("dt", {
+  name: ["Cảnh báo va chạm", "Collision alert"], sub: ["giao điểm hai đường bay, có va chạm không?", "where two paths cross, and is there a collision?"],
+  endName: ["cảnh báo va chạm", "collision alert"], what: ["Giao điểm M và kết luận va chạm", "Crossing point M and collision verdict"], unit: "",
+  btnText: ["Gửi cảnh báo", "Send the alert"], H: 430, ptol: 0.01,
+  mf: ["M(", 0, ";", 1, ";", 2, ")", { yn: 3, o: [["Có va chạm", "Collision"], ["Không va chạm", "No collision"]] }],
+  lead: ["CẢNH BÁO! Một <b>trực thăng cứu hộ</b> và một <b>máy bay phản lực</b> bay trong cùng khu vực. Hãy kiểm tra hai đường bay có cắt nhau không, và nếu cắt thì <b>hai máy có tới giao điểm cùng lúc không</b> (đơn vị: km, t tính bằng phút).",
+    "ALERT! A <b>rescue helicopter</b> and a <b>jet</b> are in the same area. Check whether their paths cross and, if so, <b>whether both reach the crossing point at the same time</b> (units: km, t in minutes)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tìm giao điểm M của hai đường bay, rồi so sánh thời điểm mỗi máy tới M để kết luận có va chạm hay không.<br><b>Cần tìm:</b> tọa độ M và chọn Có / Không va chạm.<br><b>Dữ kiện:</b> chạm vào hai dòng trên màn hình radar. Cả hai phương trình tính t từ cùng một thời điểm.",
+    "<b>Task:</b> find where the two paths cross (M), then compare when each aircraft reaches M to decide whether they collide.<br><b>Find:</b> the coordinates of M, and choose Collision / No collision.<br><b>Data:</b> tap the two lines on the radar screen. Both equations count t from the same moment."); },
+  make: function () {
+    for (var k = 0; k < 300; k++) {
+      var M = [rnd(4, 16), rnd(4, 16), rnd(3, 6)], u1 = [sgnR() * rnd(1, 3), sgnR() * rnd(1, 3), pickOne([0, 1, -1])], u2 = [sgnR() * rnd(5, 9), rnd(-4, 4), pickOne([0, -1])];
+      if (vlen(vcross(u1, u2)) < 1e-9) continue;
+      var tA = rnd(2, 5), same = Math.random() < 0.4, tB = same ? tA : tA + pickOne([1, 2, -1]);
+      if (tB < 1) continue;
+      var P1 = vsub(M, vmul(u1, tA)), P2_ = vsub(M, vmul(u2, tB)); if (P1[2] < 1 || P2_[2] < 1) continue;
+      return { M: M, u1: u1, u2: u2, tA: tA, tB: tB, same: same, P1: P1, P2: P2_ };
+    }
+    return this.make();
+  },
+  base: function (p) {
+    var o = sky12(p.bottom, null, "#0b2a3a"), cx = 250, cy = 300, R = 96;
+    o += '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="#0f3d2e" stroke="#4caf50" stroke-width="2.4"/>';
+    [0.33, 0.66].forEach(function (f) { o += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (R * f) + '" fill="none" stroke="#2e7d32" stroke-width="1"/>'; });
+    o += '<path d="M' + (cx - R) + " " + cy + " H" + (cx + R) + " M" + cx + " " + (cy - R) + " V" + (cy + R) + '" stroke="#2e7d32" stroke-width="1"/>';
+    var ext = [p.P1, p.P2, p.M, vadd(p.M, vmul(p.u1, 2)), vadd(p.M, vmul(p.u2, 1))], mx = 1;
+    ext.forEach(function (P) { mx = Math.max(mx, Math.abs(P[0] - p.M[0]), Math.abs(P[1] - p.M[1])); });
+    var sc = (R - 12) / mx, pt = function (P) { return [cx + (P[1] - p.M[1]) * sc, cy - (P[0] - p.M[0]) * sc]; };
+    var a1 = pt(p.P1), b1 = pt(vadd(p.M, vmul(p.u1, 1.5))), a2 = pt(p.P2), b2 = pt(vadd(p.M, vmul(p.u2, 0.6)));
+    o += '<path d="M' + sv(a1) + " L" + sv(b1) + '" stroke="#ffb74d" stroke-width="2" stroke-dasharray="5 4"/><path d="M' + sv(a2) + " L" + sv(b2) + '" stroke="#81d4fa" stroke-width="2" stroke-dasharray="5 4"/>';
+    o += heli12(a1[0], a1[1], 0.9) + plane12(a2[0], a2[1], Math.atan2(b2[1] - a2[1], b2[0] - a2[0]) * 180 / Math.PI, 1.1, "#e3f2fd");
+    o += card12(10, 10, 250, 64, L("TRỰC THĂNG CỨU HỘ (d₁)", "RESCUE HELICOPTER (d₁)"), "d1", p, [parS(p.P1, p.u1).split("; ").slice(0, 2).join("; "), parS(p.P1, p.u1).split("; ")[2]], "#e65100");
+    o += card12(10, 80, 250, 64, L("MÁY BAY PHẢN LỰC (d₂)", "JET (d₂)"), "d2", p, [parS(p.P2, p.u2).split("; ").slice(0, 2).join("; "), parS(p.P2, p.u2).split("; ")[2]], "#0277bd");
+    o += T2(14, 168, L("t: số phút kể từ bây giờ", "t: minutes from now"), { fs: 11, fw: 700, c: "#b0bec5" }) + radarAx(30, 400);
+    return o;
+  },
+  items: function (p) { var e1 = parS(p.P1, p.u1), e2 = parS(p.P2, p.u2);
+    return { d1: { note: ["Trực thăng d₁: " + e1, "Helicopter d₁: " + e1], sfx: "pick", say: ["Trực thăng: <b>" + e1 + "</b>.", "Helicopter: <b>" + e1 + "</b>."] },
+      d2: { note: ["Phản lực d₂: " + e2, "Jet d₂: " + e2], sfx: "pick", say: ["Máy bay phản lực: <b>" + e2 + "</b>.", "Jet: <b>" + e2 + "</b>."] } }; },
+  cmp: function (p, a) {
+    var okP = near(a.slice(0, 3), p.M, 0.01), yn = a[3] === 1;
+    if (okP && yn === p.same) return { ok: true, kind: "ok", msg: p.same ? L("Chính xác! Hai máy tới M cùng lúc: đã lệnh trực thăng hạ độ cao kịp thời.", "Correct! Both reach M at the same moment: the helicopter was told to descend in time.") : L("Chính xác! Hai đường bay cắt nhau nhưng hai máy qua M ở hai thời điểm khác nhau, không va chạm.", "Correct! The paths cross, but the aircraft pass M at different times: no collision.") };
+    if (okP) return { ok: false, kind: "bad", msg: L("Tọa độ M đúng rồi. Nhưng va chạm chỉ xảy ra khi hai máy tới M <b>cùng một lúc</b>: so sánh t của trực thăng và t của máy bay phản lực tại M.", "M is right. But a collision only happens if both reach M <b>at the same time</b>: compare the helicopter's t and the jet's t at M.") };
+    return { ok: false, kind: "bad", msg: L("Chưa đúng giao điểm. Đặt hai tham số khác nhau (t và s), giải hệ từ hai phương trình rồi thử lại phương trình thứ ba.", "That's not the crossing point. Use two different parameters (t and s), solve two of the equations, then check the third.") };
+  },
+  showA: function (a) { return ptS("M", a) + " · " + (a[3] === 1 ? L("có va chạm", "collision") : L("không va chạm", "no collision")); },
+  fx: function (p, k) { return k === "ok" ? (p.same ? '<g transform="translate(250 300)"><circle r="16" fill="#e53935" opacity=".8"/>' + T2(0, 36, L("ĐÃ TRÁNH VA CHẠM", "COLLISION AVOIDED"), { a: "middle", fs: 12, fw: 800, c: "#ffeb3b" }) + "</g>" : '<g transform="translate(250 300)"><circle r="10" fill="#4caf50"/>' + T2(0, 30, L("AN TOÀN", "SAFE"), { a: "middle", fs: 13, fw: 800, c: "#a5d6a7" }) + "</g>") : ""; },
+  okMsg: ["Chính xác!", "Correct!"], badMsg: ["Chưa đúng.", "Not right."],
+  passTitle: ["đã gửi cảnh báo!", "alert sent!"],
+  rows: function (p) { return [["d₁", parS(p.P1, p.u1)], ["d₂", parS(p.P2, p.u2, "s")], [L("Giao điểm", "Crossing point"), ptS("M", p.M)], [L("Thời điểm tới M", "Time at M"), L("trực thăng t = " + p.tA + " phút, phản lực t = " + p.tB + " phút", "helicopter t = " + p.tA + " min, jet t = " + p.tB + " min")], [L("Kết luận", "Verdict"), p.same ? L("có va chạm", "collision") : L("không va chạm", "no collision")]]; },
+  formula: function () { return L("Giải x₁(t) = x₂(s), y₁(t) = y₂(s), thử lại z₁(t) = z₂(s); va chạm ⇔ t = s", "Solve x₁(t) = x₂(s), y₁(t) = y₂(s), check z₁(t) = z₂(s); collision ⇔ t = s"); },
+  hints: function () { return [
+    L("Hai đường thẳng cắt nhau tại M thì có t (của d₁) và s (của d₂) sao cho tọa độ bằng nhau. <b>Dùng hai chữ khác nhau</b> vì mỗi máy tới M ở thời điểm riêng.", "If the lines meet at M there are t (for d₁) and s (for d₂) giving equal coordinates. <b>Use two different letters</b> because each aircraft reaches M at its own time."),
+    L("Lập hệ x₁ = x₂, y₁ = y₂ để tìm t, s; thử lại z₁ = z₂. Thay t vào d₁ để có M. Va chạm chỉ khi <b>t = s</b> (cùng một phút).", "Set x₁ = x₂, y₁ = y₂ to find t, s; check z₁ = z₂. Put t into d₁ to get M. A collision needs <b>t = s</b> (the same minute)."),
+    L("Ví dụ: d₁: x = 4 + t, y = 3t, z = 6 − 1,5t; d₂: x = 12 − 2,8s, y = 2,8s, z = 1,4s. 3t = 2,8s và 4 + t = 12 − 3t ⇒ t = 2, s = 15/7. M(6; 6; 3). t ≠ s nên không va chạm.", "Example: d₁: x = 4 + t, y = 3t, z = 6 − 1.5t; d₂: x = 12 − 2.8s, y = 2.8s, z = 1.4s. 3t = 2.8s and 4 + t = 12 − 3t ⇒ t = 2, s = 15/7. M(6; 6; 3). t ≠ s, so no collision.")]; }
+});
+
+/* ĐT4 · Góc hạ cánh (KM-HH-1214, thay thế ĐT2): góc giữa đường thẳng và mặt phẳng (Oxy) */
+var DT4 = s12Job("dt", {
+  name: ["Góc hạ cánh", "Landing angle"], sub: ["góc giữa đường bay và mặt sân đỗ", "angle between the flight path and the pad"],
+  endName: ["góc hạ cánh", "landing angle"], what: ["Góc giữa đường bay AB và mặt đất (độ, làm tròn đến độ)", "Angle between path AB and the ground (degrees, nearest degree)"], unit: "°", dp: 0,
+  btnText: ["Cài góc hạ cánh", "Set the angle"], H: 420,
+  lead: ["Trực thăng cứu hộ hạ cánh thẳng từ A xuống bãi đỗ B trên mặt đất (Oxy). Phi công cần biết <b>góc hạ cánh</b> giữa đường bay và mặt đất (đơn vị: mét).",
+    "The rescue helicopter descends in a straight line from A to pad B on the ground (Oxy). The pilot needs the <b>landing angle</b> between the path and the ground (units: metres)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tính góc giữa đường thẳng AB và mặt phẳng (Oxy).<br><b>Cần tìm:</b> góc (độ, làm tròn đến hàng đơn vị).<br><b>Dữ kiện:</b> chạm vào trực thăng A và bãi đỗ B.",
+    "<b>Task:</b> find the angle between line AB and the plane (Oxy).<br><b>Find:</b> the angle (degrees, to the nearest degree).<br><b>Data:</b> tap helicopter A and pad B."); },
+  make: function () {
+    var dx = sgnR() * 10 * rnd(3, 12), dy = sgnR() * 10 * rnd(3, 12), h = 10 * rnd(3, 9), L0 = Math.sqrt(dx * dx + dy * dy + h * h), phi = Math.asin(h / L0) * 180 / Math.PI;
+    if (phi < 12 || phi > 40 || roundAmb(phi, 0)) return this.make();
+    var B = [10 * rnd(-10, 10), 10 * rnd(-10, 10), 0], A = [B[0] - dx, B[1] - dy, h];
+    return { A: A, B: B, phi: phi, ans: Math.round(phi), AB: vsub(B, A) };
+  },
+  tol: function () { return 0.5; },
+  sc: function (p) { return prFit([p.A, p.B, [p.A[0], p.A[1], 0], [p.B[0] + 40, p.B[1] + 40, 0], [p.B[0] - 40, p.B[1] - 40, 0]], [30, 110, 330, 396]); },
+  base: function (p) {
+    var pr = this.sc(p), o = sky12(p.bottom, null, "#ddf1ff"), B = p.B, A = p.A, ext = 60;
+    o += poly3(pr, [[Math.min(A[0], B[0]) - ext, Math.min(A[1], B[1]) - ext, 0], [Math.max(A[0], B[0]) + ext, Math.min(A[1], B[1]) - ext, 0], [Math.max(A[0], B[0]) + ext, Math.max(A[1], B[1]) + ext, 0], [Math.min(A[0], B[0]) - ext, Math.max(A[1], B[1]) + ext, 0]], "#a5d98c", "#6aa75a", 1, 1.4);
+    var qb = P2(pr, B), qa = P2(pr, A);
+    o += '<ellipse cx="' + qb[0].toFixed(1) + '" cy="' + qb[1].toFixed(1) + '" rx="18" ry="8" fill="#ffcf3f" stroke="' + INK + '" stroke-width="2"/>' + T2(qb[0], qb[1] + 4, "H", { a: "middle", fs: 11, fw: 800 });
+    o += seg3(pr, A, [A[0], A[1], 0], "#90a4ae", 1.2, "3 4") + heli12(qa[0], qa[1], 1.3);
+    [["A", A, qa], ["B", B, qb]].forEach(function (x) { o += '<circle data-it="' + x[0] + '" cx="' + x[2][0].toFixed(1) + '" cy="' + x[2][1].toFixed(1) + '" r="22" fill="#fff" fill-opacity="0" style="cursor:pointer"/>' + T2(x[2][0] - 24, x[2][1] - 18, p.seen[x[0]] ? ptS(x[0], x[1]) : x[0], { fs: 12.5, fw: 800, c: "#c2410c" }); });
+    o += '<rect x="14" y="12" width="250" height="40" rx="8" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(24, 30, L("Mặt đất là mặt phẳng (Oxy)", "The ground is the (Oxy) plane"), { fs: 11.5, fw: 800, c: "#1f6f9f" }) + T2(24, 46, L("Chạm A, B để đọc tọa độ (m)", "Tap A, B to read coordinates (m)"), { fs: 11, fw: 700, c: "#607d8b" });
+    return o;
+  },
+  items: function (p) { return { A: { note: ["Trực thăng " + ptS("A", p.A), "Helicopter " + ptS("A", p.A)], sfx: "pick", say: ["Trực thăng ở <b>" + ptS("A", p.A) + "</b>.", "The helicopter is at <b>" + ptS("A", p.A) + "</b>."] }, B: { note: ["Bãi đỗ " + ptS("B", p.B), "Pad " + ptS("B", p.B)], sfx: "pick", say: ["Bãi đỗ <b>" + ptS("B", p.B) + "</b>.", "Pad <b>" + ptS("B", p.B) + "</b>."] } }; },
+  special: function (p, v) { if (Math.abs(v - (90 - p.phi)) <= 0.6) return { ok: false, kind: "long", msg: L("Đó là góc giữa đường bay và trục Oz (pháp tuyến). Góc với mặt phẳng dùng sin φ = |u·n| / (|u|·|n|).", "That's the angle with the Oz axis (the normal). The angle with a plane uses sin φ = |u·n| / (|u|·|n|).") }; return null; },
+  fx: function (p, k, v) { var pr = this.sc(p); return seg3(pr, p.A, p.B, k === "ok" ? "#1f8a4c" : "#e53935", 3, "7 4"); },
+  okMsg: ["Chính xác! Trực thăng hạ cánh êm.", "Correct! A smooth landing."],
+  shortMsg: ["Góc nhỏ quá, trực thăng sẽ đáp quá xa bãi đỗ.", "Too shallow, the helicopter would land past the pad."],
+  longMsg: ["Góc lớn quá, hạ cánh quá dốc, không an toàn.", "Too steep, an unsafe landing."],
+  passTitle: ["đã hạ cánh!", "landed!"],
+  rows: function (p) { return [["AB", vecS(p.AB)], [L("Pháp tuyến (Oxy)", "Normal of (Oxy)"), "k = (0; 0; 1)"], ["sin φ", fmt(Math.sin(p.phi * Math.PI / 180), 4)], [L("Góc", "Angle"), fmt(p.phi, 2) + "° ≈ " + p.ans + "°"]]; },
+  formula: function () { return "sin φ = |u·n| / (|u|·|n|)"; },
+  hints: function () { return [
+    L("Góc giữa đường thẳng (chỉ phương u) và mặt phẳng (pháp tuyến n) tính bằng <b>sin</b>, không phải cos.", "The angle between a line (direction u) and a plane (normal n) uses <b>sin</b>, not cos."),
+    L("u = AB, n = (0; 0; 1). sin φ = |u·n| / (|u|·|n|) = |z_B − z_A| / AB.", "u = AB, n = (0; 0; 1). sin φ = |u·n| / (|u|·|n|) = |z_B − z_A| / AB."),
+    L("Ví dụ: A(3; 2; 3), B(8; 8; 0): AB = (5; 6; −3), sin φ = 3 / √70 ≈ 0,359, φ ≈ 21°.", "Example: A(3; 2; 3), B(8; 8; 0): AB = (5; 6; −3), sin φ = 3 / √70 ≈ 0.359, φ ≈ 21°.")]; }
+});
+
+/* =============== KỊCH BẢN C · MẶT CẦU: TRẠM RADAR TRÊN ĐỈNH NÚI =============== */
+function domeAt(q, s) { s = s || 1; return '<g transform="translate(' + q[0].toFixed(1) + " " + q[1].toFixed(1) + ") scale(" + s + ')" stroke="' + INK + '" stroke-width="1.8"><rect x="-10" y="-8" width="20" height="10" fill="#eceff1"/><path d="M-12 -8 A12 12 0 0 1 12 -8 Z" fill="#fff"/><path d="M0 -20 V-26 M-4 -26 H4" stroke-width="1.6"/></g>'; }
+/* MC1 · Bật lá chắn radar (KM-HH-1221): phương trình mặt cầu */
+var MC1 = s12Job("mc", {
+  name: ["Bật lá chắn radar", "Switch on the shield"], sub: ["viết phương trình mặt cầu vùng phủ sóng", "write the sphere equation of the coverage zone"],
+  endName: ["vùng phủ sóng", "coverage zone"], what: ["Phương trình mặt cầu vùng phủ sóng", "Sphere equation of the coverage zone"], unit: "",
+  btnText: ["Bật lá chắn", "Switch on"], H: 420, mf: MF_SPH,
+  lead: ["Radar vừa được nâng cấp. Vùng phủ sóng là <b>mặt cầu</b> tâm là radar, bán kính là tầm quét. Hãy nhập phương trình để kích hoạt lá chắn (đơn vị: km).",
+    "The radar has just been upgraded. Its coverage is a <b>sphere</b> centred on the radar with the scan range as radius. Enter the equation to activate the shield (units: km)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> viết phương trình mặt cầu (x − a)² + (y − b)² + (z − c)² = R².<br><b>Cần tìm:</b> điền a, b, c và R² vào các ô.<br><b>Dữ kiện:</b> chạm vào radar và bảng thông số kỹ thuật.",
+    "<b>Task:</b> write the sphere equation (x − a)² + (y − b)² + (z − c)² = R².<br><b>Find:</b> fill in a, b, c and R².<br><b>Data:</b> tap the radar and the specification board."); },
+  make: function () { var a = sgnR() * rnd(1, 9), b = sgnR() * rnd(1, 9), c = rnd(1, 3), R = rnd(4, 15); return { I: [a, b, c], R: R }; },
+  base: function (p) {
+    var o = sky12(p.bottom, null, "#cfe9ff"), gy = 360;
+    o += '<path d="M0 ' + gy + ' L90 250 L150 290 L210 200 L290 300 L360 260 V' + p.bottom + ' H0 Z" fill="#8d9f7a" stroke="' + INK + '" stroke-width="2"/><path d="M190 222 L210 200 L232 224 L220 220 L210 230 L200 220 Z" fill="#fff"/>';
+    o += '<circle cx="210" cy="190" r="110" fill="#4fc3f7" fill-opacity=".14" stroke="#29b6f6" stroke-width="2" stroke-dasharray="6 5"/>';
+    o += domeAt([210, 200], 1.4) + '<circle data-it="I" cx="210" cy="188" r="24" fill="#fff" fill-opacity="0" style="cursor:pointer"/>' + T2(232, 170, p.seen.I ? ptS("I", p.I) : "I", { fs: 13, fw: 800, c: "#c2410c" });
+    o += card12(14, 12, 200, 44, L("THÔNG SỐ KỸ THUẬT", "SPECIFICATIONS"), "R", p, [L("Tầm quét tối đa R = ", "Max range R = ") + p.R + " km"], "#6a1b9a");
+    return o;
+  },
+  items: function (p) { return { I: { note: ["Radar đặt tại " + ptS("I", p.I), "Radar at " + ptS("I", p.I)], sfx: "pick", say: ["Radar đặt tại <b>" + ptS("I", p.I) + "</b> (đỉnh núi).", "The radar is at <b>" + ptS("I", p.I) + "</b> (mountain top)."] },
+    R: { note: ["Tầm quét R = " + p.R + " km", "Range R = " + p.R + " km"], val: p.R, sym: "R", sfx: "pick", say: ["Tầm quét tối đa <b>R = " + p.R + " km</b>.", "Maximum range <b>R = " + p.R + " km</b>."] } }; },
+  cmp: function (p, a) {
+    var cOk = near(a.slice(0, 3), p.I, 0.01), rOk = Math.abs(a[3] - p.R * p.R) < 0.01;
+    if (cOk && rOk) return { ok: true, kind: "ok", msg: L("Chính xác! Lá chắn bật đúng tâm, đúng tầm quét.", "Correct! The shield is centred right with the right range.") };
+    if (near(a.slice(0, 3), vmul(p.I, -1), 0.01)) return { ok: false, kind: "bad", msg: L("Ngược dấu tâm rồi: trong (x − a)², a chính là hoành độ của tâm. Tâm (2; −3; 1) cho (x − 2)² + (y + 3)² + (z − 1)².", "The centre's signs are flipped: in (x − a)², a is the centre's x-coordinate. Centre (2; −3; 1) gives (x − 2)² + (y + 3)² + (z − 1)².") };
+    if (cOk && Math.abs(a[3] - p.R) < 0.01) return { ok: false, kind: "bad", msg: L("Tâm đúng rồi. Vế phải là <b>R²</b>, không phải R.", "The centre is right. The right-hand side is <b>R²</b>, not R.") };
+    if (cOk) return { ok: false, kind: "bad", msg: L("Tâm đúng, nhưng vế phải chưa đúng: R² = R·R.", "Centre right, but the right-hand side is wrong: R² = R·R.") };
+    return { ok: false, kind: "bad", msg: L("Tâm chưa đúng. Tâm mặt cầu chính là vị trí radar I.", "Wrong centre. The sphere's centre is the radar position I.") };
+  },
+  showA: function (a) { var t = function (n, v) { return "(" + n + (v < 0 ? " + " + c3(-v) : " − " + c3(v)) + ")²"; }; return t("x", a[0]) + " + " + t("y", a[1]) + " + " + t("z", a[2]) + " = " + c3(a[3]); },
+  fx: function (p, k, v) { var r = Math.sqrt(Math.max(0, v.a[3])), s = 110 * Math.min(1.6, r / p.R); return '<circle cx="210" cy="190" r="' + s.toFixed(1) + '" fill="' + (k === "ok" ? "#4fc3f7" : "#ef9a9a") + '" fill-opacity=".35" stroke="' + (k === "ok" ? "#0288d1" : "#e53935") + '" stroke-width="3"/>'; },
+  okMsg: ["Chính xác!", "Correct!"], badMsg: ["Chưa đúng.", "Not right."],
+  passTitle: ["lá chắn đã bật!", "shield on!"],
+  rows: function (p) { var a = [p.I[0], p.I[1], p.I[2], p.R * p.R]; return [[L("Tâm", "Centre"), ptS("I", p.I)], [L("Bán kính", "Radius"), "R = " + p.R + " km"], [L("Phương trình", "Equation"), this.showA(a)]]; },
+  formula: function () { return "(x − a)² + (y − b)² + (z − c)² = R²"; },
+  hints: function () { return [
+    L("Mặt cầu tâm I(a; b; c), bán kính R có phương trình <b>(x − a)² + (y − b)² + (z − c)² = R²</b>.", "The sphere with centre I(a; b; c) and radius R is <b>(x − a)² + (y − b)² + (z − c)² = R²</b>."),
+    L("Tâm là vị trí radar, bán kính là tầm quét. Chú ý dấu: tâm (2; −3; 1) cho (x − 2)² + (y + 3)² + (z − 1)²; ô thứ hai điền −3.", "The centre is the radar, the radius is the range. Mind the signs: centre (2; −3; 1) gives (x − 2)² + (y + 3)² + (z − 1)²; the second box is −3."),
+    L("Ví dụ: radar tại O(0; 0; 0), R = 417 km: x² + y² + z² = 173 889 (vì 417² = 173 889).", "Example: radar at O(0; 0; 0), R = 417 km: x² + y² + z² = 173,889 (since 417² = 173,889).")]; }
+});
+
+/* MC2 · Vật thể bay vào vùng sóng (KM-HH-1222): giao đường thẳng – mặt cầu, lấy điểm vào (t nhỏ hơn) */
+var MC2_C = (function () { var c = [];
+  [[6, 8], [8, 6], [12, 5], [5, 12], [9, 12], [12, 9], [8, 15], [15, 8]].forEach(function (u) { var U = Math.sqrt(u[0] * u[0] + u[1] * u[1]), g = gcd(u[0], u[1]), w = [-u[1] / g, u[0] / g];
+    for (var m = 1; m < 40; m++) for (var k = 1; k < 30; k++) for (var h = 6; h <= 11; h++) { var R2 = m * m * (w[0] * w[0] + w[1] * w[1]) + h * h + k * k * U * U, R = Math.round(Math.sqrt(R2)); if (R * R === R2 && R >= 60 && R <= 450) c.push([u[0], u[1], m, k, h, R]); } });
+  return c; })();
+var MC2 = s12Job("mc", {
+  name: ["Vật thể bay vào vùng sóng", "Object entering the zone"], sub: ["điểm vật thể bắt đầu vào vùng radar", "where the object enters the radar zone"],
+  endName: ["điểm vào vùng sóng", "entry point"], what: ["Tọa độ điểm M vật thể bắt đầu vào vùng radar", "Coordinates of the entry point M"], unit: "",
+  btnText: ["Khóa mục tiêu", "Lock on"], H: 430, mf: MF_TRI("M"), ptol: 0.5,
+  lead: ["Một vật thể lạ bay thẳng ở độ cao không đổi, xuyên qua vùng phủ sóng hình cầu của radar. Hãy tính <b>điểm nó bắt đầu xuất hiện trên màn hình radar</b> (đơn vị: km, t tính bằng phút).",
+    "An unknown object flies straight at constant altitude through the radar's spherical zone. Work out <b>where it first appears on the radar screen</b> (units: km, t in minutes)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tìm giao điểm của đường bay với mặt cầu vùng phủ sóng. Vật bay theo chiều t tăng nên <b>điểm vào</b> ứng với nghiệm t nhỏ hơn.<br><b>Cần tìm:</b> tọa độ điểm vào M.<br><b>Dữ kiện:</b> chạm vào bảng vùng phủ sóng và dữ liệu đường bay.",
+    "<b>Task:</b> find where the flight path meets the coverage sphere. The object moves as t increases, so the <b>entry point</b> is the smaller root t.<br><b>Find:</b> the coordinates of the entry point M.<br><b>Data:</b> tap the coverage board and the flight data."); },
+  make: function () {
+    var c = pickOne(MC2_C), s1 = sgnR(), s2 = sgnR(), u = [c[0] * s1, c[1] * s2, 0], g = gcd(c[0], c[1]), w = [-u[1] / g * c[2], u[0] / g * c[2], c[4]], k = c[3], R = c[5];
+    var M1 = vsub(w, vmul(u, k)), M2 = vadd(w, vmul(u, k)), t1 = rnd(3, 8), P0 = vsub(M1, vmul(u, t1));
+    return { u: u, R: R, M1: M1, M2: M2, t1: t1, t2: t1 + 2 * k, P0: P0 };
+  },
+  base: function (p) {
+    var o = sky12(p.bottom, null, "#0b2a3a"), cx = 200, cy = 280, Rp = 120, sc = Rp / p.R, pt = function (P) { return [cx + P[1] * sc, cy - P[0] * sc]; };
+    o += '<circle cx="' + cx + '" cy="' + cy + '" r="' + Rp + '" fill="#0f3d2e" stroke="#4caf50" stroke-width="2.4"/>';
+    [0.33, 0.66].forEach(function (f) { o += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (Rp * f) + '" fill="none" stroke="#2e7d32"/>'; });
+    o += domeAt([cx, cy + 6], 0.9);
+    var a = pt(p.P0), b = pt(vadd(p.M2, vmul(p.u, 3))); o += '<path d="M' + sv(a) + " L" + sv(b) + '" stroke="#ffb74d" stroke-width="1.8" stroke-dasharray="5 5"/>';
+    o += '<g transform="translate(' + a[0].toFixed(1) + " " + a[1].toFixed(1) + ')"><path d="M-8 0 L0 -6 L8 0 L0 6 Z" fill="#ff7043" stroke="#fff" stroke-width="1.4"/></g>';
+    o += T2(cx, cy + Rp + 18, L("Màn hình radar (nhìn từ trên xuống)", "Radar screen (top view)"), { a: "middle", fs: 11, fw: 700, c: "#a5d6a7" }) + radarAx(24, 410);
+    o += card12(10, 10, 160, 60, L("VÙNG PHỦ SÓNG", "COVERAGE ZONE"), "S", p, ["x² + y² + z² = " + p.R + "²"], "#2e7d32");
+    o += card12(176, 10, 176, 76, L("VẬT THỂ LẠ", "UNKNOWN OBJECT"), "d", p, parS(p.P0, p.u).split("; "), "#e65100");
+    return o;
+  },
+  items: function (p) { var e = parS(p.P0, p.u); return { S: { note: ["Vùng phủ sóng: x² + y² + z² = " + p.R + "² (km)", "Coverage: x² + y² + z² = " + p.R + "² (km)"], val: p.R, sym: "R", sfx: "pick", say: ["Vùng phủ sóng là mặt cầu <b>x² + y² + z² = " + p.R + "²</b>.", "The coverage zone is the sphere <b>x² + y² + z² = " + p.R + "²</b>."] },
+    d: { note: ["Đường bay: " + e, "Path: " + e], sfx: "pick", say: ["Vật thể bay theo <b>" + e + "</b>.", "The object flies along <b>" + e + "</b>."] } }; },
+  cmp: function (p, a) { return this.ptCheck(p, a, p.M1); },
+  special: function (p, a) { if (near(a.slice(0, 3), p.M2, 0.5)) return { ok: false, kind: "bad", msg: L("Đó là điểm vật thể <b>rời khỏi</b> vùng sóng (nghiệm t lớn hơn). Điểm vào ứng với t nhỏ hơn.", "That's where the object <b>leaves</b> the zone (the larger t). The entry point uses the smaller t.") }; if (near(a.slice(0, 3), p.P0, 0.5)) return { ok: false, kind: "bad", msg: L("Đó là vị trí lúc t = 0, vật thể còn ở ngoài vùng sóng.", "That's the position at t = 0, still outside the zone.") }; return null; },
+  fx: function (p, k, v) { var cx = 200, cy = 280, sc = 120 / p.R, P = v.a, q = [cx + P[1] * sc, cy - P[0] * sc]; return '<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="' + (k === "ok" ? 9 : 6) + '" fill="' + (k === "ok" ? "#ff1744" : "#ffeb3b") + '" stroke="#fff" stroke-width="2"/>'; },
+  okMsg: ["Chính xác! Radar khóa mục tiêu ngay khi vật thể vừa vào vùng sóng.", "Correct! The radar locks on the moment the object enters."], badMsg: ["Chưa đúng. Thay x, y, z của đường bay vào phương trình mặt cầu để được phương trình bậc hai theo t.", "Not right. Substitute the path's x, y, z into the sphere equation to get a quadratic in t."],
+  passTitle: ["đã khóa mục tiêu!", "target locked!"],
+  rows: function (p) { return [[L("Đường bay", "Path"), parS(p.P0, p.u)], [L("Nghiệm", "Roots"), "t = " + p.t1 + "; t = " + p.t2], [L("Điểm vào (t nhỏ)", "Entry (smaller t)"), ptS("M", p.M1)], [L("Điểm ra (t lớn)", "Exit (larger t)"), ptS("N", p.M2)]]; },
+  formula: function () { return L("Thay x(t), y(t), z(t) vào x² + y² + z² = R² ⇒ phương trình bậc hai theo t", "Put x(t), y(t), z(t) into x² + y² + z² = R² ⇒ a quadratic in t"); },
+  hints: function () { return [
+    L("Giao điểm của đường thẳng và mặt cầu: thay x, y, z (theo t) vào phương trình mặt cầu.", "Line meets sphere: substitute x, y, z (in terms of t) into the sphere equation."),
+    L("Được phương trình bậc hai theo t với hai nghiệm t₁ < t₂. Vật bay theo chiều t tăng, nên vào vùng tại t₁, ra tại t₂. Máy tính Casio giải được phương trình bậc hai.", "You get a quadratic in t with roots t₁ < t₂. The object moves as t increases, so it enters at t₁ and leaves at t₂. The Casio calculator solves quadratics."),
+    L("Ví dụ: x = 222 + 91t, y = 565 + 75t, z = 8; x² + y² + z² = 417² ⇒ t² + 9t + 14 = 0 ⇒ t = −7 hoặc t = −2. Điểm vào ứng với t = −7: M(−415; 40; 8).", "Example: x = 222 + 91t, y = 565 + 75t, z = 8; x² + y² + z² = 417² ⇒ t² + 9t + 14 = 0 ⇒ t = −7 or t = −2. Entry at t = −7: M(−415; 40; 8).")]; }
+});
+
+/* MC3 · Tìm khinh khí cầu thời tiết (KM-HH-1223): ba mặt cầu tâm ở ba trạm mặt đất */
+var MC3_Q = (function () { var q = {}; for (var h = 1; h <= 4; h++) { q[h] = []; for (var a = -14; a <= 14; a++) for (var b = -14; b <= 14; b++) { if (!a && !b) continue; var d2 = a * a + b * b + h * h, d = Math.round(Math.sqrt(d2)); if (d * d === d2 && d <= 20) q[h].push([a, b, d]); } } return q; })();
+var MC3 = s12Job("mc", {
+  name: ["Tìm khinh khí cầu thời tiết", "Find the weather balloon"], sub: ["độ cao khinh khí cầu từ khoảng cách đến ba trạm", "the balloon's height from three station distances"],
+  endName: ["khinh khí cầu", "weather balloon"], what: ["Độ cao z của khinh khí cầu (km)", "The balloon's height z (km)"], unit: "km", dp: 2,
+  btnText: ["Gửi tọa độ cứu hộ", "Send to rescuers"], H: 430,
+  lead: ["Một khinh khí cầu thời tiết mất liên lạc. Ba trạm mặt đất A, B, C (độ cao 0) đo được khoảng cách đến nó. Hãy tìm <b>độ cao của khinh khí cầu</b> để đội thu hồi chuẩn bị (đơn vị: km).",
+    "A weather balloon has lost contact. Ground stations A, B, C (height 0) have measured their distances to it. Find the <b>balloon's height</b> so the recovery team can prepare (units: km)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> khinh khí cầu M(x; y; z) nằm trên ba mặt cầu tâm A, B, C với bán kính là các khoảng cách đo được. Tìm z (z > 0).<br><b>Cần tìm:</b> độ cao z (km).<br><b>Dữ kiện:</b> chạm vào ba trạm A, B, C.",
+    "<b>Task:</b> the balloon M(x; y; z) lies on the three spheres centred at A, B, C with the measured distances as radii. Find z (z > 0).<br><b>Find:</b> the height z (km).<br><b>Data:</b> tap stations A, B, C."); },
+  make: function () {
+    for (var k = 0; k < 400; k++) {
+      var h = rnd(1, 4), Q = MC3_Q[h]; if (Q.length < 3) continue;
+      var a = pickOne(Q), b = pickOne(Q), c = pickOne(Q), M = [rnd(15, 40), rnd(15, 40), h];
+      var A = [M[0] - a[0], M[1] - a[1], 0], B = [M[0] - b[0], M[1] - b[1], 0], C = [M[0] - c[0], M[1] - c[1], 0];
+      var area = (B[0] - A[0]) * (C[1] - A[1]) - (B[1] - A[1]) * (C[0] - A[0]);
+      if (Math.abs(area) < 12 || a[2] === b[2] || b[2] === c[2] || a[2] === c[2]) continue;
+      return { M: M, h: h, St: [A, B, C], D: [a[2], b[2], c[2]], ans: h };
+    }
+    return this.make();
+  },
+  tol: function () { return 0.02; },
+  sc: function (p) { var pts = p.St.concat([p.M, [p.M[0], p.M[1], 0], [p.M[0], p.M[1], p.h + 2]]); return prFit(pts, [40, 150, 330, 380], 3); },
+  base: function (p) {
+    var pr = this.sc(p), o = sky12(p.bottom, null, "#dff2ff"), xs = p.St.map(function (s) { return s[0]; }).concat([p.M[0]]), ys = p.St.map(function (s) { return s[1]; }).concat([p.M[1]]);
+    var x0 = Math.min.apply(null, xs) - 4, x1 = Math.max.apply(null, xs) + 4, y0 = Math.min.apply(null, ys) - 4, y1 = Math.max.apply(null, ys) + 4;
+    o += poly3(pr, [[x0, y0, 0], [x1, y0, 0], [x1, y1, 0], [x0, y1, 0]], "#b9dfa0", "#6aa75a", 1, 1.4);
+    var qm = P2(pr, p.M); o += '<g transform="translate(' + qm[0].toFixed(1) + " " + qm[1].toFixed(1) + ')"><ellipse cy="-10" rx="11" ry="13" fill="#fff" stroke="' + INK + '" stroke-width="1.8"/><path d="M-4 2 L0 10 L4 2" stroke="' + INK + '" stroke-width="1.4" fill="none"/>' + T2(0, -6, "?", { a: "middle", fs: 12, fw: 800, c: "#e53935" }) + "</g>";
+    ["A", "B", "C"].forEach(function (n, i) { var S0 = p.St[i], q = P2(pr, S0); o += '<g transform="translate(' + q[0].toFixed(1) + " " + q[1].toFixed(1) + ')" stroke="' + INK + '" stroke-width="1.6"><path d="M-6 0 L0 -26 L6 0 M-4 -8 H4 M-3 -16 H3" fill="none"/><circle cy="-28" r="3.5" fill="#e53935"/></g><circle data-it="' + n + '" cx="' + q[0].toFixed(1) + '" cy="' + (q[1] - 12).toFixed(1) + '" r="22" fill="#fff" fill-opacity="0" style="cursor:pointer"/>' + T2(q[0] + 8, q[1] + 14, p.seen[n] ? ptS(n, S0) + " · " + p.D[i] + " km" : n, { fs: 11.5, fw: 800, c: "#c2410c" }); });
+    o += '<rect x="14" y="12" width="270" height="40" rx="8" fill="#fff" stroke="' + INK + '" stroke-width="2"/>' + T2(24, 30, L("Ba trạm thu sóng mặt đất (z = 0)", "Three ground receivers (z = 0)"), { fs: 11.5, fw: 800, c: "#1f6f9f" }) + T2(24, 46, L("Chạm A, B, C để đọc tọa độ và khoảng cách", "Tap A, B, C for coordinates and distances"), { fs: 11, fw: 700, c: "#607d8b" });
+    return o;
+  },
+  items: function (p) { var o = {}; ["A", "B", "C"].forEach(function (n, i) { var S0 = p.St[i], d = p.D[i]; o[n] = { note: ["Trạm " + ptS(n, S0) + ", cách khinh khí cầu " + d + " km", "Station " + ptS(n, S0) + ", " + d + " km from the balloon"], val: d, sym: "d" + n, sfx: "pick", say: ["Trạm <b>" + ptS(n, S0) + "</b> đo được khoảng cách <b>" + d + " km</b>.", "Station <b>" + ptS(n, S0) + "</b> measures <b>" + d + " km</b>."] }; }); return o; },
+  special: function (p, v) { if (p.D.some(function (d) { return Math.abs(v - d) < 0.02; }) && p.D.indexOf(p.h) < 0) return { ok: false, kind: v < p.ans ? "short" : "long", msg: L("Đó là một khoảng cách đo được, chưa phải độ cao. Lập ba phương trình mặt cầu rồi trừ vế.", "That's a measured distance, not the height. Write the three sphere equations and subtract them.") }; return null; },
+  fx: function (p, k, v) { var pr = this.sc(p), M = [p.M[0], p.M[1], v], o = ""; p.St.forEach(function (S0, i) { var dd = vlen(vsub(M, S0)), good = Math.abs(dd - p.D[i]) < 0.02; o += seg3(pr, S0, M, good ? "#1f8a4c" : "#e53935", 2, "5 3"); }); return o + dot3(pr, M, k === "ok" ? "#1f8a4c" : "#e53935", 6); },
+  okMsg: ["Chính xác! Ba khoảng cách đều khớp, đội thu hồi đã tìm thấy khinh khí cầu.", "Correct! All three distances match and the team finds the balloon."],
+  shortMsg: ["Thấp quá, khoảng cách tới các trạm không khớp số đo.", "Too low, the distances to the stations don't match."],
+  longMsg: ["Cao quá, khoảng cách tới các trạm không khớp số đo.", "Too high, the distances to the stations don't match."],
+  passTitle: ["đã tìm thấy khinh khí cầu!", "balloon found!"],
+  rows: function (p) { var St = p.St; return [[L("Ba trạm", "Stations"), ptS("A", St[0]) + ", " + ptS("B", St[1]) + ", " + ptS("C", St[2])], [L("Khoảng cách", "Distances"), p.D.join("; ") + " km"], [L("Khinh khí cầu", "Balloon"), ptS("M", p.M)]]; },
+  formula: function () { return "(x − x_A)² + (y − y_A)² + z² = d_A²; … (trừ vế từng cặp)"; },
+  hints: function () { return [
+    L("M cách A một khoảng d_A nên M nằm trên mặt cầu tâm A bán kính d_A. Tương tự với B, C: được <b>ba phương trình mặt cầu</b>.", "M is d_A from A, so it lies on the sphere centred at A with radius d_A. Same for B, C: <b>three sphere equations</b>."),
+    L("Trừ vế hai phương trình cho nhau: các số hạng x², y², z² triệt tiêu, còn phương trình bậc nhất theo x, y. Làm hai lần, giải hệ được x, y. Thay vào một phương trình để tìm z² rồi lấy z > 0.", "Subtract the equations in pairs: x², y², z² cancel, leaving linear equations in x, y. Do it twice, solve for x, y. Substitute back to get z², then take z > 0."),
+    L("Ví dụ: A(19; 28; 0), B(26; 27; 0), C(11; 36; 0), khoảng cách 3; 7; 11 km. Trừ vế ra x = 20, y = 30; (20 − 19)² + (30 − 28)² + z² = 9 ⇒ z² = 4, z = 2 km.", "Example: A(19; 28; 0), B(26; 27; 0), C(11; 36; 0), distances 3; 7; 11 km. Subtracting gives x = 20, y = 30; (20 − 19)² + (30 − 28)² + z² = 9 ⇒ z² = 4, z = 2 km.")]; }
+});
+
+/* MC4 · Khoảng cách xa nhất trong vùng phủ sóng (KM-HH-1224, thay thế MC1): 2R từ phương trình khai triển */
+var MC4 = s12Job("mc", {
+  name: ["Khoảng cách xa nhất", "Greatest distance"], sub: ["hai điểm xa nhau nhất trong vùng phủ sóng", "two points furthest apart in the zone"],
+  endName: ["khoảng cách xa nhất", "greatest distance"], what: ["Khoảng cách xa nhất giữa hai điểm trong vùng phủ sóng (km)", "Greatest distance between two points in the zone (km)"], unit: "km", dp: 2,
+  btnText: ["Cài anten tiếp sóng", "Place the repeaters"], H: 400,
+  lead: ["Vùng phủ sóng điện thoại của trạm là một khối cầu. Để đặt hai anten tiếp sóng ở hai điểm <b>xa nhau nhất</b> trong vùng, cần biết khoảng cách đó (đơn vị: km).",
+    "The phone mast covers a ball-shaped zone. To place two repeaters at the two points <b>furthest apart</b> in the zone, we need that distance (units: km)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> từ phương trình mặt cầu, tìm khoảng cách lớn nhất giữa hai điểm thuộc vùng phủ sóng.<br><b>Cần tìm:</b> khoảng cách (km).<br><b>Dữ kiện:</b> chạm vào bảng thông số trạm.",
+    "<b>Task:</b> from the sphere equation, find the greatest distance between two points of the zone.<br><b>Find:</b> the distance (km).<br><b>Data:</b> tap the station board."); },
+  make: function () { var a = rnd(-5, 5), b = rnd(-5, 5), c = rnd(1, 4), R = rnd(2, 9); return { a: a, b: b, c: c, R: R, d: a * a + b * b + c * c - R * R, ans: 2 * R }; },
+  tol: function () { return 0.02; },
+  eq: function (p) { return "x² + y² + z²" + linS([-2 * p.a, -2 * p.b, -2 * p.c, p.d], ["x", "y", "z", ""]).replace(/^(?!−)/, " + ").replace(/^−/, " − ") + " = 0"; },
+  base: function (p) {
+    var o = sky12(p.bottom, 330, "#e3f2fd");
+    o += '<circle cx="190" cy="230" r="100" fill="#ce93d8" fill-opacity=".22" stroke="#8e24aa" stroke-width="2" stroke-dasharray="6 5"/><path d="M186 330 L190 160 L194 330 Z" fill="#cfd8dc" stroke="' + INK + '" stroke-width="2"/><path d="M178 170 H202 M180 190 H200" stroke="' + INK + '" stroke-width="2"/>';
+    o += card12(14, 12, 300, 44, L("BẢNG THÔNG SỐ TRẠM", "STATION BOARD"), "E", p, [this.eq(p)], "#6a1b9a");
+    return o;
+  },
+  items: function (p) { var e = this.eq(p); return { E: { note: ["Vùng phủ sóng: " + e, "Coverage: " + e], sfx: "pick", say: ["Vùng phủ sóng: <b>" + e + "</b> (km).", "Coverage: <b>" + e + "</b> (km)."] } }; },
+  special: function (p, v) { if (Math.abs(v - p.R) < 0.02) return { ok: false, kind: "short", msg: L("Đó là bán kính R. Hai điểm xa nhau nhất là hai đầu một đường kính.", "That's the radius R. The furthest points are the two ends of a diameter.") }; if (Math.abs(v - p.R * p.R) < 0.02 || Math.abs(v - 2 * p.R * p.R) < 0.02) return { ok: false, kind: "long", msg: L("Nhớ lấy căn: R = √(a² + b² + c² − d).", "Remember the square root: R = √(a² + b² + c² − d).") }; return null; },
+  fx: function (p, k, v) { var s = 100 * Math.min(1.5, v / (2 * p.R)); return '<path d="M' + (190 - s) + " 230 H" + (190 + s) + '" stroke="' + (k === "ok" ? "#1f8a4c" : "#e53935") + '" stroke-width="4"/><circle cx="' + (190 - s) + '" cy="230" r="6" fill="#ffcf3f" stroke="' + INK + '" stroke-width="1.6"/><circle cx="' + (190 + s) + '" cy="230" r="6" fill="#ffcf3f" stroke="' + INK + '" stroke-width="1.6"/>'; },
+  okMsg: ["Chính xác! Hai anten nằm ở hai đầu đường kính.", "Correct! The repeaters sit at the two ends of a diameter."],
+  shortMsg: ["Chưa phải xa nhất. Kiểm tra lại bán kính và nhân đôi.", "Not the greatest. Check the radius and double it."],
+  longMsg: ["Vượt ra ngoài vùng phủ sóng rồi. Kiểm tra lại bán kính.", "That goes outside the zone. Check the radius."],
+  passTitle: ["đã đặt anten tiếp sóng!", "repeaters placed!"],
+  rows: function (p) { return [[L("Tâm", "Centre"), ptS("I", [p.a, p.b, p.c])], ["R", "√(" + (p.a * p.a + p.b * p.b + p.c * p.c) + " − (" + c3(p.d) + ")) = " + p.R + " km"], ["2R", 2 * p.R + " km"]]; },
+  formula: function () { return "x² + y² + z² − 2ax − 2by − 2cz + d = 0: I(a; b; c), R = √(a² + b² + c² − d)"; },
+  hints: function () { return [
+    L("Hai điểm xa nhau nhất trong một khối cầu là <b>hai đầu một đường kính</b>: khoảng cách bằng 2R.", "The furthest two points in a ball are the <b>ends of a diameter</b>: distance 2R."),
+    L("Phương trình x² + y² + z² − 2ax − 2by − 2cz + d = 0 có tâm I(a; b; c) và R = √(a² + b² + c² − d). Chú ý: hệ số của x là −2a nên a bằng −(hệ số x)/2.", "The equation x² + y² + z² − 2ax − 2by − 2cz + d = 0 has centre I(a; b; c) and R = √(a² + b² + c² − d). Note: the x-coefficient is −2a, so a = −(x-coefficient)/2."),
+    L("Ví dụ: x² + y² + z² − 4x − 6y − 2z + 5 = 0: I(2; 3; 1), R = √(4 + 9 + 1 − 5) = 3, khoảng cách xa nhất 6 km.", "Example: x² + y² + z² − 4x − 6y − 2z + 5 = 0: I(2; 3; 1), R = √(4 + 9 + 1 − 5) = 3, greatest distance 6 km.")]; }
+});
+
+/* =============== KỊCH BẢN D · KIẾN THỨC TỔNG HỢP: SÂN BAY VÀ VÙNG TRỜI =============== */
+/* TH1 · Dự đoán vị trí máy bay (KM-HH-1231): bay đều theo đường thẳng (dạng đề thi thử TN THPT 2025) */
+var TH1 = s12Job("th", {
+  name: ["Dự đoán vị trí máy bay", "Predict the plane's position"], sub: ["máy bay giữ nguyên vận tốc, sau vài phút ở đâu?", "same speed and heading: where is it in a few minutes?"],
+  endName: ["dự đoán vị trí", "position forecast"], what: ["Tọa độ máy bay sau p phút tiếp theo", "The plane's coordinates p minutes later"], unit: "",
+  btnText: ["Gửi dự đoán", "Send the forecast"], H: 420, mf: MF_TRI("C"), ptol: 0.051,
+  lead: ["Radar phát hiện một máy bay bay với <b>vận tốc và hướng không đổi</b>. Đài cần dự đoán vị trí của nó vài phút sau để sắp xếp đường bay (đơn vị: km).",
+    "Radar spots a plane flying at <b>constant speed and heading</b>. Control must predict where it will be a few minutes later (units: km)."],
+  taskT: function (p) { return L("<b>Nhiệm vụ:</b> máy bay bay thẳng đều từ M đến N trong " + p.k + " phút. Nếu giữ nguyên vận tốc và hướng, tìm vị trí C của máy bay <b>" + p.pm + " phút sau khi qua N</b>.<br><b>Cần tìm:</b> tọa độ C (km).<br><b>Dữ kiện:</b> chạm vào hai lần đo M, N trên màn hình radar.",
+    "<b>Task:</b> the plane flies straight and steadily from M to N in " + p.k + " minutes. Keeping the same velocity, find its position C <b>" + p.pm + " minutes after passing N</b>.<br><b>Find:</b> the coordinates of C (km).<br><b>Data:</b> tap the two radar readings M and N."); },
+  make: function () {
+    var k = pickOne([10, 15, 20, 30]), pm = pickOne([5, 10, 15]), w = [sgnR() * rnd(9, 15), sgnR() * rnd(2, 9), pickOne([0, 0.1, -0.1, 0.2])];
+    var M = [10 * rnd(10, 60), 10 * rnd(10, 40), rnd(7, 9)], N = vadd(M, vmul(w, k)), C = vadd(N, vmul(w, pm));
+    N = N.map(function (x) { return Math.round(x * 10) / 10; }); C = C.map(function (x) { return Math.round(x * 10) / 10; });
+    if (N[2] < 5 || C[2] < 5 || N[2] > 12 || C[2] > 12) return this.make();
+    return { k: k, pm: pm, w: w, M: M, N: N, C: C, MN: vsub(N, M) };
+  },
+  base: function (p) {
+    var o = sky12(p.bottom, null, "#0b2a3a"), cx = 190, cy = 290, Rr = 110, pts = [p.M, p.N, p.C], mx = 1, c0 = vmul(vadd(p.M, p.C), 0.5);
+    pts.forEach(function (P) { mx = Math.max(mx, Math.abs(P[0] - c0[0]), Math.abs(P[1] - c0[1])); });
+    var sc = (Rr - 16) / mx, pt = function (P) { return [cx + (P[1] - c0[1]) * sc, cy - (P[0] - c0[0]) * sc]; };
+    o += '<circle cx="' + cx + '" cy="' + cy + '" r="' + Rr + '" fill="#0f3d2e" stroke="#4caf50" stroke-width="2.4"/><circle cx="' + cx + '" cy="' + cy + '" r="' + (Rr / 2) + '" fill="none" stroke="#2e7d32"/>';
+    var qm = pt(p.M), qn = pt(p.N);
+    o += '<path d="M' + sv(qm) + " L" + sv(qn) + '" stroke="#ffb74d" stroke-width="2"/>';
+    [["M", qm], ["N", qn]].forEach(function (x) { o += '<circle cx="' + x[1][0].toFixed(1) + '" cy="' + x[1][1].toFixed(1) + '" r="5" fill="#ffb74d"/>' + T2(x[1][0] + 7, x[1][1] - 6, x[0], { fs: 12, fw: 800, c: "#ffe0b2" }); });
+    o += card12(10, 10, 168, 60, L("LẦN ĐO 1 (lúc 9:00)", "READING 1 (9:00)"), "M", p, [ptS("M", p.M)], "#e65100") + radarAx(24, 400);
+    o += card12(184, 10, 168, 60, L("LẦN ĐO 2 (sau " + p.k + " phút)", "READING 2 (" + p.k + " min later)"), "N", p, [ptS("N", p.N)], "#e65100");
+    return o;
+  },
+  items: function (p) { return { M: { note: ["Lúc 9:00 máy bay ở " + ptS("M", p.M), "At 9:00 the plane is at " + ptS("M", p.M)], sfx: "pick", say: ["Lần đo 1: <b>" + ptS("M", p.M) + "</b>.", "Reading 1: <b>" + ptS("M", p.M) + "</b>."] },
+    N: { note: [p.k + " phút sau máy bay ở " + ptS("N", p.N), p.k + " minutes later the plane is at " + ptS("N", p.N)], sfx: "pick", say: ["Lần đo 2 (sau " + p.k + " phút): <b>" + ptS("N", p.N) + "</b>.", "Reading 2 (" + p.k + " min later): <b>" + ptS("N", p.N) + "</b>."] } }; },
+  cmp: function (p, a) { return this.ptCheck(p, a, p.C); },
+  special: function (p, a) {
+    var x = a.slice(0, 3);
+    if (near(x, vadd(p.N, vmul(p.MN, p.pm)), 0.051)) return { ok: false, kind: "bad", msg: L("Máy bay đi hết MN trong " + p.k + " phút, nên mỗi phút chỉ đi MN/" + p.k + ".", "The plane covers MN in " + p.k + " minutes, so each minute it moves MN/" + p.k + ".") };
+    if (near(x, vadd(p.M, vmul(p.MN, p.pm / p.k)), 0.051)) return { ok: false, kind: "bad", msg: L("Em tính từ M rồi. Đề hỏi " + p.pm + " phút <b>sau khi qua N</b>.", "You started from M. The question asks " + p.pm + " minutes <b>after N</b>.") };
+    return null;
+  },
+  fx: function (p, k, v) {
+    var cx = 190, cy = 290, mx = 1, c0 = vmul(vadd(p.M, p.C), 0.5); [p.M, p.N, p.C].forEach(function (P) { mx = Math.max(mx, Math.abs(P[0] - c0[0]), Math.abs(P[1] - c0[1])); });
+    var sc = 94 / mx, P = v.a, q = [cx + (P[1] - c0[1]) * sc, cy - (P[0] - c0[0]) * sc], qn = [cx + (p.N[1] - c0[1]) * sc, cy - (p.N[0] - c0[0]) * sc];
+    return '<path d="M' + sv(qn) + " L" + sv(q) + '" stroke="' + (k === "ok" ? "#69f0ae" : "#ff5252") + '" stroke-width="2" stroke-dasharray="5 4"/><circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="7" fill="' + (k === "ok" ? "#69f0ae" : "#ff5252") + '" stroke="#fff" stroke-width="2"/>';
+  },
+  okMsg: ["Chính xác! Máy bay xuất hiện đúng chỗ em dự đoán.", "Correct! The plane appears exactly where you predicted."], badMsg: ["Chưa đúng. Tìm véc-tơ dịch chuyển trong 1 phút: MN chia cho số phút.", "Not right. Find the movement per minute: MN divided by the minutes."],
+  passTitle: ["dự đoán đã gửi!", "forecast sent!"],
+  rows: function (p) { return [["MN", vecS(p.MN)], [L("Mỗi phút", "Per minute"), vecS(p.w)], ["C = N + " + p.pm + "·(MN/" + p.k + ")", ptS("C", p.C)]]; },
+  formula: function () { return L("Mỗi phút dịch chuyển MN/k; sau p phút từ N: C = N + p·MN/k", "Movement per minute MN/k; p minutes after N: C = N + p·MN/k"); },
+  hints: function () { return [
+    L("Bay thẳng đều nghĩa là mỗi phút máy bay dịch chuyển cùng một véc-tơ, cùng phương với MN.", "Flying straight and steadily means the plane moves by the same vector every minute, parallel to MN."),
+    L("Véc-tơ mỗi phút: w = MN / k (k là số phút từ M đến N). Sau p phút nữa: C = N + p·w.", "Per-minute vector: w = MN / k (k minutes from M to N). After p more minutes: C = N + p·w."),
+    L("Ví dụ: M(500; 200; 8) đến N(800; 300; 10) trong 20 phút: w = (15; 5; 0,1). 5 phút sau khi qua N: C(875; 325; 10,5).", "Example: M(500; 200; 8) to N(800; 300; 10) in 20 minutes: w = (15; 5; 0.1). 5 minutes after N: C(875; 325; 10.5).")]; }
+});
+
+/* TH2 · Bao lâu trong tầm radar (KM-HH-1232): đường thẳng cắt mặt cầu, thời gian = hiệu hai nghiệm */
+var TH2_C = (function () { var c = [];
+  [[6, 8], [8, 6], [12, 5], [5, 12], [9, 12], [12, 9]].forEach(function (u) { var U = Math.sqrt(u[0] * u[0] + u[1] * u[1]), g = gcd(u[0], u[1]), w = [-u[1] / g, u[0] / g];
+    for (var m = 1; m < 30; m++) for (var k2 = 4; k2 <= 24; k2++) for (var h = 9; h <= 11; h++) { var R2 = m * m * (w[0] * w[0] + w[1] * w[1]) + h * h + k2 * k2 * U * U / 4; if (R2 !== Math.round(R2)) continue; var R = Math.round(Math.sqrt(R2)); if (R * R === R2 && R >= 80 && R <= 300) c.push([u[0], u[1], m, k2, h, R]); } });
+  return c; })();
+var TH2 = s12Job("th", {
+  name: ["Bao lâu trong tầm radar", "Time in radar range"], sub: ["thời gian máy bay nằm trong vùng phủ radar", "how long the plane stays in the radar zone"],
+  endName: ["thời gian trong tầm radar", "time in range"], what: ["Thời gian máy bay ở trong vùng radar (phút)", "Time the plane spends in the radar zone (minutes)"], get unit() { return L("phút", "min"); }, dp: 1,
+  btnText: ["Lập lịch theo dõi", "Schedule tracking"], H: 430,
+  lead: ["Radar sân bay quét một vùng hình cầu. Một máy bay bay thẳng, đều ở độ cao không đổi. Để lập lịch trực, hãy tính <b>máy bay ở trong vùng radar bao nhiêu phút</b> (đơn vị: km, t tính bằng phút).",
+    "The airport radar scans a spherical zone. A plane flies straight and steadily at constant altitude. To plan the watch, work out <b>how many minutes the plane stays inside the zone</b> (units: km, t in minutes)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tìm hai thời điểm máy bay vào và ra khỏi mặt cầu vùng radar, rồi tính thời gian ở trong vùng.<br><b>Cần tìm:</b> thời gian (phút, làm tròn đến hàng phần mười).<br><b>Dữ kiện:</b> chạm vào bảng radar và dữ liệu máy bay.",
+    "<b>Task:</b> find when the plane enters and leaves the radar sphere, then the time spent inside.<br><b>Find:</b> the time (minutes, to one decimal place).<br><b>Data:</b> tap the radar board and the flight data."); },
+  make: function () {
+    var c = pickOne(TH2_C), u = [c[0] * sgnR(), c[1] * sgnR(), 0], g = gcd(c[0], c[1]), I = [10 * rnd(-5, 5), 10 * rnd(-5, 5), 0];
+    var F = [I[0] - u[1] / g * c[2], I[1] + u[0] / g * c[2], c[4]], kk = c[3] / 2, t0 = c[3] % 2 ? rnd(3, 8) + 0.5 : rnd(3, 8), P0 = vsub(F, vmul(u, kk + t0));
+    return { u: u, I: I, R: c[5], h: c[4], t1: t0, t2: t0 + c[3], P0: P0, ans: c[3] };
+  },
+  tol: function () { return 0.051; },
+  base: function (p) {
+    var o = sky12(p.bottom, null, "#0b2a3a"), cx = 200, cy = 290, Rp = 112, sc = Rp / p.R, pt = function (P) { return [cx + (P[1] - p.I[1]) * sc, cy - (P[0] - p.I[0]) * sc]; };
+    o += '<circle cx="' + cx + '" cy="' + cy + '" r="' + Rp + '" fill="#0f3d2e" stroke="#4caf50" stroke-width="2.4"/><circle cx="' + cx + '" cy="' + cy + '" r="' + (Rp / 2) + '" fill="none" stroke="#2e7d32"/>' + domeAt([cx, cy + 6], 0.8);
+    var a = pt(p.P0), b = pt(vadd(p.P0, vmul(p.u, p.t2 + 4)));
+    o += '<path d="M' + sv(a) + " L" + sv(b) + '" stroke="#ffb74d" stroke-width="1.6" stroke-dasharray="5 5"/>' + plane12(a[0], a[1], Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI, 1, "#ffe0b2");
+    o += card12(10, 10, 168, 76, L("RADAR SÂN BAY", "AIRPORT RADAR"), "R", p, [ptS("I", p.I), "R = " + p.R + " km"], "#2e7d32") + radarAx(24, 410);
+    o += card12(184, 10, 168, 76, L("MÁY BAY (mỗi phút)", "PLANE (per minute)"), "d", p, [ptS("P₀", p.P0), "v = " + vecS(p.u)], "#e65100");
+    return o;
+  },
+  items: function (p) { return { R: { note: ["Radar tại " + ptS("I", p.I) + ", tầm quét R = " + p.R + " km", "Radar at " + ptS("I", p.I) + ", range R = " + p.R + " km"], val: p.R, sym: "R", sfx: "pick", say: ["Radar đặt tại <b>" + ptS("I", p.I) + "</b>, tầm quét <b>" + p.R + " km</b>.", "Radar at <b>" + ptS("I", p.I) + "</b>, range <b>" + p.R + " km</b>."] },
+    d: { note: ["Máy bay lúc t = 0 ở " + ptS("P₀", p.P0) + ", mỗi phút dịch chuyển " + vecS(p.u), "At t = 0 the plane is at " + ptS("P₀", p.P0) + ", moving " + vecS(p.u) + " per minute"], sfx: "pick", say: ["Lúc t = 0 máy bay ở <b>" + ptS("P₀", p.P0) + "</b>, mỗi phút dịch chuyển <b>" + vecS(p.u) + "</b>.", "At t = 0 the plane is at <b>" + ptS("P₀", p.P0) + "</b>, moving <b>" + vecS(p.u) + "</b> each minute."] } }; },
+  special: function (p, v) { if (Math.abs(v - p.t1) < 0.06) return { ok: false, kind: "short", msg: L("Đó là thời điểm máy bay <b>bắt đầu vào</b> vùng radar. Cần thời gian ở trong vùng: t₂ − t₁.", "That's when the plane <b>enters</b> the zone. You need the time inside: t₂ − t₁.") }; if (Math.abs(v - p.t2) < 0.06) return { ok: false, kind: "long", msg: L("Đó là thời điểm máy bay <b>rời</b> vùng radar. Cần t₂ − t₁.", "That's when the plane <b>leaves</b> the zone. You need t₂ − t₁.") }; return null; },
+  fx: function (p, k, v) { var cx = 200, cy = 290, sc = 112 / p.R, pt = function (P) { return [cx + (P[1] - p.I[1]) * sc, cy - (P[0] - p.I[0]) * sc]; }, a = pt(vadd(p.P0, vmul(p.u, p.t1))), b = pt(vadd(p.P0, vmul(p.u, p.t1 + Math.min(v, p.ans * 1.6)))); return '<path d="M' + sv(a) + " L" + sv(b) + '" stroke="' + (k === "ok" ? "#69f0ae" : "#ff5252") + '" stroke-width="5" stroke-linecap="round"/>'; },
+  okMsg: ["Chính xác! Lịch theo dõi khớp đúng thời gian máy bay trong vùng radar.", "Correct! The tracking schedule matches the time in range."],
+  shortMsg: ["Ngắn quá, máy bay vẫn còn trong vùng radar khi hết giờ theo dõi.", "Too short, the plane is still in range when tracking stops."],
+  longMsg: ["Dài quá, radar theo dõi cả lúc máy bay đã ra khỏi vùng.", "Too long, tracking continues after the plane has left."],
+  passTitle: ["lịch theo dõi đã lập!", "tracking scheduled!"],
+  rows: function (p) { return [[L("Vị trí lúc t", "Position at t"), parS(p.P0, p.u)], [L("Hai nghiệm", "Roots"), "t₁ = " + fmt(p.t1, 1) + "; t₂ = " + fmt(p.t2, 1)], [L("Thời gian trong vùng", "Time inside"), fmt(p.ans, 1) + L(" phút", " min")]]; },
+  formula: function () { return L("(x(t) − a)² + (y(t) − b)² + (z(t) − c)² = R² ⇒ t₁, t₂; thời gian = t₂ − t₁", "(x(t) − a)² + (y(t) − b)² + (z(t) − c)² = R² ⇒ t₁, t₂; time = t₂ − t₁"); },
+  hints: function () { return [
+    L("Vị trí máy bay lúc t: P₀ + t·v. Máy bay ở trong vùng radar khi khoảng cách tới I không vượt quá R.", "The plane's position at t is P₀ + t·v. It's inside the zone while its distance to I is at most R."),
+    L("Thay x(t), y(t), z(t) vào phương trình mặt cầu tâm I bán kính R, được phương trình bậc hai theo t. Hai nghiệm t₁ < t₂ là lúc vào và lúc ra; thời gian ở trong vùng là t₂ − t₁.", "Substitute x(t), y(t), z(t) into the sphere centred at I with radius R: a quadratic in t. The roots t₁ < t₂ are entry and exit; the time inside is t₂ − t₁."),
+    L("Mẹo kiểm tra: t₂ − t₁ = √Δ / a (với phương trình at² + bt + c = 0, a > 0).", "Check: t₂ − t₁ = √Δ / a (for at² + bt + c = 0 with a > 0).")]; }
+});
+
+/* TH3 · Điểm chạm đường băng (KM-HH-1233): đường thẳng qua hai lần đo radar cắt mặt phẳng (Oxy) */
+var TH3 = s12Job("th", {
+  name: ["Điểm chạm đường băng", "Touchdown point"], sub: ["máy bay chạm mặt đường băng ở đâu?", "where does the plane touch the runway?"],
+  endName: ["điểm chạm đường băng", "touchdown point"], what: ["Tọa độ điểm chạm T trên mặt đường băng", "Coordinates of touchdown point T"], unit: "",
+  btnText: ["Bật đèn điểm chạm", "Light the touchdown"], H: 420, mf: MF_TRI("T"), ptol: 0.5,
+  lead: ["Máy bay đang hạ cánh theo một đường thẳng. Radar đo được hai vị trí liên tiếp. Mặt đường băng là mặt phẳng (Oxy). Hãy tìm <b>điểm chạm</b> để bật đèn hiệu đúng chỗ (đơn vị: mét).",
+    "A plane is landing along a straight line. Radar has two consecutive positions. The runway surface is the (Oxy) plane. Find the <b>touchdown point</b> so the lights come on in the right place (units: metres)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> viết phương trình đường thẳng qua hai vị trí A, B rồi tìm giao điểm T với mặt phẳng (Oxy).<br><b>Cần tìm:</b> tọa độ T.<br><b>Dữ kiện:</b> chạm vào hai lần đo radar A, B.",
+    "<b>Task:</b> write the line through positions A and B, then find where it meets the plane (Oxy).<br><b>Find:</b> the coordinates of T.<br><b>Data:</b> tap the two radar readings A and B."); },
+  make: function () {
+    var u = [rnd(15, 20), pickOne([-1, 0, 0, 1]), -1], T = [10 * rnd(30, 120), rnd(-8, 8), 0], s1 = 10 * rnd(18, 30), s2 = s1 - 10 * rnd(5, 10);
+    return { u: u, T: T, A: vsub(T, vmul(u, s1)), B: vsub(T, vmul(u, s2)), s1: s1, s2: s2 };
+  },
+  base: function (p) {
+    var o = sky12(p.bottom, null, "#dff2ff"), pr = prFit([p.A, [p.A[0], p.A[1], 0], [2400, 100, 0], [0, -100, 0], [2400, -100, 0], [0, 100, 0]], [24, 120, 336, 380], 4);
+    o += poly3(pr, [[p.A[0] - 300, -400, 0], [2700, -400, 0], [2700, 400, 0], [p.A[0] - 300, 400, 0]], "#a5d98c", "#6aa75a", 1, 1.4);
+    o += poly3(pr, [[0, -90, 0], [2400, -90, 0], [2400, 90, 0], [0, 90, 0]], "#607d8b", INK, 1, 1.8);
+    for (var x = 100; x < 2400; x += 200) o += seg3(pr, [x, 0, 0], [x + 100, 0, 0], "#fff", 2);
+    var qa = P2(pr, p.A), qb = P2(pr, p.B), ang = Math.atan2(qb[1] - qa[1], qb[0] - qa[0]) * 180 / Math.PI;
+    o += seg3(pr, p.A, p.B, "#90caf9", 2, "5 4") + plane12(qb[0], qb[1], ang, 1.2);
+    [["A", p.A, qa], ["B", p.B, qb]].forEach(function (x) { o += '<circle cx="' + x[2][0].toFixed(1) + '" cy="' + x[2][1].toFixed(1) + '" r="4" fill="#e65100"/>'; });
+    o += card12(10, 10, 168, 60, L("RADAR LẦN 1", "RADAR READING 1"), "A", p, [ptS("A", p.A)], "#0d47a1");
+    o += card12(184, 10, 168, 60, L("RADAR LẦN 2", "RADAR READING 2"), "B", p, [ptS("B", p.B)], "#0d47a1");
+    o += T2(14, 92, L("Đường băng: mặt phẳng (Oxy), từ x = 0 đến x = 2400 m", "Runway: plane (Oxy), from x = 0 to x = 2400 m"), { fs: 11, fw: 700, c: "#455a64" });
+    return o;
+  },
+  items: function (p) { return { A: { note: ["Radar lần 1: " + ptS("A", p.A), "Radar reading 1: " + ptS("A", p.A)], sfx: "pick", say: ["Lần đo 1: máy bay ở <b>" + ptS("A", p.A) + "</b>.", "Reading 1: the plane is at <b>" + ptS("A", p.A) + "</b>."] },
+    B: { note: ["Radar lần 2: " + ptS("B", p.B), "Radar reading 2: " + ptS("B", p.B)], sfx: "pick", say: ["Lần đo 2: máy bay ở <b>" + ptS("B", p.B) + "</b>.", "Reading 2: the plane is at <b>" + ptS("B", p.B) + "</b>."] } }; },
+  cmp: function (p, a) { if (Math.abs(a[2]) > 0.01 && near([a[0], a[1]], [p.T[0], p.T[1]], 0.5)) return { ok: false, kind: "bad", msg: L("Điểm chạm nằm trên mặt đường băng (Oxy) nên z = 0.", "The touchdown point lies on the runway (Oxy), so z = 0.") }; return this.ptCheck(p, a, p.T); },
+  special: function (p, a) { var x = a.slice(0, 3); if (near(x, p.A, 0.5) || near(x, p.B, 0.5)) return { ok: false, kind: "bad", msg: L("Đó là một lần đo radar, máy bay còn trên không. Tìm điểm trên đường thẳng AB có z = 0.", "That's a radar reading; the plane is still airborne. Find the point of line AB with z = 0.") }; if (Math.abs(x[2]) > 0.01) return { ok: false, kind: "bad", msg: L("Điểm chạm phải có z = 0 (nằm trên mặt đường băng).", "The touchdown point must have z = 0 (on the runway).") }; return null; },
+  fx: function (p, k, v) { var pr = prFit([p.A, [p.A[0], p.A[1], 0], [2400, 100, 0], [0, -100, 0], [2400, -100, 0], [0, 100, 0]], [24, 120, 336, 380], 4), P = v.a.slice(0, 3); return seg3(pr, p.B, P, k === "ok" ? "#1f8a4c" : "#e53935", 2.4, "6 4") + dot3(pr, P, k === "ok" ? "#ffeb3b" : "#e53935", 7); },
+  okMsg: ["Chính xác! Đèn hiệu sáng đúng điểm chạm, máy bay hạ cánh an toàn.", "Correct! The lights mark the touchdown point and the plane lands safely."], badMsg: ["Chưa đúng điểm chạm. Viết phương trình AB rồi cho z = 0 để tìm t.", "Not the touchdown point. Write line AB, then set z = 0 to find t."],
+  passTitle: ["máy bay đã hạ cánh!", "plane landed!"],
+  rows: function (p) { var u = vsub(p.B, p.A); return [["AB", vecS(u)], [L("Đường thẳng AB", "Line AB"), parS(p.A, u)], ["z = 0", "t = " + fmt(p.s1 / (p.s1 - p.s2), 3)], ["T", ptS("T", p.T)]]; },
+  formula: function () { return L("Đường thẳng qua A, chỉ phương AB; giao với (Oxy): cho z = 0", "Line through A along AB; meets (Oxy) where z = 0"); },
+  hints: function () { return [
+    L("Máy bay đi trên đường thẳng AB. Điểm chạm T là giao điểm của AB với mặt phẳng (Oxy): z = 0.", "The plane moves along line AB. The touchdown T is where AB meets the plane (Oxy): z = 0."),
+    L("Viết x = x_A + (x_B − x_A)t, y = …, z = z_A + (z_B − z_A)t. Cho z = 0 tìm t, thay vào x, y.", "Write x = x_A + (x_B − x_A)t, y = …, z = z_A + (z_B − z_A)t. Set z = 0 to find t, then x, y."),
+    L("Ví dụ: A(−4500; 0; 250), B(−2700; 0; 150): AB = (1800; 0; −100); 250 − 100t = 0 ⇒ t = 2,5; T(0; 0; 0).", "Example: A(−4500; 0; 250), B(−2700; 0; 150): AB = (1800; 0; −100); 250 − 100t = 0 ⇒ t = 2.5; T(0; 0; 0).")]; }
+});
+
+/* TH4 · Drone giữ khoảng cách an toàn (KM-HH-1234, thay thế TH2): đường thẳng + khoảng cách đến mặt phẳng tường */
+var TH4 = s12Job("th", {
+  name: ["Drone giữ khoảng cách an toàn", "Drone safety distance"], sub: ["drone phải dừng ở đâu để cách tường đúng d mét?", "where must the drone stop to stay d metres from the wall?"],
+  endName: ["điểm dừng của drone", "drone stop point"], what: ["Tọa độ điểm dừng Q của drone", "Coordinates of the drone's stop point Q"], unit: "",
+  btnText: ["Cài điểm dừng", "Set the stop point"], H: 420, mf: MF_TRI("Q"), ptol: 0.5,
+  lead: ["Drone chụp ảnh tòa nhà ga bay thẳng về phía mặt tường kính. Quy định: drone phải dừng khi còn cách tường đúng <b>d mét</b>. Hãy cài <b>điểm dừng</b> (đơn vị: mét, t tính bằng giây).",
+    "A survey drone flies straight towards the terminal's glass wall. Rule: it must stop exactly <b>d metres</b> from the wall. Set the <b>stop point</b> (units: metres, t in seconds)."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> tìm điểm Q trên đường bay của drone sao cho khoảng cách từ Q đến mặt tường (α) bằng d, trước khi drone tới tường.<br><b>Cần tìm:</b> tọa độ Q.<br><b>Dữ kiện:</b> chạm vào bản vẽ tường, dữ liệu drone và quy định an toàn.",
+    "<b>Task:</b> find the point Q on the drone's path whose distance to the wall (α) equals d, before the drone reaches the wall.<br><b>Find:</b> the coordinates of Q.<br><b>Data:</b> tap the wall drawing, the drone data and the safety rule."); },
+  make: function () {
+    for (var k = 0; k < 400; k++) {
+      var n = pickOne([[3, 4], [4, 3], [-3, 4], [4, -3]]), r = rnd(1, 3), ds = pickOne([5, 6, 8, 10]), t = rnd(6, 16), D0 = ds + r * t;
+      var u1 = rnd(-6, 6), rem = -5 * r - n[0] * u1; if (rem % n[1] !== 0) continue; var u2 = rem / n[1], u = [u1, u2, pickOne([0, 0, 1, -1])];
+      if (Math.abs(u2) > 8) continue;
+      var P0 = [rnd(-20, 20), rnd(-20, 20), rnd(15, 30)], d = 5 * D0 - (n[0] * P0[0] + n[1] * P0[1]), Q = vadd(P0, vmul(u, t)), W = vadd(P0, vmul(u, D0 / r));
+      if (Q[2] < 5) continue;
+      return { n: n, d: d, r: r, ds: ds, t: t, D0: D0, u: u, P0: P0, Q: Q, W: W };
+    }
+    return this.make();
+  },
+  base: function (p) {
+    var o = sky12(p.bottom, 380, "#e3f2fd"), pr = prFit([p.P0, p.W, [p.W[0], p.W[1], 0], [p.P0[0], p.P0[1], 0], [p.W[0], p.W[1], 40]], [40, 140, 330, 390]);
+    var nn = [p.n[1], -p.n[0], 0], s = 30 / 5, W0 = [p.W[0], p.W[1], 0], a1 = vadd(W0, vmul(nn, s)), a2 = vsub(W0, vmul(nn, s));
+    o += poly3(pr, [a1, a2, [a2[0], a2[1], 40], [a1[0], a1[1], 40]], "#90caf9", "#1565c0", 0.7);
+    for (var z = 8; z < 40; z += 8) o += seg3(pr, [a1[0], a1[1], z], [a2[0], a2[1], z], "#1565c0", 1);
+    var q = P2(pr, p.P0); o += seg3(pr, p.P0, p.W, "#ffb74d", 1.6, "4 4") + '<g transform="translate(' + q[0].toFixed(1) + " " + q[1].toFixed(1) + ')" stroke="' + INK + '" stroke-width="1.6"><rect x="-8" y="-4" width="16" height="8" rx="3" fill="#ff7a3d"/><path d="M-14 -8 H-4 M4 -8 H14 M-9 -8 V-4 M9 -8 V-4"/></g>';
+    o += card12(10, 10, 168, 60, L("MẶT TƯỜNG KÍNH (α)", "GLASS WALL (α)"), "W", p, ["(α): " + planeS(p.n[0], p.n[1], 0, p.d)], "#1565c0");
+    o += card12(184, 10, 168, 76, L("DRONE (mỗi giây)", "DRONE (per second)"), "D", p, [ptS("P₀", p.P0), "v = " + vecS(p.u)], "#e65100");
+    o += card12(10, 76, 168, 44, L("QUY ĐỊNH AN TOÀN", "SAFETY RULE"), "S", p, [L("cách tường d = ", "keep d = ") + p.ds + " m"], "#c62828");
+    return o;
+  },
+  items: function (p) { var w = planeS(p.n[0], p.n[1], 0, p.d); return { W: { note: ["Mặt tường (α): " + w, "Wall (α): " + w], sfx: "pick", say: ["Mặt tường kính nằm trên <b>(α): " + w + "</b>.", "The glass wall lies on <b>(α): " + w + "</b>."] },
+    D: { note: ["Drone lúc t = 0 ở " + ptS("P₀", p.P0) + ", mỗi giây dịch chuyển " + vecS(p.u), "At t = 0 the drone is at " + ptS("P₀", p.P0) + ", moving " + vecS(p.u) + " per second"], sfx: "pick", say: ["Drone lúc t = 0 ở <b>" + ptS("P₀", p.P0) + "</b>, mỗi giây dịch chuyển <b>" + vecS(p.u) + "</b>.", "At t = 0 the drone is at <b>" + ptS("P₀", p.P0) + "</b>, moving <b>" + vecS(p.u) + "</b> each second."] },
+    S: { note: ["Phải dừng khi cách tường " + p.ds + " m", "Must stop " + p.ds + " m from the wall"], val: p.ds, sym: "d", sfx: "pick", say: ["Drone phải dừng khi còn cách tường đúng <b>" + p.ds + " m</b>.", "The drone must stop exactly <b>" + p.ds + " m</b> from the wall."] } }; },
+  cmp: function (p, a) { return this.ptCheck(p, a, p.Q); },
+  special: function (p, a) { var x = a.slice(0, 3); if (near(x, p.W, 0.5)) return { ok: false, kind: "bad", msg: L("Đó là điểm drone đâm vào tường (khoảng cách bằng 0)!", "That's where the drone hits the wall (distance 0)!") }; if (near(x, vadd(p.P0, vmul(p.u, (p.D0 + p.ds) / p.r)), 0.5)) return { ok: false, kind: "bad", msg: L("Điểm này cách tường d mét nhưng ở <b>phía bên kia</b> tường. Chọn nghiệm t trước khi tới tường.", "That point is d metres away but on the <b>other side</b> of the wall. Take the t before the wall.") }; if (near(x, p.P0, 0.5)) return { ok: false, kind: "bad", msg: L("Đó là vị trí ban đầu của drone.", "That's the drone's starting point.") }; return null; },
+  fx: function (p, k, v) { var pr = prFit([p.P0, p.W, [p.W[0], p.W[1], 0], [p.P0[0], p.P0[1], 0], [p.W[0], p.W[1], 40]], [40, 140, 330, 390]), P = v.a.slice(0, 3); return seg3(pr, p.P0, P, k === "ok" ? "#1f8a4c" : "#e53935", 2.6) + dot3(pr, P, k === "ok" ? "#1f8a4c" : "#e53935", 6); },
+  okMsg: ["Chính xác! Drone dừng đúng khoảng cách an toàn.", "Correct! The drone stops at the safe distance."], badMsg: ["Chưa đúng. Viết khoảng cách từ điểm M(t) đến tường theo t rồi cho bằng d.", "Not right. Write the distance from M(t) to the wall in terms of t and set it equal to d."],
+  passTitle: ["điểm dừng đã cài!", "stop point set!"],
+  rows: function (p) { return [[L("Đường bay", "Path"), parS(p.P0, p.u)], [L("Khoảng cách lúc t", "Distance at t"), "(" + p.D0 + " − " + p.r + "t) m"], [L("Cho bằng " + p.ds, "Set equal to " + p.ds), "t = " + p.t + " s"], ["Q", ptS("Q", p.Q)]]; },
+  formula: function () { return L("d(M(t), (α)) = |a·x(t) + b·y(t) + c·z(t) + d| / √(a² + b² + c²) = d_an toàn", "d(M(t), (α)) = |a·x(t) + b·y(t) + c·z(t) + d| / √(a² + b² + c²) = d_safe"); },
+  hints: function () { return [
+    L("Vị trí drone lúc t: M(t) = P₀ + t·v. Khoảng cách từ M(t) đến tường là một biểu thức theo t.", "The drone's position at t is M(t) = P₀ + t·v. Its distance to the wall is an expression in t."),
+    L("Dùng công thức khoảng cách từ điểm đến mặt phẳng, cho bằng d. Bỏ trị tuyệt đối được hai nghiệm t; chọn nghiệm <b>trước khi</b> drone tới tường (t nhỏ hơn).", "Use the point-to-plane distance formula and set it equal to d. Removing the absolute value gives two t; take the one <b>before</b> the drone reaches the wall (the smaller t)."),
+    L("Ví dụ: (α): 3x + 4y − 250 = 0, P₀(0; 0; 20), v = (3; 4; 0): khoảng cách = |25t − 250| / 5 = 50 − 5t. Cho bằng 10 ⇒ t = 8, Q(24; 32; 20).", "Example: (α): 3x + 4y − 250 = 0, P₀(0; 0; 20), v = (3; 4; 0): distance = |25t − 250| / 5 = 50 − 5t. Set it to 10 ⇒ t = 8, Q(24; 32; 20).")]; }
+});
+
+/* ---------- ghép bộ bài, danh mục ---------- */
+var S12_POOL = { mp: [[MP1, MP4], MP2, MP3], dt: [DT1, [DT2, DT4], DT3], mc: [[MC1, MC4], MC2, MC3], th: [TH1, [TH2, TH4], TH3] };
+var S12OB = { MP1: MP1, MP2: MP2, MP3: MP3, MP4: MP4, DT1: DT1, DT2: DT2, DT3: DT3, DT4: DT4, MC1: MC1, MC2: MC2, MC3: MC3, MC4: MC4, TH1: TH1, TH2: TH2, TH3: TH3, TH4: TH4 };
+var S12_CAT = [
+  ["KM-HH-1201", "MP1", "Độ cao nóc nhà", "Roof height", "mp", ["khoảng cách từ điểm đến mặt phẳng"], ["distance from a point to a plane"], "do_dai", "m", "làm tròn 0,1", 1],
+  ["KM-HH-1202", "MP2", "Góc nghiêng của mái", "Roof pitch", "mp", ["phương trình mặt phẳng qua 3 điểm", "góc giữa hai mặt phẳng"], ["plane through 3 points", "angle between two planes"], "goc", "°", "làm tròn đến độ", 2],
+  ["KM-HH-1203", "MP3", "Bóng của ăng-ten", "The antenna's shadow", "mp", ["giao điểm đường thẳng và mặt phẳng", "độ dài đoạn thẳng"], ["line–plane intersection", "segment length"], "do_dai", "m", "làm tròn 0,01", 3],
+  ["KM-HH-1204", "MP4", "Hai mái che song song", "Two parallel canopies", "mp", ["khoảng cách giữa hai mặt phẳng song song"], ["distance between parallel planes"], "do_dai", "m", "làm tròn 0,1", 1],
+  ["KM-HH-1211", "DT1", "Cài hướng bay", "Set the heading", "dt", ["véc-tơ chỉ phương của đường thẳng"], ["direction vector of a line"], "vec_to", "", "mọi véc-tơ cùng phương", 1],
+  ["KM-HH-1212", "DT2", "Chụp ảnh lúc gần đài nhất", "Photo at closest approach", "dt", ["hình chiếu vuông góc của điểm lên đường thẳng"], ["foot of the perpendicular from a point to a line"], "toa_do", "m", "đúng tọa độ", 2],
+  ["KM-HH-1213", "DT3", "Cảnh báo va chạm", "Collision alert", "dt", ["giao điểm hai đường thẳng", "vị trí tương đối"], ["intersection of two lines", "relative position"], "toa_do", "km", "đúng tọa độ và kết luận", 3],
+  ["KM-HH-1214", "DT4", "Góc hạ cánh", "Landing angle", "dt", ["góc giữa đường thẳng và mặt phẳng"], ["angle between a line and a plane"], "goc", "°", "làm tròn đến độ", 2],
+  ["KM-HH-1221", "MC1", "Bật lá chắn radar", "Switch on the shield", "mc", ["phương trình mặt cầu"], ["equation of a sphere"], "phuong_trinh", "", "đúng tâm và R²", 1],
+  ["KM-HH-1222", "MC2", "Vật thể bay vào vùng sóng", "Object entering the zone", "mc", ["giao điểm đường thẳng và mặt cầu"], ["line–sphere intersection"], "toa_do", "km", "đúng tọa độ", 2],
+  ["KM-HH-1223", "MC3", "Tìm khinh khí cầu thời tiết", "Find the weather balloon", "mc", ["hệ phương trình mặt cầu", "trừ vế đưa về bậc nhất"], ["system of sphere equations", "subtracting to get linear equations"], "do_dai", "km", "±0,02", 3],
+  ["KM-HH-1224", "MC4", "Khoảng cách xa nhất", "Greatest distance", "mc", ["tâm, bán kính từ phương trình khai triển"], ["centre and radius from the expanded equation"], "do_dai", "km", "±0,02", 1],
+  ["KM-HH-1231", "TH1", "Dự đoán vị trí máy bay", "Predict the plane's position", "th", ["chuyển động thẳng đều", "véc-tơ, đường thẳng"], ["uniform straight motion", "vectors, lines"], "toa_do", "km", "±0,05", 1],
+  ["KM-HH-1232", "TH2", "Bao lâu trong tầm radar", "Time in radar range", "th", ["đường thẳng cắt mặt cầu", "phương trình bậc hai"], ["line meets sphere", "quadratic equation"], "thoi_gian", "phút", "±0,05", 2],
+  ["KM-HH-1233", "TH3", "Điểm chạm đường băng", "Touchdown point", "th", ["đường thẳng qua 2 điểm", "giao với mặt phẳng"], ["line through 2 points", "meeting a plane"], "toa_do", "m", "đúng tọa độ", 2],
+  ["KM-HH-1234", "TH4", "Drone giữ khoảng cách an toàn", "Drone safety distance", "th", ["đường thẳng", "khoảng cách từ điểm đến mặt phẳng"], ["lines", "point-to-plane distance"], "toa_do", "m", "đúng tọa độ", 3]
+].map(function (r) { return { id: r[0], key: r[1], ten: { vi: r[2], en: r[3] }, kb: r[4], cap: [3], lop: [12], chu_de: { vi: r[5], en: r[6] }, yccd: { vi: ["Toán 12 (CT GDPT 2018) · Chuyên đề Hình giải tích"], en: ["Grade 12 maths (2018 curriculum) · Coordinate geometry"] }, do_kho: { cap3: r[10] }, goc_nhin: "chinh_dien", dap_an: { loai: r[7], don_vi: r[8], sai_so: r[9] }, dung_cu_can: ["doc_so_lieu"], vai_tro: "cap3_hgt", trang_thai: "dang_dung" }; });
+function S12_HERO(id, end) {
+  var H = end ? 150 : 170, o = '<svg viewBox="0 0 360 ' + H + '" role="img" aria-label="' + L(S12[id].title[0], S12[id].title[1]) + '">';
+  if (id === "mp") {
+    o += '<rect width="360" height="' + H + '" fill="#e6f4ff"/><circle cx="310" cy="34" r="18" fill="#ffcf3f" stroke="' + INK + '" stroke-width="2.4"/><rect y="' + (H - 34) + '" width="360" height="34" fill="#a5d98c"/>';
+    o += '<path d="M90 ' + (H - 34) + ' V' + (H - 90) + ' H250 V' + (H - 34) + ' Z" fill="#fff3d6" stroke="' + INK + '" stroke-width="2.2"/><path d="M76 ' + (H - 88) + ' L150 ' + (H - 140) + ' H270 L264 ' + (H - 88) + ' Z" fill="#5c8fd6" stroke="' + INK + '" stroke-width="2.2"/>';
+    for (var i = 0; i < 3; i++) o += '<path d="M' + (110 + i * 44) + " " + (H - 100) + " l30 -24 h30 l-30 24 Z" + '" fill="#1e3a5f" stroke="#90caf9" stroke-width="1.4"/>';
+    o += '<path d="M240 ' + (H - 140) + ' V' + (H - 170 + 8) + '" stroke="' + INK + '" stroke-width="2.4"/>' + (end ? T2(300, H - 56, "⚡", { a: "middle", fs: 26, fw: 800 }) : "");
+    o += '<path d="M24 ' + (H - 12) + ' L24 ' + (H - 70) + ' M24 ' + (H - 12) + ' L70 ' + (H - 12) + ' M24 ' + (H - 12) + ' L4 ' + (H + 2) + '" stroke="#546e7a" stroke-width="1.6"/>' + T2(28, H - 66, "z", { fs: 11, fw: 800, c: "#546e7a" }) + T2(64, H - 16, "y", { fs: 11, fw: 800, c: "#546e7a" });
+  } else if (id === "dt") {
+    o += '<rect width="360" height="' + H + '" fill="#cfeaff"/><rect y="' + (H - 30) + '" width="360" height="30" fill="#a5d98c"/>' + towerAt([60, H - 30]);
+    o += '<path d="M90 40 L330 110" stroke="#fff" stroke-width="3" stroke-dasharray="8 6"/><path d="M110 120 L320 30" stroke="#ffe082" stroke-width="3" stroke-dasharray="8 6"/>' + plane12(220, 70, 16, 1.6) + heli12(250, 72 - 30 + 20, 1.2);
+  } else if (id === "mc") {
+    o += '<rect width="360" height="' + H + '" fill="#d6ecff"/><path d="M0 ' + H + ' L110 70 L180 110 L240 60 L360 ' + H + ' Z" fill="#8d9f7a" stroke="' + INK + '" stroke-width="2"/>' + domeAt([240, 66], 1.3);
+    o += '<circle cx="240" cy="62" r="' + (end ? 70 : 56) + '" fill="#4fc3f7" fill-opacity=".2" stroke="#0288d1" stroke-width="2" stroke-dasharray="6 5"/><g transform="translate(70 40)"><ellipse rx="12" ry="14" fill="#fff" stroke="' + INK + '" stroke-width="1.8"/><path d="M-4 13 L0 22 L4 13" stroke="' + INK + '" fill="none" stroke-width="1.4"/></g>';
+  } else {
+    o += '<rect width="360" height="' + H + '" fill="#dff2ff"/><rect y="' + (H - 40) + '" width="360" height="40" fill="#a5d98c"/><path d="M60 ' + (H - 12) + ' L330 ' + (H - 30) + ' L340 ' + (H - 18) + ' L70 ' + H + ' Z" fill="#607d8b" stroke="' + INK + '" stroke-width="1.8"/>';
+    o += '<path d="M20 30 L200 ' + (H - 36) + '" stroke="#fff" stroke-width="2.4" stroke-dasharray="7 6"/>' + plane12(110, 76, 34, 1.6) + domeAt([300, H - 40], 1.1) + '<circle cx="300" cy="' + (H - 46) + '" r="50" fill="#4fc3f7" fill-opacity=".15" stroke="#0288d1" stroke-width="1.6" stroke-dasharray="5 4"/>';
+  }
+  return o + "</svg>";
+}
+
 var OBK = { OB1: OB1, OB2: OB2, OB3: OB3, OB4: OB4, OB5: OB5, OB6: OB6, G1: G1, G2: G2, G3: G3, G4: G4, G5: G5, M1: M1, M2: M2, M3: M3, M4: M4, TR1: TR1, TR2: TR2, TR3: TR3 };
 Object.keys(S9OB).forEach(function (k) { OBK[k] = S9OB[k]; }); S9_CAT.forEach(function (m) { CATALOG.push(m); });
 Object.keys(C4OB).forEach(function (k) { OBK[k] = C4OB[k]; }); C4_CAT.forEach(function (m) { CATALOG.push(m); });
+Object.keys(S12OB).forEach(function (k) { OBK[k] = S12OB[k]; }); S12_CAT.forEach(function (m) { CATALOG.push(m); });
 CATALOG.forEach(function (m) { var ob = OBK[m.key]; ob.key = m.key; ob.meta = m; ob.hidden = m.trang_thai !== "dang_dung"; });
 function taskHTML(ob) { return ob.task(S.g) + '<div class="pcode">' + TX("Mã bài") + ": " + ob.meta.id + "</div>"; }
 /* ---------- kịch bản (câu chuyện) theo cấp học: lời dẫn, hình minh họa, lời kết ---------- */
@@ -6511,6 +7508,14 @@ function scen() {
     get endTitle() { return TX("Tèo giỏi quá!"); },
     endText: function (obs) { var nm = obs.map(function (o) { return o.endName; }); return TX("Tuyệt vời! Nhờ Tèo đo đạc và tính toán giỏi, khu vườn của ông đã gọn đẹp: ") + nm.join(", ") + TX(" đều xong cả. Ông bà thưởng Tèo một giỏ ổi chín!"); }
   };
+  if (isS12()) { var c12 = S12[S.scen3] || S12.mp, id12 = S12[S.scen3] ? S.scen3 : "mp"; return {
+    get level() { return L("Cấp 3 · Lớp 12 · Chuyên đề Hình giải tích", "Upper secondary · Grade 12 · Coordinate geometry"); },
+    get title() { return L(c12.title[0], c12.title[1]); },
+    get lead() { return L(c12.lead[0], c12.lead[1]); },
+    hero: function () { return S12_HERO(id12); }, endHero: function () { return S12_HERO(id12, true); },
+    get endTitle() { return L(c12.endTitle[0], c12.endTitle[1]); },
+    endText: function () { return L(c12.endText[0], c12.endText[1]); }
+  }; }
   if (isS9()) { var c9 = S9[S.scen2], id9 = S.scen2; return {
     get level() { return L("Cấp 2 · Ôn thi vào 10", "Lower secondary · Exam prep"); },
     get title() { return L(c9.title[0], c9.title[1]); },
@@ -6539,6 +7544,10 @@ function scen() {
 function renderStory() {
   var c = scen();
   $("#scenPick").hidden = S.g > 5; $("#scenPick2").hidden = !(S.g > 5 && S.g < 10);
+  var sp3 = $("#scenPick3"); sp3.hidden = !isS12();
+  if (!sp3.querySelector("[data-scen3]")) sp3.innerHTML = '<span class="s9lab"></span>' + S12_ORDER.map(function (k) { return '<button type="button" data-scen3="' + k + '" aria-pressed="false"></button>'; }).join("");
+  sp3.querySelector(".s9lab").textContent = L("Chuyên đề Hình giải tích:", "Coordinate geometry topic:");
+  S12_ORDER.forEach(function (k) { var b3 = sp3.querySelector("[data-scen3=" + k + "]"); b3.textContent = L(S12[k].btn[0], S12[k].btn[1]); b3.setAttribute("aria-pressed", k === (S.scen3 || "mp") ? "true" : "false"); });
   var sp2 = $("#scenPick2");
   if (!sp2.querySelector("[data-scen2=dothi]")) { sp2.insertAdjacentHTML("beforeend", '<span class="s9lab"></span>' + S9_ORDER.map(function (k) { return '<button type="button" data-scen2="' + k + '" aria-pressed="false"></button>'; }).join("")); }
   sp2.querySelector(".s9lab").textContent = L("Ôn thi vào 10:", "Grade 10 exam prep:");
@@ -6557,6 +7566,7 @@ function renderStory() {
 }
 
 $("#scenPick2").addEventListener("click", function (e) { var b = e.target.closest("[data-scen2]"); if (!b || b.dataset.scen2 === S.scen2) return; S.scen2 = b.dataset.scen2; SFX.click(); pickRoute(); renderStory(); });
+$("#scenPick3").addEventListener("click", function (e) { var b = e.target.closest("[data-scen3]"); if (!b || b.dataset.scen3 === S.scen3) return; S.scen3 = b.dataset.scen3; SFX.click(); pickRoute(); renderStory(); });
 $("#scenPick").addEventListener("click", function (e) { var b = e.target.closest("[data-scen]"); if (!b || b.dataset.scen === S.scen) return; S.scen = b.dataset.scen; SFX.click(); pickRoute(); renderStory(); });
 /* ---------- scratch paper: build a parabola (structured worksheet) ---------- */
 var PAR_FORMS = { a: { lab: "y = ax²", vars: ["a"] }, ac: { lab: "y = ax² + c", vars: ["a", "c"] }, abc: { lab: "y = ax² + bx + c", vars: ["a", "b", "c"] } };
@@ -6718,7 +7728,7 @@ function isCamp() { return S.g > 5 && S.g < 10 && S.scen2 === "trai"; }
 function isTap(ob) { return !!(ob && (ob.market || ob.tapOnly)); }
 var OBS = [OB1, OB2];
 /* ---------- game state ---------- */
-var S = { g: 9, scen2: "km", stars: 3, i: 0, p: null, att: 0, hints: [false, false, false], stakes: [], meas: [], memo: "", eng: null, mode: "move", sel: [], build: null, done: false, formulas: [], board: null, busy: false };
+var S = { g: 9, scen2: "km", scen3: "mp", stars: 3, i: 0, p: null, att: 0, hints: [false, false, false], stakes: [], meas: [], memo: "", eng: null, mode: "move", sel: [], build: null, done: false, formulas: [], board: null, busy: false };
 
 function show(id, keep) { ["sStart", "sStory", "sGame", "sRoom", "sEnd"].forEach(function (k) { document.getElementById(k).hidden = k !== id; }); if (!keep) window.scrollTo(0, 0); }
 function closeTask(noComp) {
@@ -6929,9 +7939,10 @@ document.addEventListener("click", function (e) {
 });
 function putAnswer(v) {
   closeSheet();
-  $("#inVal").value = v;
+  var mfOb = OBS[S.i] && OBS[S.i].mf;
+  if (mfOb) mfPut(v); else $("#inVal").value = v;
   if (!$("#sRoom").hidden && !OBS[S.i].noInput && !S.done) {
-    $("#rVal").value = v; syncRoomAns(); SFX.pick();
+    if (!mfOb) $("#rVal").value = v; syncRoomAns(); SFX.pick();
     var m = $("#rMsg"); m.textContent = TX("Đã đưa ") + v + TX(" vào ô. Kiểm tra lại rồi bấm ") + $("#bBuild").textContent + "."; m.classList.add("ok");
     clearTimeout(putAnswer.t); putAnswer.t = setTimeout(function () { m.textContent = ""; m.classList.remove("ok"); }, 4000);
     $("#rAns").scrollIntoView({ block: "nearest" });
@@ -6972,7 +7983,7 @@ function render() {
   $("#inVal").placeholder = ob.ph ? L(ob.ph[0], ob.ph[1]) : TX("Nhập số"); $("#inVal").inputMode = ob.ph ? "text" : "decimal";
   var unitT = ob.unit ? ob.unit : ob.intAns ? L("đồng", "VND") : ob.s9 || ob.unit === "" ? "" : "m"; $(".build .unit").textContent = unitT; if (!unitT) $(".build .unit").hidden = true; $("#bBuild").textContent = ob.btnText || (ob.garden ? TX("Gửi ông") : TX("Lắp đặt"));
   if (ob.market) $("#wallet").textContent = money(S.wallet || 0);
-  document.body.classList.toggle("nocalc", !calcOK()); document.body.classList.toggle("lv1", S.g <= 5);
+  document.body.classList.toggle("nocalc", !calcOK()); document.body.classList.toggle("lv1", S.g <= 5); mfRender(ob);
   $("#obName").textContent = ob.name;
   $("#stars").textContent = S.stars;
   var m = ""; for (var k = 0; k < 3; k++) m += '<span class="mat' + (k < S.att ? " used" : "") + '"></span>';
@@ -7198,6 +8209,17 @@ function refreshNotes() {
 
 function shuffle(a) { return a.slice().sort(function () { return Math.random() - 0.5; }); }
 function pickRoute() {
+  if (isS12()) {
+    if (!S12[S.scen3]) S.scen3 = "mp";
+    var pl12 = S12_POOL[S.scen3], sl12 = function (i) { return Array.isArray(pl12[i]) ? pl12[i] : [pl12[i]]; };
+    var ok12 = S.route && S.route.length === pl12.length && S.route.every(function (o, i) { return o.s12 === S.scen3 && sl12(i).indexOf(o) >= 0; });
+    if (!ok12 || S.c4re) {
+      var old12 = (S.route || []).map(function (o) { return o.key; }).join(), r12, t12 = 0;
+      do { r12 = pl12.map(function (x, i) { return pickOne(sl12(i)); }); } while (ok12 && S.c4re && r12.map(function (o) { return o.key; }).join() === old12 && ++t12 < 30);
+      S.route = r12; S.c4re = false;
+    }
+    return;
+  }
   if (isS9()) {
     var pl = S9_POOL[S.scen2], cur = (S.route || []).map(function (o) { return o.key; }).sort().join();
     if (Array.isArray(pl)) { var okS = S.route && S.route.length === pl.length && S.route.every(function (o) { return o.s9 === S.scen2; }); if (!okS) S.route = pl.slice(); return; }
@@ -7239,14 +8261,23 @@ function pickRoute() {
   S.route = c;
 }
 pickRoute();
-function routeList() { return S.route.concat(S.g >= 10 ? [OB3] : []); }
+function routeList() { return S.route.concat(S.g >= 10 && S.g < 12 ? [OB3] : []); }
 function setObUi(ob) { $(".ftools").classList.toggle("mkt", isTap(ob)); $("#walletPill").hidden = !ob.market; $(".ftools").classList.toggle("rv", !!ob.boat); $(".ftools").classList.toggle("sqm", !!ob.eke && !ob.boat); }
-function reroll() { if (isC4()) S.c4re = true; pickRoute(); renderRoute(); }
+function reroll() { if (isC4() || isS12()) S.c4re = true; pickRoute(); renderRoute(); }
 document.addEventListener("click", function (e) { if (e.target.closest("#bReroll")) { reroll(); SFX.pick(); } });
 document.addEventListener("click", function (e) { var u = e.target.closest("[data-up]"); if (!u) return; var k = +u.dataset.up, r = S.route; if (!r || !r[k] || !r[k - 1]) return; var t = r[k - 1]; r[k - 1] = r[k]; r[k] = t; SFX.pick(); renderRoute(); });
 function renderRoute() {
   var lv3 = S.g >= 10, list = routeList();
-  $("#subG").hidden = S.g > 5;
+  var sgW = S.g <= 5 ? [4, 5] : S.g >= 10 ? [10, 11, 12] : null, sgB = $("#subG");
+  sgB.hidden = !sgW;
+  if (sgW && sgB.dataset.set !== sgW.join() + LANG) { sgB.querySelectorAll("[data-sg]").forEach(function (x) { x.remove(); }); sgW.forEach(function (g) { sgB.insertAdjacentHTML("beforeend", '<button type="button" data-sg="' + g + '" aria-pressed="false">' + L("Lớp ", "Grade ") + g + "</button>"); }); sgB.dataset.set = sgW.join() + LANG; }
+  if (isS12()) {
+    $("#routeInfo").className = "card route r3";
+    $("#routeInfo").innerHTML = "<p><b>" + L("Lớp 12 · Hình giải tích:</b> em làm <b>", "Grade 12 · Coordinate geometry:</b> you do <b>") + list.length + L(" thử thách</b>, từ dễ đến khó.</p><ol>", " challenges</b>, from easy to harder.</p><ol>") +
+      list.map(function (o) { return "<li>" + doneMark(o) + "<b>" + o.name + "</b>: " + o.sub + "</li>"; }).join("") + "</ol>" + '<button class="linkbtn" type="button" id="bReroll">' + L("Đổi bài khác (ngẫu nhiên)", "Other challenges (random)") + "</button>";
+    document.querySelectorAll("#subG [data-sg]").forEach(function (x) { x.setAttribute("aria-pressed", +x.dataset.sg === S.g ? "true" : "false"); });
+    return;
+  }
   document.querySelectorAll("#subG [data-sg]").forEach(function (x) { x.setAttribute("aria-pressed", +x.dataset.sg === S.g ? "true" : "false"); });
   if (isC4()) {
     $("#routeInfo").className = "card route r1";
@@ -7288,8 +8319,9 @@ $("#grades").addEventListener("click", function (e) {
   var b = e.target.closest("[data-g]"); if (!b) return;
   var was = S.g; S.g = +b.dataset.g;
   if (S.g <= 5 && was <= 5) S.g = was;
+  if (S.g >= 10 && was >= 10) S.g = was;
   document.querySelectorAll("#grades [data-g]").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-  if ((was <= 5) !== (S.g <= 5) || S.g <= 5 || (S.route || []).some(function (o) { return o.camp; }) !== isCamp() || isS9() !== (S.route || []).some(function (o) { return o.s9job; })) pickRoute();
+  if ((was <= 5) !== (S.g <= 5) || S.g <= 5 || (S.route || []).some(function (o) { return o.camp; }) !== isCamp() || isS9() !== (S.route || []).some(function (o) { return o.s9job && !o.s12job; }) || isS12() !== (S.route || []).some(function (o) { return o.s12job; })) pickRoute();
   renderRoute();
 });
 $("#subG").addEventListener("click", function (e) { var sg = e.target.closest("[data-sg]"); if (!sg) return; S.g = +sg.dataset.sg; pickRoute(); renderRoute(); SFX.click(); });
@@ -10126,7 +11158,7 @@ function tlmDev() {
 function tlmNick() { return (lsGet("khemay-nick") || "").trim(); }
 function tlmQ() { try { return JSON.parse(lsGet("khemay-tlmq") || "[]"); } catch (e) { return []; } }
 function tlmSave(q) { if (q.length > 3000) q = q.slice(q.length - 3000); lsSet("khemay-tlmq", JSON.stringify(q)); }
-function tlmScen() { return S.g <= 5 ? (S.scen || "vuon") : (S.scen2 || "km"); }
+function tlmScen() { return S.g <= 5 ? (S.scen || "vuon") : S.g >= 12 ? (S.scen3 || "mp") : S.g >= 10 ? "km" : (S.scen2 || "km"); }
 function tlm(ev, x) {
   try {
     var ob = ev !== "phien" && ev !== "mo" && typeof OBS !== "undefined" && OBS[S.i], r = {
@@ -10152,7 +11184,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.18";
+var APP_VER = "3.19";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
@@ -10542,7 +11574,7 @@ function lsSet(k, v) { try { window.localStorage.setItem(k, v); return true; } c
 function lsDel(k) { try { window.localStorage.removeItem(k); } catch (e) {} }
 function snapshot() {
   return { v: 1, t: Date.now(), g: S.g, obs: OBS.map(function (o) { return o.key; }), i: S.i, stars: S.stars, att: S.att, hints: S.hints, formulas: S.formulas,
-    scen: S.scen || "vuon", scen2: S.scen2 || "km", wallet: S.wallet || 0, p: S.p, stakes: S.stakes, meas: S.meas, results: S.results, kq: S.kq, memo: S.memo, eng: S.eng, side: S.side, boat: S.boat, board: S.board,
+    scen: S.scen || "vuon", scen2: S.scen2 || "km", scen3: S.scen3 || "mp", wallet: S.wallet || 0, p: S.p, stakes: S.stakes, meas: S.meas, results: S.results, kq: S.kq, memo: S.memo, eng: S.eng, side: S.side, boat: S.boat, board: S.board,
     figCount: S.figCount, scale: S.scale, par: S.par, parF: S.parF || null, done: S.done, hist: S.hist || [], inVal: $("#inVal").value, okDone: !!S.okDone };
 }
 function autosave(now) {
@@ -10558,7 +11590,7 @@ function renderResume() {
   if (!d) { box.hidden = true; return; }
   var obs = d.obs.map(function (k) { return OBK[k]; }), ob = obs[d.i], tm = new Date(d.t);
   var hh = ("0" + tm.getHours()).slice(-2) + ":" + ("0" + tm.getMinutes()).slice(-2) + TX(" ngày ") + tm.getDate() + "/" + (tm.getMonth() + 1);
-  box.innerHTML = TX("<div><b>Em đang làm dở một nhiệm vụ</b><br><span class='small'>") + (d.g >= 10 ? TX("Cấp 3") : (d.g <= 5 ? TX("Cấp 1 · Lớp ") + d.g : TX("Cấp 2"))) + (d.g <= 5 ? TX(" · việc ") : (obs[0] && (obs[0].camp || obs[0].s9job) ? TX(" · thử thách ") : TX(" · chướng ngại "))) + (d.i + 1) + "/" + obs.length + ": <b>" + (ob ? ob.name : "") + "</b> · " + d.meas.length + TX(" số đo · lưu lúc ") + hh + "</span></div>" +
+  box.innerHTML = TX("<div><b>Em đang làm dở một nhiệm vụ</b><br><span class='small'>") + (d.g >= 10 ? TX("Cấp 3") + L(" · Lớp ", " · Grade ") + d.g : (d.g <= 5 ? TX("Cấp 1 · Lớp ") + d.g : TX("Cấp 2"))) + (d.g <= 5 ? TX(" · việc ") : (obs[0] && (obs[0].camp || obs[0].s9job) ? TX(" · thử thách ") : TX(" · chướng ngại "))) + (d.i + 1) + "/" + obs.length + ": <b>" + (ob ? ob.name : "") + "</b> · " + d.meas.length + TX(" số đo · lưu lúc ") + hh + "</span></div>" +
     TX("<div class='rrow'><button class='btn green sm' type='button' id='bResume'>Chơi tiếp</button><button class='btn sm' type='button' id='bDropSave'>Xóa bài đã lưu</button></div>");
   box.hidden = false;
 }
@@ -10568,7 +11600,7 @@ document.addEventListener("click", function (e) {
 });
 function resumeGame(d) {
   OBS = d.obs.map(function (k) { return OBK[k]; }); S.g = d.g; S.i = d.i; S.stars = d.stars; S.att = d.att; S.hints = d.hints; S.formulas = d.formulas || [];
-  S.scen = d.scen || "vuon"; S.scen2 = d.scen2 || "km"; S.wallet = d.wallet || 0; S.p = d.p; S.stakes = d.stakes; S.meas = d.meas; S.results = d.results; S.kq = d.kq || 0; S.lock = { len: null, ang: null, lid: null, aid: null }; S.memo = d.memo || ""; S.eng = d.eng; S.side = d.side || "near";
+  S.scen = d.scen || "vuon"; S.scen2 = d.scen2 || "km"; S.scen3 = d.scen3 || "mp"; S.wallet = d.wallet || 0; S.p = d.p; S.stakes = d.stakes; S.meas = d.meas; S.results = d.results; S.kq = d.kq || 0; S.lock = { len: null, ang: null, lid: null, aid: null }; S.memo = d.memo || ""; S.eng = d.eng; S.side = d.side || "near";
   S.boat = d.boat; S.board = d.board || { lines: [], strokes: [], hist: [] }; S.figCount = d.figCount; S.scale = d.scale; S.par = d.par || null; S.hist = d.hist || [];
   S.done = false; S.busy = false; S.build = null; S.sel = []; S.rowing = false; ROW.on = false; Z = { z: 1, tx: 0, ty: 0 };
   if (!S.par) parReset();
@@ -10711,10 +11743,11 @@ var PROG_KEY = "tt-tien-do", STAR_KEY = "tt-kho-sao", LV_RANK = { ok: 1, good: 2
 function progGet() { try { return JSON.parse(lsGet(PROG_KEY) || "{}") || {}; } catch (e) { return {}; } }
 function progMark(key, level) { if (!key) return; var o = progGet(); o.d = o.d || {}; if (!o.d[key] || LV_RANK[level] > LV_RANK[o.d[key]]) o.d[key] = level; lsSet(PROG_KEY, JSON.stringify(o)); }
 function progScenDone(id) { var o = progGet(); o.s = o.s || {}; o.s[id] = (o.s[id] || 0) + 1; lsSet(PROG_KEY, JSON.stringify(o)); }
-function scenId() { return S.g <= 5 ? "c1:" + (S.scen || "vuon") + ":" + S.g : (S.g >= 10 ? "c3:km" : "c2:" + (S.scen2 || "km")); }
+function scenId() { return S.g <= 5 ? "c1:" + (S.scen || "vuon") + ":" + S.g : (S.g >= 12 ? "c3:" + (S.scen3 || "mp") : S.g >= 10 ? "c3:km" : "c2:" + (S.scen2 || "km")); }
 function flat(a) { var o = []; (a || []).forEach(function (x) { o = o.concat(Array.isArray(x) ? x : [x]); }); return o; }
 function scenPoolFor(lv1, id) {
   if (lv1) { if (C4[id]) return flat(C4_POOL[id]); if (id === "cho") return MPOOL; return GPOOL.filter(function (o) { return o.meta.lop.indexOf(S.g) >= 0; }); }
+  if (S12[id]) return flat(S12_POOL[id]);
   if (S9[id]) { var pl = S9_POOL[id]; return Array.isArray(pl) ? pl : [].concat(pl.ds, pl.hh, pl.tt); }
   return id === "trai" ? CPOOL : POOL;
 }
@@ -10723,8 +11756,9 @@ function doneMark(o) { var lv = (progGet().d || {})[o.key]; return lv ? '<span c
 function decoratePickers() {
   var any = false;
   document.querySelectorAll("#scenPick [data-scen]").forEach(function (b) { var st = scenStatus(scenPoolFor(true, b.dataset.scen)); if (st) any = true; if (st) b.dataset.prog = st; else b.removeAttribute("data-prog"); });
+  document.querySelectorAll("#scenPick3 [data-scen3]").forEach(function (b) { var st = scenStatus(scenPoolFor(false, b.dataset.scen3)); if (st) any = true; if (st) b.dataset.prog = st; else b.removeAttribute("data-prog"); });
   document.querySelectorAll("#scenPick2 [data-scen2]").forEach(function (b) { var st = scenStatus(scenPoolFor(false, b.dataset.scen2)); if (st) any = true; if (st) b.dataset.prog = st; else b.removeAttribute("data-prog"); });
-  ["#scenPick", "#scenPick2"].forEach(function (s) { var p = $(s); if (!p) return; var lg = p.querySelector(".proglegend"); if (!lg) { p.insertAdjacentHTML("beforeend", '<span class="proglegend"></span>'); lg = p.querySelector(".proglegend"); } lg.innerHTML = L('<b class="pa">✓</b> đã chơi hết bài · <b class="ps">◐</b> đã chơi một phần', '<b class="pa">✓</b> all tasks played · <b class="ps">◐</b> some played'); lg.hidden = !any; });
+  ["#scenPick", "#scenPick2", "#scenPick3"].forEach(function (s) { var p = $(s); if (!p) return; var lg = p.querySelector(".proglegend"); if (!lg) { p.insertAdjacentHTML("beforeend", '<span class="proglegend"></span>'); lg = p.querySelector(".proglegend"); } lg.innerHTML = L('<b class="pa">✓</b> đã chơi hết bài · <b class="ps">◐</b> đã chơi một phần', '<b class="pa">✓</b> all tasks played · <b class="ps">◐</b> some played'); lg.hidden = !any; });
 }
 function bankGet() { return Math.max(0, Math.floor(+(lsGet(STAR_KEY) || 0) || 0)); }
 function bankSave() { if (typeof S.stars === "number" && isFinite(S.stars)) lsSet(STAR_KEY, String(S.stars)); }
@@ -11049,19 +12083,84 @@ var SCEN_TAG = {
   dothi: ["Kiến thức tổng hợp", "Mixed topics"],
   taichinh: ["Hàm số bậc nhất · Hệ phương trình", "Linear functions · Simultaneous equations"],
   haitrinh: ["Kiến thức tổng hợp", "Mixed topics"],
-  xuong3d: ["Hình trụ, hình cầu, hình nón", "Cylinder, sphere, cone"]
+  xuong3d: ["Hình trụ, hình cầu, hình nón", "Cylinder, sphere, cone"],
+  mp: ["Phương trình mặt phẳng · Khoảng cách · Góc", "Plane equations · Distance · Angles"],
+  dt: ["Phương trình đường thẳng · Hình chiếu · Giao điểm", "Line equations · Projection · Intersection"],
+  mc: ["Phương trình mặt cầu · Giao với đường thẳng", "Sphere equations · Meeting a line"],
+  th: ["Kiến thức tổng hợp", "Mixed topics"]
 };
 function scenTags() {
-  document.querySelectorAll("#scenPick [data-scen], #scenPick2 [data-scen2]").forEach(function (b) {
-    var t = SCEN_TAG[b.dataset.scen || b.dataset.scen2]; if (typeof t === "function") t = t(S.g);
+  document.querySelectorAll("#scenPick [data-scen], #scenPick2 [data-scen2], #scenPick3 [data-scen3]").forEach(function (b) {
+    var t = SCEN_TAG[b.dataset.scen || b.dataset.scen2 || b.dataset.scen3]; if (typeof t === "function") t = t(S.g);
     var sp = b.querySelector(".ktag"); if (!t) { if (sp) sp.remove(); return; }
     if (!sp) { sp = document.createElement("span"); sp.className = "ktag"; b.appendChild(sp); }
     sp.textContent = L(t[0], t[1]);
   });
 }
 
+/* ---------- ô nhập nhiều ô cho bài lớp 12 (tọa độ, véc-tơ, phương trình mặt cầu, Có/Không) ----------
+   Giá trị ghép thành "a|b|c|…" đặt vào #inVal và #rVal, nên luồng Lắp đặt/Chốt cũ vẫn dùng được. */
+var MF = { last: {} };
+function mfHTML(ob, box) {
+  var h = "", pmB = '<button type="button" class="mfpm" data-mfpm="' + box + '" aria-label="' + L("Đổi dấu ô đang chọn", "Change the sign of the selected box") + '">±</button>', hasYn = ob.mf.some(function (x) { return x && x.yn != null; });
+  ob.mf.forEach(function (x) {
+    if (typeof x === "number") h += '<input class="mfin" data-mi="' + x + '" inputmode="decimal" autocomplete="off" aria-label="' + L("ô ", "box ") + (x + 1) + '">';
+    else if (typeof x === "string") h += '<span class="mft">' + x + "</span>";
+    else if (x && x.yn != null) h += pmB + '<span class="mfyn" data-myn="' + x.yn + '">' + x.o.map(function (o, i) { return '<button type="button" data-ynv="' + (i ? 0 : 1) + '" aria-pressed="false">' + L(o[0], o[1]) + "</button>"; }).join("") + "</span>";
+  });
+  return h + (hasYn ? "" : pmB);
+}
+function mfVals() { return String($("#inVal").value || "").split("|"); }
+function mfFill(boxEl, vals) {
+  boxEl.querySelectorAll(".mfin").forEach(function (inp) { var v = vals[+inp.dataset.mi] || ""; if (document.activeElement !== inp && inp.value !== v) inp.value = v; });
+  boxEl.querySelectorAll(".mfyn").forEach(function (g) { var v = vals[+g.dataset.myn]; g.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", v !== "" && v != null && b.dataset.ynv === v ? "true" : "false"); }); });
+}
+function mfRender(ob) {
+  var on = !!(ob && ob.mf && !ob.noInput), sig = on ? ob.key + LANG : "";
+  [["#mfG", "#inVal", "g"], ["#mfR", "#rVal", "r"]].forEach(function (z) {
+    var bx = $(z[0]); if (!bx) return;
+    bx.hidden = !on; $(z[1]).hidden = on || (z[2] === "g" && !!(ob && ob.noInput));
+    if (!on) { bx.dataset.sig = ""; return; }
+    if (bx.dataset.sig !== sig) { bx.innerHTML = mfHTML(ob, z[2]); bx.dataset.sig = sig; }
+    mfFill(bx, mfVals());
+  });
+  if (on) { var u = $(".build .unit"); if (u) u.hidden = true; }
+}
+function mfCollect(bx) {
+  var ob = OBS[S.i]; if (!ob || !ob.mf) return;
+  var n = ob.mfN(), vals = mfVals(); while (vals.length < n) vals.push("");
+  bx.querySelectorAll(".mfin").forEach(function (inp) { vals[+inp.dataset.mi] = inp.value.trim().replace(/−/g, "-"); });
+  var s = vals.slice(0, n).join("|"); if (/^\|*$/.test(s)) s = "";
+  $("#inVal").value = s; $("#rVal").value = s;
+  ["#mfG", "#mfR"].forEach(function (id) { var o = $(id); if (o && o !== bx) mfFill(o, vals); });
+}
+function mfPut(v) {
+  var ob = OBS[S.i]; if (!ob || !ob.mf) return;
+  var n = ob.mfN(), vals = mfVals(); while (vals.length < n) vals.push("");
+  var idx = MF.last.i;
+  if (idx == null || idx >= n) { idx = 0; for (var i = 0; i < n; i++) if (!vals[i]) { idx = i; break; } }
+  vals[idx] = String(v).replace(/−/g, "-");
+  var s = vals.slice(0, n).join("|"); $("#inVal").value = s; $("#rVal").value = s; mfRender(ob);
+}
+document.addEventListener("input", function (e) { var inp = e.target.closest(".mfin"); if (!inp) return; MF.last.i = +inp.dataset.mi; mfCollect(inp.closest(".mfbox")); });
+document.addEventListener("focusin", function (e) { var inp = e.target.closest && e.target.closest(".mfin"); if (inp) { MF.last.i = +inp.dataset.mi; MF.last.box = inp.closest(".mfbox").id; } });
+document.addEventListener("keydown", function (e) { if (e.key !== "Enter") return; var inp = e.target.closest && e.target.closest(".mfin"); if (!inp) return; e.preventDefault(); if (inp.closest("#mfR")) roomBuild(); else doBuild(); });
+document.addEventListener("click", function (e) {
+  var yb = e.target.closest(".mfyn button");
+  if (yb) {
+    var g = yb.closest(".mfyn"), bx = yb.closest(".mfbox"), ob = OBS[S.i], vals = mfVals(), n = ob.mfN(); while (vals.length < n) vals.push("");
+    vals[+g.dataset.myn] = yb.dataset.ynv; var s = vals.slice(0, n).join("|"); $("#inVal").value = s; $("#rVal").value = s;
+    SFX.click(); ["#mfG", "#mfR"].forEach(function (id) { var o = $(id); if (o) mfFill(o, vals); }); return;
+  }
+  var pm = e.target.closest("[data-mfpm]"); if (!pm) return;
+  var box = pm.closest(".mfbox"), i = MF.last.i == null ? 0 : MF.last.i, inp = box.querySelector('.mfin[data-mi="' + i + '"]') || box.querySelector(".mfin");
+  if (!inp) return; var v = inp.value.trim().replace(/−/g, "-"); inp.value = v.charAt(0) === "-" ? v.slice(1) : "-" + v; MF.last.i = +inp.dataset.mi;
+  SFX.click(); mfCollect(box); inp.focus();
+});
+
+Object.assign(EN, { "Lớp 10, 11, 12": "Grades 10, 11, 12", "Khe Mây · Hình giải tích": "Khe Mây · Coordinate geometry" });
 applyStatic(); syncSnd(); renderRoute(); renderResume();
-window.__khemay = { DT: DT, dtKey: dtKey, openDt: openDt, S9OB: S9OB, setLang: setLang, MISSING: MISSING, TX: TX,  readSave: readSave, snapshot: snapshot,  OB4: OB4, OB5: OB5, OB6: OB6, ROW: ROW, setRoute: function (a) { S.route = a.map(function (n) { return OBK[n]; }); renderRoute(); }, view: function () { return VIEW; }, OB3: OB3, getOBS: function () { return OBS; }, loadOb: loadOb, SFX: SFX, SND: SND, showReport: showReport, CAS: CAS, keyPress: keyPress, calcVars: calcVars, calcC: function () { return C; }, outTxt: outTxt, OB1: OB1, OB2: OB2, S: S, findPt: findPt, P: P };
+window.__khemay = { S12OB: S12OB, DT: DT, dtKey: dtKey, openDt: openDt, S9OB: S9OB, setLang: setLang, MISSING: MISSING, TX: TX,  readSave: readSave, snapshot: snapshot,  OB4: OB4, OB5: OB5, OB6: OB6, ROW: ROW, setRoute: function (a) { S.route = a.map(function (n) { return OBK[n]; }); renderRoute(); }, view: function () { return VIEW; }, OB3: OB3, getOBS: function () { return OBS; }, loadOb: loadOb, SFX: SFX, SND: SND, showReport: showReport, CAS: CAS, keyPress: keyPress, calcVars: calcVars, calcC: function () { return C; }, outTxt: outTxt, OB1: OB1, OB2: OB2, S: S, findPt: findPt, P: P };
 })();
 </script>
 
