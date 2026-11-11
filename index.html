@@ -7822,34 +7822,48 @@ var CS6 = s12Job("cs", {
     L("Ví dụ: cạnh 10 cm: S = 100 : (1 − 1/2) = 200 cm².", "Example: side 10 cm: S = 100 ÷ (1 − 1/2) = 200 cm².")]; }
 });
 
-/* CS7 · Quả bóng nảy (KM-DS-1107, thay thế CS5): tổng quãng đường, cấp số nhân lùi vô hạn */
+/* CS7 · Quả bóng nảy trong ống đứng (KM-DS-1107, thay thế CS5): tổng quãng đường, cấp số nhân lùi vô hạn. Ống trụ vừa lọt bóng nên bóng chỉ đi thẳng đứng, quãng đường đúng bằng h + 2(h₁ + h₂ + …). */
 var CS7_R = [[1, 2], [1, 3], [2, 3], [3, 4]];
 var CS7 = s12Job("cs", {
-  name: ["Quả bóng nảy", "The bouncing ball"], sub: ["tổng quãng đường quả bóng đi được cho tới khi nằm yên", "total distance until the ball stops"],
-  endName: ["quả bóng nảy", "bouncing ball"], what: ["Tổng quãng đường quả bóng đi được (m)", "Total distance travelled by the ball (m)"], unit: "m", dp: 2,
+  name: ["Quả bóng nảy", "The bouncing ball"], sub: ["tổng quãng đường bóng nảy trong ống đứng cho tới khi nằm yên", "total distance the ball travels in an upright tube until it stops"],
+  endName: ["quả bóng nảy", "bouncing ball"], what: ["Tổng quãng đường bóng đi được trong ống (m)", "Total distance the ball travels in the tube (m)"], unit: "m", dp: 2,
   btnText: ["Nhập mật mã", "Enter the code"], H: 430,
-  lead: ["Ở trạm cuối, một quả <b>bóng cao su</b> được thả từ trên giá xuống nền đá. Mỗi lần chạm đất nó nảy lên bằng một phần cố định của độ cao trước đó. Mật mã là <b>tổng quãng đường</b> quả bóng đi được (cả rơi xuống và nảy lên) cho tới khi nằm yên.",
-    "At the last station a <b>rubber ball</b> is dropped from a frame onto the rock floor. Each bounce reaches a fixed fraction of the previous height. The code is the <b>total distance</b> it travels (down and up) until it comes to rest."],
-  taskT: function () { return L("<b>Nhiệm vụ:</b> các độ cao nảy lập thành cấp số nhân lùi vô hạn. Tính tổng quãng đường quả bóng đi được.<br><b>Cần tìm:</b> tổng quãng đường (m).<br><b>Dữ kiện:</b> chạm thước đo độ cao lúc thả và độ cao lần nảy thứ nhất.",
-    "<b>Task:</b> the bounce heights form an infinite decreasing geometric sequence. Find the total distance.<br><b>Find:</b> the total distance (m).<br><b>Data:</b> tap the scale for the drop height and the first bounce height."); },
-  make: function () { var r = pickOne(CS7_R), h = r[1] * rnd(2, Math.floor(20 / r[1])), q = r[0] / r[1], h1 = h * q; return { h: h, h1: h1, q: q, rn: r, ans: Math.round(h * (1 + q) / (1 - q) * 100) / 100 }; },
+  lead: ["Trạm cuối có một <b>ống trụ trong suốt</b> dựng thẳng đứng, vừa lọt một quả <b>bóng cao su</b>. Bóng được thả trong ống xuống đáy đá, nên chỉ đi lên, đi xuống dọc theo thân ống. Mỗi lần chạm đáy, bóng nảy lên bằng một phần cố định của độ cao trước đó. Mật mã là <b>tổng quãng đường</b> bóng đi được trong ống (cả lúc rơi xuống và lúc nảy lên) cho tới khi nằm yên.",
+    "The last station has an upright <b>clear tube</b>, just wide enough for a <b>rubber ball</b>. The ball is dropped inside the tube onto the rock floor, so it can only move straight up and down. Each bounce reaches a fixed fraction of the previous height. The code is the <b>total distance</b> the ball travels in the tube (falling and rising) until it comes to rest."],
+  taskT: function () { return L("<b>Nhiệm vụ:</b> các độ cao nảy lập thành cấp số nhân lùi vô hạn. Tính tổng quãng đường bóng đi được trong ống.<br><b>Cần tìm:</b> tổng quãng đường (m).<br><b>Dữ kiện:</b> chạm thước đo độ cao lúc thả và độ cao lần nảy thứ nhất.",
+    "<b>Task:</b> the bounce heights form an infinite decreasing geometric sequence. Find the total distance the ball travels in the tube.<br><b>Find:</b> the total distance (m).<br><b>Data:</b> tap the scale for the drop height and the first bounce height."); },
+  make: function () { var r = pickOne(CS7_R), m = rnd(Math.ceil(10 / r[1]), Math.floor(30 / r[1])), h = Math.round(r[1] * m) / 10, h1 = Math.round(r[0] * m) / 10, q = r[0] / r[1]; return { h: h, h1: h1, q: q, rn: r, ans: Math.round(h * (1 + q) / (1 - q) * 100) / 100 }; },
+  segs: function (p) { var a = [p.h], hh = p.h1; for (var i = 0; i < 7; i++) { a.push(hh, hh); hh *= p.q; } return a; },
+  geo: function (p) { var gy = 396, yt = 118; return { gy: gy, yt: yt, sc: (gy - yt) / p.h, tx: 92, ax: 240, dx: 7 }; },
   tol: function () { return 0.01; },
   base: function (p) {
-    var o = caveBg(p.bottom, 23), gy = 396, top = 100, sc = (gy - top) / p.h, x = 70, hh = p.h, o2 = "";
-    o += '<path d="M40 ' + top + ' H92 M50 ' + top + ' V' + gy + '" stroke="#a1887f" stroke-width="4"/>';
-    o += '<rect x="20" y="' + top + '" width="16" height="' + (gy - top) + '" fill="#ffe082" stroke="#5d4037" stroke-width="1.4"/>';
-    for (var m = 0; m <= p.h; m += Math.max(1, Math.round(p.h / 10))) o += '<path d="M20 ' + (gy - m * sc).toFixed(1) + ' h8" stroke="#5d4037" stroke-width="1.2"/>';
-    var d = "M" + x + " " + top + " L" + (x + 10) + " " + gy;
-    x += 10;
-    for (var i = 0; i < 7; i++) { hh *= p.q; var w = 34 * Math.pow(p.q, i * 0.5) + 8; d += " Q" + (x + w / 2) + " " + (gy - 2 * hh * sc) + " " + (x + w) + " " + gy; x += w; }
-    o += '<path d="' + d + '" fill="none" stroke="#ffcc80" stroke-width="2.2" stroke-dasharray="6 4"/>';
-    o += '<circle cx="70" cy="' + (top + 10) + '" r="10" fill="#e53935" stroke="#fff" stroke-width="2"/><path d="M62 ' + (top + 6) + ' Q70 ' + (top + 14) + ' 78 ' + (top + 6) + '" stroke="#fff" stroke-width="1.6" fill="none"/>';
-    o += '<rect x="0" y="' + gy + '" width="360" height="' + (p.bottom - gy) + '" fill="#4e3b2f"/>';
-    o += '<g data-it="h" style="cursor:pointer"><rect x="96" y="' + (top - 12) + '" width="132" height="22" rx="6" fill="' + (p.seen.h ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(104, top + 4, p.seen.h ? L("thả từ ", "dropped from ") + fmt(p.h, 2) + " m" : L("độ cao thả: chạm", "drop height: tap"), { fs: 11.5, fw: 800, c: p.seen.h ? INK : "#90a4ae" }) + "</g>";
-    var bx = 80 + 20, by = gy - p.h1 * sc;
-    o += '<path d="M' + (bx + 6) + " " + by.toFixed(1) + " H" + (bx + 60) + '" stroke="#80deea" stroke-width="1.6" stroke-dasharray="3 3"/>';
-    o += '<g data-it="h1" style="cursor:pointer"><rect x="' + (bx + 62) + '" y="' + (by - 12).toFixed(1) + '" width="150" height="22" rx="6" fill="' + (p.seen.h1 ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(bx + 70, by + 4, p.seen.h1 ? L("nảy lần 1 cao ", "1st bounce ") + fmt(p.h1, 2) + " m" : L("lần nảy thứ nhất: chạm", "1st bounce: tap"), { fs: 11.5, fw: 800, c: p.seen.h1 ? INK : "#90a4ae" }) + "</g>";
+    var g = this.geo(p), o = caveBg(p.bottom, 23), tx = g.tx, by = g.gy - p.h1 * g.sc;
+    o += '<rect x="0" y="' + g.gy + '" width="360" height="' + (p.bottom - g.gy) + '" fill="#4e3b2f"/><rect x="' + (tx - 26) + '" y="' + (g.gy - 6) + '" width="52" height="8" rx="2" fill="#78909c" stroke="#263238" stroke-width="1.4"/>';
+    o += '<path d="M' + (tx + 40) + " " + (g.yt - 24) + " V" + g.gy + '" stroke="#a1887f" stroke-width="4"/>';
+    [g.yt + 10, (g.yt + g.gy) / 2, g.gy - 30].forEach(function (y) { o += '<path d="M' + (tx + 16) + " " + y + " H" + (tx + 40) + '" stroke="#a1887f" stroke-width="3"/><rect x="' + (tx + 13) + '" y="' + (y - 4) + '" width="6" height="8" fill="#8d6e63"/>'; });
+    o += '<rect x="' + (tx - 16) + '" y="' + (g.yt - 22) + '" width="32" height="' + (g.gy - g.yt + 18) + '" fill="#b3e5fc" fill-opacity=".18" stroke="#b3e5fc" stroke-width="2"/><ellipse cx="' + tx + '" cy="' + (g.yt - 22) + '" rx="16" ry="4" fill="#b3e5fc" fill-opacity=".35" stroke="#e1f5fe" stroke-width="1.6"/><path d="M' + (tx - 10) + " " + (g.yt - 16) + " V" + (g.gy - 10) + '" stroke="#fff" stroke-width="3" opacity=".35"/>';
+    o += '<rect x="44" y="' + g.yt + '" width="14" height="' + (g.gy - g.yt) + '" fill="#ffe082" stroke="#5d4037" stroke-width="1.4"/>';
+    for (var m = 0; m <= p.h + 1e-9; m += 0.5) o += '<path d="M44 ' + (g.gy - m * g.sc).toFixed(1) + " h" + (m % 1 ? 5 : 9) + '" stroke="#5d4037" stroke-width="1.2"/>' + (m % 1 || !m ? "" : T2(40, g.gy - m * g.sc + 4, m + "m", { a: "end", fs: 9, fw: 700, c: "#ffe082" }));
+    o += '<circle cx="' + tx + '" cy="' + (g.yt - 2) + '" r="11" fill="#e53935" stroke="#fff" stroke-width="2"/><path d="M' + (tx - 8) + " " + (g.yt - 6) + " Q" + tx + " " + (g.yt + 2) + " " + (tx + 8) + " " + (g.yt - 6) + '" stroke="#fff" stroke-width="1.6" fill="none"/>';
+    o += '<path d="M' + (tx - 16) + " " + by.toFixed(1) + " H" + (tx + 16) + '" stroke="#80deea" stroke-width="2" stroke-dasharray="3 3"/><circle cx="' + tx + '" cy="' + (by - 11).toFixed(1) + '" r="11" fill="none" stroke="#ef9a9a" stroke-width="1.6" stroke-dasharray="3 3"/>';
+    o += '<g data-it="h" style="cursor:pointer"><rect x="140" y="' + (g.yt - 34) + '" width="96" height="22" rx="6" fill="' + (p.seen.h ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(147, g.yt - 19, p.seen.h ? L("thả từ ", "from ") + fmt(p.h, 2) + " m" : L("độ cao thả?", "drop height?"), { fs: 11.5, fw: 800, c: p.seen.h ? INK : "#90a4ae" }) + "</g>" + (p.seen.h ? "" : qBadge(234, g.yt - 34));
+    o += '<path d="M' + (tx + 12) + " " + (g.yt - 2) + " L140 " + (g.yt - 23) + '" stroke="' + CS_CARD + '" stroke-width="1.2"/>';
+    o += '<g data-it="h1" style="cursor:pointer"><rect x="140" y="' + (by - 11).toFixed(1) + '" width="96" height="22" rx="6" fill="' + (p.seen.h1 ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(147, by + 4, p.seen.h1 ? L("nảy ", "rises ") + fmt(p.h1, 2) + " m" : L("nảy lần 1?", "1st bounce?"), { fs: 11.5, fw: 800, c: p.seen.h1 ? INK : "#90a4ae" }) + "</g>" + (p.seen.h1 ? "" : qBadge(234, by - 11));
+    o += '<path d="M' + (tx + 16) + " " + by.toFixed(1) + " H140" + '" stroke="#80deea" stroke-width="1.2" stroke-dasharray="3 3"/>';
+    o += this.arrows(p, g, null) + T2(352, g.gy + 20, L("các đoạn bóng đi trong ống", "the ball's runs in the tube"), { a: "end", fs: 10.5, fw: 700, c: "#d1c4e9" });
     return o + lockBox(318, 58, "? ? ?", false);
+  },
+  arrows: function (p, g, lim, col) {
+    var sg = this.segs(p), o = "", cum = 0;
+    sg.forEach(function (L0, i) {
+      var x = g.ax + i * g.dx, down = i % 2 === 0, y0 = g.gy - L0 * g.sc, len = L0;
+      if (lim != null) { if (cum >= lim) { cum += L0; return; } len = Math.min(L0, lim - cum); }
+      cum += L0;
+      var ya = down ? y0 : g.gy, yb = down ? y0 + len * g.sc : g.gy - len * g.sc, c = lim != null ? col : (down ? "#ffb74d" : "#4dd0e1"), w = lim != null ? 4 : 2;
+      o += '<path d="M' + x + " " + ya.toFixed(1) + " L" + x + " " + yb.toFixed(1) + '" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round"/>';
+      if (lim == null && L0 * g.sc > 14) o += '<path d="M' + (x - 3) + " " + (down ? yb - 5 : yb + 5).toFixed(1) + " L" + x + " " + yb.toFixed(1) + " L" + (x + 3) + " " + (down ? yb - 5 : yb + 5).toFixed(1) + '" fill="none" stroke="' + c + '" stroke-width="1.6"/>';
+    });
+    return o + (lim == null ? T2(g.ax + sg.length * g.dx + 2, g.gy - 4, "…", { fs: 14, fw: 800, c: "#d1c4e9" }) : "");
   },
   items: function (p) { return { h: { note: ["Bóng thả từ độ cao " + fmt(p.h, 2) + " m", "Dropped from " + fmt(p.h, 2) + " m"], val: p.h, sym: "h", sfx: "tape", say: ["Quả bóng được thả từ độ cao <b>" + fmt(p.h, 2) + " m</b>.", "The ball is dropped from <b>" + fmt(p.h, 2) + " m</b>."] },
     h1: { note: ["Lần nảy thứ nhất cao " + fmt(p.h1, 2) + " m", "First bounce: " + fmt(p.h1, 2) + " m"], val: p.h1, sym: "h₁", sfx: "tape", say: ["Lần nảy thứ nhất bóng lên cao <b>" + fmt(p.h1, 2) + " m</b>.", "The first bounce reaches <b>" + fmt(p.h1, 2) + " m</b>."] } }; },
@@ -7858,7 +7872,12 @@ var CS7 = s12Job("cs", {
     if (Math.abs(v - 2 * p.h / (1 - p.q)) < 0.01) return { ok: false, kind: "long", msg: L("Lần rơi đầu tiên chỉ đi xuống, không có lượt đi lên. Chỉ nhân 2 cho các lần nảy.", "The first drop only goes down. Only the bounces count twice.") };
     return null;
   },
-  fx: function (p, k, v) { return k === "ok" ? lockBox(318, 58, fmt(p.ans, 2), true) + cspill(240, 418, L("Tổng: ", "Total: ") + fmt(p.ans, 2) + " m", "#c8e6c9") : lockBox(318, 58, fmt(v, 2), false, true); },
+  fx: function (p, k, v) {
+    var g = this.geo(p), col = k === "ok" ? "#69f0ae" : "#ff5252", tot = this.segs(p).reduce(function (s, x) { return s + x; }, 0);
+    var o = this.arrows(p, g, k === "ok" ? tot : Math.max(0, Math.min(v, tot)), col);
+    if (k === "long") o += '<path d="M' + (g.ax + 16 * g.dx) + " " + g.gy + " V" + (g.gy - Math.min(200, (v - p.ans) * g.sc)).toFixed(1) + '" stroke="#ff5252" stroke-width="5" stroke-linecap="round"/>' + T2(g.ax + 16 * g.dx, g.gy - Math.min(200, (v - p.ans) * g.sc) - 8, L("thừa", "extra"), { a: "middle", fs: 11, fw: 800, c: "#ff8a80" });
+    return o + (k === "ok" ? lockBox(318, 58, fmt(p.ans, 2), true) + cspill(240, 418, L("Tổng: ", "Total: ") + fmt(p.ans, 2) + " m", "#c8e6c9") : lockBox(318, 58, fmt(v, 2), false, true));
+  },
   okMsg: ["Đúng mật mã! Rương kho báu đã mở khóa.", "Right code! The treasure chest is unlocked."],
   shortMsg: ["Chưa đủ quãng đường. Nhớ cả lượt đi lên và lượt rơi xuống của mỗi lần nảy.", "Not enough distance. Remember each bounce goes up and comes back down."],
   longMsg: ["Quãng đường thừa. Kiểm tra lại lần rơi đầu tiên.", "Too much distance. Check the first drop."],
@@ -7868,7 +7887,7 @@ var CS7 = s12Job("cs", {
   hints: function () { return [
     L("Công bội q = h₁ : h. Các độ cao nảy h₁, h₂, … lập thành cấp số nhân lùi vô hạn.", "The ratio is q = h₁ ÷ h. The bounce heights h₁, h₂, … form an infinite decreasing geometric sequence."),
     L("Quãng đường = lần rơi đầu h + 2 × (tổng các độ cao nảy), vì mỗi lần nảy bóng đi lên rồi rơi xuống. Tổng các độ cao nảy = h₁/(1 − q).", "Distance = first drop h + 2 × (sum of bounce heights), because each bounce goes up and comes down. Sum of bounce heights = h₁/(1 − q)."),
-    L("Ví dụ: thả từ 16 m, nảy lên 8 m (q = 1/2): S = 16 + 2·8/(1 − 1/2) = 16 + 32 = 48 m.", "Example: dropped from 16 m, bounces to 8 m (q = 1/2): S = 16 + 2·8/(1 − 1/2) = 16 + 32 = 48 m.")]; }
+    L("Ví dụ: thả từ 2 m, nảy lên 1 m (q = 1/2): S = 2 + 2·1/(1 − 1/2) = 2 + 4 = 6 m.", "Example: dropped from 2 m, bounces to 1 m (q = 1/2): S = 2 + 2·1/(1 − 1/2) = 2 + 4 = 6 m.")]; }
 });
 
 S12_POOL.cs = [CS1, CS2, CS3, CS4, [CS5, CS6, CS7]];
@@ -11868,7 +11887,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.23";
+var APP_VER = "3.24";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
