@@ -7526,7 +7526,12 @@ var CS1 = s12Job("cs", {
     "Station 1 is at the top of a wooden staircase with many flights along the cave wall. The lock code is the <b>number of steps in the last flight</b>. Count the first flights to find the pattern!"],
   taskT: function (p) { return L("<b>Nhiệm vụ:</b> cầu thang có " + p.n + " nhịp, số bậc các nhịp lập thành cấp số cộng. Tìm số bậc của nhịp thứ " + p.n + ".<br><b>Cần tìm:</b> số bậc (số tự nhiên).<br><b>Dữ kiện:</b> chạm vào từng nhịp đầu để đếm bậc, chạm biển báo để biết số nhịp.",
     "<b>Task:</b> the staircase has " + p.n + " flights and the step counts form an arithmetic sequence. Find the number of steps in flight " + p.n + ".<br><b>Find:</b> the number of steps (a whole number).<br><b>Data:</b> tap the first flights to count their steps and tap the sign for the number of flights."); },
-  make: function () { var u1 = rnd(6, 12), d = rnd(1, 3), n = rnd(7, 13); return { u1: u1, d: d, n: n, ans: u1 + (n - 1) * d }; },
+  make: function () {
+    var n, d, u1;
+    if (Math.random() < 1 / 3) { d = -rnd(2, 3); n = rnd(7, 11); u1 = rnd(4, 8) - (n - 1) * d; }
+    else { d = rnd(2, 4); n = rnd(7, 12); u1 = rnd(5, 10); if (u1 + (n - 1) * d > 50) return this.make(); }
+    return { u1: u1, d: d, n: n, ans: u1 + (n - 1) * d };
+  },
   tol: function () { return 0.01; },
   stair: function (k, x0, y0, w, h, dir, col, sw) {
     var sx = w / k, sy = h / k, x = x0, y = y0, d = "M" + x0 + " " + y0;
@@ -7561,7 +7566,8 @@ var CS1 = s12Job("cs", {
     return o;
   },
   special: function (p, v) {
-    if (Math.abs(v - (p.u1 + p.n * p.d)) < 0.01) return { ok: false, kind: "long", msg: L("Nhịp thứ n có u₁ + (n − 1)d bậc, không phải u₁ + n·d.", "Flight n has u₁ + (n − 1)d steps, not u₁ + n·d.") };
+    if (Math.abs(v - (p.u1 + p.n * p.d)) < 0.01) return { ok: false, kind: v > p.ans ? "long" : "short", msg: L("Nhịp thứ n có u₁ + (n − 1)d bậc, không phải u₁ + n·d.", "Flight n has u₁ + (n − 1)d steps, not u₁ + n·d.") };
+    if (p.d < 0 && Math.abs(v - (p.u1 - (p.n - 1) * p.d)) < 0.01) return { ok: false, kind: "long", msg: L("Các nhịp ngắn dần khi lên cao, nên công sai d là số âm (d = u₂ − u₁ = " + p.d + ").", "The flights get shorter going up, so the common difference is negative (d = u₂ − u₁ = " + p.d + ").") };
     if (Math.abs(v - p.n * (2 * p.u1 + (p.n - 1) * p.d) / 2) < 0.01) return { ok: false, kind: "long", msg: L("Đó là tổng số bậc của cả cầu thang. Mật mã chỉ là số bậc của nhịp cuối.", "That's the total number of steps. The code is only the steps in the last flight.") };
     return null;
   },
@@ -7571,40 +7577,40 @@ var CS1 = s12Job("cs", {
   shortMsg: ["Chưa đủ bậc, cầu thang chưa lên tới trạm. Kiểm tra lại công sai và số nhịp.", "Not enough steps to reach the station. Check the common difference and the number of flights."],
   longMsg: ["Thừa bậc, vượt quá chỗ trạm. Kiểm tra lại công sai và số nhịp.", "Too many steps, past the station. Check the common difference and the number of flights."],
   passTitle: ["khóa trạm 1 đã mở!", "station 1 unlocked!"],
-  rows: function (p) { return [["u₁, d", p.u1 + "; " + p.d], ["n", p.n], ["uₙ = u₁ + (n − 1)d", p.u1 + " + " + (p.n - 1) + "·" + p.d + " = " + p.ans]]; },
+  rows: function (p) { var ds = p.d < 0 ? "(−" + (-p.d) + ")" : String(p.d); return [["u₁, d", p.u1 + "; " + (p.d < 0 ? "−" + (-p.d) : p.d)], ["n", p.n], ["uₙ = u₁ + (n − 1)d", p.u1 + " + " + (p.n - 1) + "·" + ds + " = " + p.ans]]; },
   formula: function () { return "uₙ = u₁ + (n − 1)d"; },
   hints: function () { return [
-    L("Đếm bậc ba nhịp đầu: mỗi nhịp hơn nhịp trước cùng một số bậc, đó là <b>cấp số cộng</b> với công sai d.", "Count the first three flights: each has the same number of extra steps, so it's an <b>arithmetic sequence</b> with common difference d."),
+    L("Đếm bậc ba nhịp đầu: mỗi nhịp hơn (hoặc kém) nhịp trước cùng một số bậc, đó là <b>cấp số cộng</b> với công sai d = u₂ − u₁ (nhịp ngắn dần thì d âm).", "Count the first three flights: each has the same number of steps more (or fewer) than the one before, so it's an <b>arithmetic sequence</b> with d = u₂ − u₁ (negative if the flights get shorter)."),
     L("Số hạng thứ n: uₙ = u₁ + (n − 1)d. Nhịp cuối là nhịp thứ n (đọc ở biển báo).", "The n-th term: uₙ = u₁ + (n − 1)d. The last flight is flight n (read the sign)."),
     L("Ví dụ: u₁ = 10, d = 2, n = 10: u₁₀ = 10 + 9·2 = 28 bậc.", "Example: u₁ = 10, d = 2, n = 10: u₁₀ = 10 + 9·2 = 28 steps.")]; }
 });
 
 /* CS2 · Cổng bánh răng (KM-DS-1102): số hạng thứ n của cấp số nhân */
 var CS2 = s12Job("cs", {
-  name: ["Cổng bánh răng", "The gear gate"], sub: ["bán kính bánh răng thứ n (cấp số nhân)", "radius of gear n (geometric sequence)"],
-  endName: ["cổng bánh răng", "gear gate"], what: ["Bán kính bánh răng còn thiếu (cm)", "Radius of the missing gear (cm)"], unit: "cm", dp: 2,
+  name: ["Cổng bánh răng", "The gear gate"], sub: ["số răng của bánh răng thứ n (cấp số nhân)", "teeth on gear n (geometric sequence)"],
+  endName: ["cổng bánh răng", "gear gate"], what: ["Số răng của bánh răng còn thiếu", "Teeth on the missing gear"], unit: "", dp: 0,
   btnText: ["Lắp bánh răng", "Fit the gear"], H: 430,
-  lead: ["Trạm 2 là mô hình <b>cổng cơ khí</b> chạy bằng một dãy bánh răng. Bánh răng cuối cùng bị tháo ra để làm mật mã: em phải tính đúng <b>bán kính của nó</b> thì mới lắp vừa.",
-    "Station 2 is a model <b>mechanical gate</b> driven by a row of gears. The last gear has been taken out as the puzzle: work out its <b>radius</b> to fit it back."],
-  taskT: function (p) { return L("<b>Nhiệm vụ:</b> bán kính các bánh răng lập thành cấp số nhân. Tính bán kính bánh răng thứ " + p.n + ".<br><b>Cần tìm:</b> bán kính (cm).<br><b>Dữ kiện:</b> chạm thước kẹp vào các bánh răng đầu, chạm bảng ghi chú để biết số bánh răng.",
-    "<b>Task:</b> the gear radii form a geometric sequence. Find the radius of gear " + p.n + ".<br><b>Find:</b> the radius (cm).<br><b>Data:</b> tap the calliper on the first gears and tap the note for the number of gears."); },
+  lead: ["Trạm 2 là mô hình <b>cổng cơ khí</b> chạy bằng một dãy bánh răng ăn khớp nhau. Bánh răng cuối cùng bị tháo ra để làm mật mã: em phải tính đúng <b>số răng của nó</b> thì thợ mới làm được bánh vừa khớp. Răng của mọi bánh cùng cỡ, nên bánh to thì nhiều răng hơn.",
+    "Station 2 is a model <b>mechanical gate</b> driven by a row of meshing gears. The last gear has been taken out as the puzzle: work out <b>how many teeth</b> it has so the fitter can make one that meshes. All the teeth are the same size, so bigger gears have more teeth."],
+  taskT: function (p) { return L("<b>Nhiệm vụ:</b> số răng của các bánh răng lập thành cấp số nhân. Tính số răng của bánh răng thứ " + p.n + ".<br><b>Cần tìm:</b> số răng (số tự nhiên).<br><b>Dữ kiện:</b> chạm vào các bánh răng đầu để đếm răng, chạm ghi chú của thợ để biết số bánh răng.",
+    "<b>Task:</b> the numbers of teeth form a geometric sequence. Find the number of teeth on gear " + p.n + ".<br><b>Find:</b> the number of teeth (a whole number).<br><b>Data:</b> tap the first gears to count their teeth and tap the fitter's note for the number of gears."); },
   make: function () {
-    var c = pickOne([[2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [16, 1.5], [32, 1.5], [8, 1.5]]), u1 = c[0], q = c[1], n;
-    for (var k = 0; k < 50; k++) { n = rnd(5, 7); var un = u1 * Math.pow(q, n - 1); if (un <= 200 && Math.abs(un * 4 - Math.round(un * 4)) < 1e-9) break; }
-    var ans = u1 * Math.pow(q, n - 1); if (ans > 200) return this.make();
-    return { u1: u1, q: q, n: n, ans: ans };
+    var c = [], z;
+    for (z = 6; z <= 12; z++) [5, 6].forEach(function (n) { if (z * Math.pow(2, n - 1) <= 200) c.push([z, 2, n]); });
+    [[16, 5], [32, 5]].forEach(function (x) { for (var r = 0; r < 3; r++) c.push([x[0], 1.5, x[1]]); });
+    var k = pickOne(c); return { u1: k[0], q: k[1], n: k[2], ans: k[0] * Math.pow(k[1], k[2] - 1) };
   },
   tol: function () { return 0.01; },
   base: function (p) {
-    var o = caveBg(p.bottom, 7), cy = 282, qv = Math.min(p.q, 1.55), rs = [17, 17 * qv, 17 * qv * qv];
+    var o = caveBg(p.bottom, 7), cy = 282, zs = [0, 1, 2].map(function (i) { return p.u1 * Math.pow(p.q, i); }), kz = 44 / zs[2], rs = zs.map(function (z) { return z * kz; });
     o += '<rect x="10" y="' + (cy - 120) + '" width="340" height="240" rx="16" fill="#3e2f22" stroke="#8d6e63" stroke-width="3" opacity=".9"/>';
     for (var bx = 10; bx < 350; bx += 34) o += '<path d="M' + bx + " " + (cy - 120) + " v240" + '" stroke="#5d4037" stroke-width="1"/>';
     o += '<path d="M60 ' + (cy - 120) + ' V' + (cy - 60) + ' Q180 ' + (cy - 116) + ' 300 ' + (cy - 60) + ' V' + (cy - 120) + '" fill="#4e3b2f" stroke="#8d6e63" stroke-width="2"/><path d="M180 ' + (cy - 92) + ' V' + (cy - 62) + '" stroke="#8d6e63" stroke-width="2"/>' + T2(180, cy - 100, L("CỔNG CƠ KHÍ", "MECHANICAL GATE"), { a: "middle", fs: 11, fw: 800, c: "#ffcc80" });
     [70, 290].forEach(function (x0) { o += '<circle cx="' + x0 + '" cy="' + (cy - 70) + '" r="4" fill="#bcaaa4" stroke="#3e2723"/>'; });
     var x = 46, cx = [];
     rs.forEach(function (r, i) { if (i) x += rs[i - 1] + r - 2; cx.push(x); });
-    rs.forEach(function (r, i) { var it = "g" + (i + 1); o += gearP(cx[i], cy, r, 0, ["#ffd54f", "#ffca28", "#ffb300"][i], i * 0.3) + '<circle data-it="' + it + '" cx="' + cx[i] + '" cy="' + cy + '" r="' + Math.max(r + 6, 18) + '" fill="#fff" fill-opacity="0" style="cursor:pointer"/>';
-      o += p.seen[it] ? cspill(cx[i], i === 1 ? cy + r + 22 : cy - r - 12, "r" + (i + 1) + " = " + fmt(p.u1 * Math.pow(p.q, i), 2) + " cm", "#fff8e1") : qBadge(cx[i], cy - r - 14); });
+    rs.forEach(function (r, i) { var it = "g" + (i + 1); o += gearP(cx[i], cy, r, zs[i], ["#ffd54f", "#ffca28", "#ffb300"][i], i * 0.3) + '<circle data-it="' + it + '" cx="' + cx[i] + '" cy="' + cy + '" r="' + Math.max(r + 6, 18) + '" fill="#fff" fill-opacity="0" style="cursor:pointer"/>';
+      o += p.seen[it] ? cspill(cx[i], i === 1 ? cy + r + 22 : cy - r - 12, L(zs[i] + " răng", zs[i] + " teeth"), "#fff8e1") : qBadge(cx[i], cy - r - 14); });
     var lastX = cx[2] + rs[2] + 8; o += T2(lastX, cy + 4, "…", { fs: 22, fw: 800, c: "#ffe082" });
     o += '<circle cx="296" cy="' + cy + '" r="56" fill="none" stroke="#ffcf3f" stroke-width="2.4" stroke-dasharray="8 6"/>' + T2(296, cy + 5, L("bánh " + p.n + ": ?", "gear " + p.n + ": ?"), { a: "middle", fs: 13, fw: 800, c: "#ffe082" });
     o += '<g data-it="s" style="cursor:pointer"><rect x="14" y="36" width="190" height="40" rx="8" fill="' + (p.seen.s ? "#fff" : "#fffbe6") + '" stroke="' + CS_CARD + '" stroke-width="2"/>' + T2(24, 52, L("GHI CHÚ CỦA THỢ", "FITTER'S NOTE"), { fs: 11, fw: 800, c: CS_CARD }) + T2(24, 69, p.seen.s ? L("Dãy có " + p.n + " bánh răng", "The row has " + p.n + " gears") : L("chạm để xem", "tap to read"), { fs: 12, fw: 800, c: p.seen.s ? INK : "#90a4ae" }) + "</g>" + (p.seen.s ? "" : qBadge(194, 46));
@@ -7613,25 +7619,25 @@ var CS2 = s12Job("cs", {
   },
   items: function (p) {
     var o = { s: { note: ["Dãy có " + p.n + " bánh răng", "The row has " + p.n + " gears"], val: p.n, sym: "n", sfx: "pick", say: ["Ghi chú: dãy có <b>" + p.n + " bánh răng</b>, bánh cuối đang bị tháo.", "Note: the row has <b>" + p.n + " gears</b>; the last one is missing."] } };
-    [1, 2, 3].forEach(function (i) { var r = p.u1 * Math.pow(p.q, i - 1); o["g" + i] = { note: ["Bánh răng " + i + ": bán kính " + fmt(r, 2) + " cm", "Gear " + i + ": radius " + fmt(r, 2) + " cm"], val: r, sym: "r" + ["₁", "₂", "₃"][i - 1], sfx: "tape", say: ["Thước kẹp: bánh răng " + i + " có bán kính <b>" + fmt(r, 2) + " cm</b>.", "Calliper: gear " + i + " has radius <b>" + fmt(r, 2) + " cm</b>."] }; });
+    [1, 2, 3].forEach(function (i) { var z = p.u1 * Math.pow(p.q, i - 1); o["g" + i] = { note: ["Bánh răng " + i + ": " + z + " răng", "Gear " + i + ": " + z + " teeth"], val: z, sym: "u" + ["₁", "₂", "₃"][i - 1], sfx: "pick", say: ["Em đếm được bánh răng " + i + " có <b>" + z + " răng</b>.", "You count <b>" + z + " teeth</b> on gear " + i + "."] }; });
     return o;
   },
   special: function (p, v) {
-    if (Math.abs(v - p.u1 * Math.pow(p.q, p.n)) < 0.01) return { ok: false, kind: "long", msg: L("Bánh thứ n có bán kính u₁·qⁿ⁻¹ (số mũ là n − 1).", "Gear n has radius u₁·qⁿ⁻¹ (the exponent is n − 1).") };
-    var dd = p.u1 * (p.q - 1); if (Math.abs(v - (p.u1 + (p.n - 1) * dd)) < 0.01) return { ok: false, kind: "short", msg: L("Các bán kính không tăng đều một lượng, mà gấp lên cùng một số lần: đây là cấp số nhân, không phải cấp số cộng.", "The radii don't grow by the same amount; they are multiplied by the same number: it's a geometric sequence, not arithmetic.") };
+    if (Math.abs(v - p.u1 * Math.pow(p.q, p.n)) < 0.01) return { ok: false, kind: "long", msg: L("Bánh thứ n có u₁·qⁿ⁻¹ răng (số mũ là n − 1).", "Gear n has u₁·qⁿ⁻¹ teeth (the exponent is n − 1).") };
+    var dd = p.u1 * (p.q - 1); if (Math.abs(v - (p.u1 + (p.n - 1) * dd)) < 0.01) return { ok: false, kind: "short", msg: L("Số răng không tăng đều một lượng, mà gấp lên cùng một số lần: đây là cấp số nhân, không phải cấp số cộng.", "The radii don't grow by the same amount; they are multiplied by the same number: it's a geometric sequence, not arithmetic.") };
     return null;
   },
-  fx: function (p, k, v) { var r = Math.max(10, Math.min(90, 56 * v / p.ans)); return gearP(296, 282, r, 0, k === "ok" ? "#ffca28" : "#ff8a65", 0.2) + (k === "ok" ? lockBox(318, 60, fmt(p.ans, 2), true) : lockBox(318, 60, fmt(v, 2), false, true) + T2(180, 412, k === "short" ? L("Nhỏ quá, không ăn khớp!", "Too small, it won't mesh!") : L("To quá, kẹt cứng!", "Too big, it jams!"), { a: "middle", fs: 13, fw: 800, c: "#ff8a80" })); },
+  fx: function (p, k, v) { var r = Math.max(10, Math.min(90, 56 * v / p.ans)); return gearP(296, 282, r, Math.max(6, Math.min(240, Math.round(v))), k === "ok" ? "#ffca28" : "#ff8a65", 0.2) + (k === "ok" ? lockBox(318, 60, String(p.ans), true) : lockBox(318, 60, fmt(v, 2), false, true) + T2(180, 412, k === "short" ? L("Nhỏ quá, không ăn khớp!", "Too small, it won't mesh!") : L("To quá, kẹt cứng!", "Too big, it jams!"), { a: "middle", fs: 13, fw: 800, c: "#ff8a80" })); },
   okMsg: ["Vừa khít! Bánh răng ăn khớp, cổng từ từ mở.", "A perfect fit! The gears mesh and the gate slowly opens."],
   shortMsg: ["Bánh răng nhỏ quá, không ăn khớp với bánh bên cạnh.", "Gear too small, it doesn't mesh with its neighbour."],
   longMsg: ["Bánh răng to quá, kẹt cứng cả dãy.", "Gear too big, it jams the whole row."],
   passTitle: ["cổng bánh răng đã mở!", "gear gate open!"],
-  rows: function (p) { return [["u₁, q", fmt(p.u1, 2) + " cm; " + fmt(p.q, 2)], ["n", p.n], ["uₙ = u₁·qⁿ⁻¹", fmt(p.u1, 2) + "·" + fmt(p.q, 2) + supN(p.n - 1) + " = " + fmt(p.ans, 2) + " cm"]]; },
+  rows: function (p) { return [["u₁, q", p.u1 + L(" răng; ", " teeth; ") + fmt(p.q, 2)], ["n", p.n], ["uₙ = u₁·qⁿ⁻¹", p.u1 + "·" + fmt(p.q, 2) + supN(p.n - 1) + " = " + p.ans + L(" răng", " teeth")]]; },
   formula: function () { return "uₙ = u₁·qⁿ⁻¹, q = u₂ : u₁"; },
   hints: function () { return [
-    L("So bán kính hai bánh liền nhau: bánh sau gấp bánh trước cùng một số lần, đó là <b>cấp số nhân</b> với công bội q = r₂ : r₁.", "Compare neighbouring radii: each is the same multiple of the one before, so it's a <b>geometric sequence</b> with ratio q = r₂ ÷ r₁."),
+    L("So số răng hai bánh liền nhau: bánh sau gấp bánh trước cùng một số lần, đó là <b>cấp số nhân</b> với công bội q = u₂ : u₁.", "Compare neighbouring gears: each has the same multiple of the teeth of the one before, so it's a <b>geometric sequence</b> with ratio q = u₂ ÷ u₁."),
     L("Số hạng thứ n: uₙ = u₁·qⁿ⁻¹. Số bánh răng đọc ở ghi chú của thợ.", "The n-th term: uₙ = u₁·qⁿ⁻¹. Read the number of gears on the fitter's note."),
-    L("Ví dụ: r₁ = 5 cm, q = 2, bánh thứ 6: 5·2⁵ = 160 cm.", "Example: r₁ = 5 cm, q = 2, gear 6: 5·2⁵ = 160 cm.")]; }
+    L("Ví dụ: bánh đầu 10 răng, q = 2, bánh thứ 5: 10·2⁴ = 160 răng.", "Example: first gear 10 teeth, q = 2, gear 5: 10·2⁴ = 160 teeth.")]; }
 });
 
 /* CS3 · Bức tường đèn pha lê (KM-DS-1103): tổng n số hạng đầu của cấp số cộng */
@@ -7894,7 +7900,7 @@ S12_POOL.cs = [CS1, CS2, CS3, CS4, [CS5, CS6, CS7]];
 ["CS1", "CS2", "CS3", "CS4", "CS5", "CS6", "CS7"].forEach(function (k, i) { S12OB[k] = [CS1, CS2, CS3, CS4, CS5, CS6, CS7][i]; });
 [
   ["KM-DS-1101", "CS1", "Cầu thang nhiều nhịp", "The multi-flight stairs", ["số hạng tổng quát cấp số cộng"], ["n-th term of an arithmetic sequence"], "so_luong", "bậc", "đúng tuyệt đối", 1],
-  ["KM-DS-1102", "CS2", "Cổng bánh răng", "The gear gate", ["số hạng tổng quát cấp số nhân"], ["n-th term of a geometric sequence"], "do_dai", "cm", "đúng tuyệt đối", 2],
+  ["KM-DS-1102", "CS2", "Cổng bánh răng", "The gear gate", ["số hạng tổng quát cấp số nhân"], ["n-th term of a geometric sequence"], "so_luong", "răng", "đúng tuyệt đối", 2],
   ["KM-DS-1103", "CS3", "Bức tường đèn pha lê", "The crystal light wall", ["tổng n số hạng đầu cấp số cộng"], ["sum of an arithmetic sequence"], "so_luong", "khối", "đúng tuyệt đối", 2],
   ["KM-DS-1104", "CS4", "Clip lan truyền", "The viral clip", ["tổng n số hạng đầu cấp số nhân"], ["sum of a geometric sequence"], "so_luong", "lượt", "đúng tuyệt đối", 3],
   ["KM-DS-1105", "CS5", "Hoa văn tam giác trên nắp rương", "Triangles on the chest lid", ["tổng cấp số nhân lùi vô hạn", "chu vi"], ["infinite geometric sum", "perimeter"], "do_dai", "cm", "đúng tuyệt đối", 3],
@@ -11887,7 +11893,7 @@ function tlmBase() { return { giay: tlmSec(), lan_lap: S.att || 0, goi_y: tlmHin
 function tlmStep() { if (!(S.meas || []).length) return L("chưa đo", "not measured"); if (!(S.results || []).length && !S.att) return L("đã đo, chưa tính", "measured"); if (!S.att) return L("đã tính, chưa lắp", "calculated"); return L("đã lắp sai", "wrong build"); }
 function tlmObStart() { TLM.t0 = Date.now(); TLM.calcN = 0; tlm("batdau", {}); }
 /* ---------- tài khoản (nick + mật khẩu), điểm, rank, bảng xếp hạng, góp ý: máy chủ Google Sheet của thầy ---------- */
-var APP_VER = "3.24";
+var APP_VER = "3.25";
 TLM_URL_DEFAULT = "https://script.google.com/macros/s/AKfycbwW_ZqhtVVbv9g-Jxx7xEkhtfgFdFO6HKXSZc-xPCVtp3K2myV0ytLHkAWxELHLALq8qA/exec";
 function appPlat() { return /; wv\)/.test(navigator.userAgent || "") || location.protocol === "file:" ? "apk" : "web"; }
 /* SHA-256 viết tay: trong APK (file://) không có crypto.subtle */
